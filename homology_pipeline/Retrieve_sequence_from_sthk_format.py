@@ -42,15 +42,16 @@ if len(lengthDict) > 1:
     sys.exit("ERROR! Aligned sequences differ by length")
 
 
-file = open("{}.fa".format(outfile), "a")
-x_file = open('{}_x.faa'.format(outfile), 'a')
-for header in alignment.keys():
-    if (len(alignment[header].replace('-', ''))) > length: 
-        
-    #    file = open("{}.fa".format(outfile), "a")
-        sequence = ">" + header + '\n' + alignment[header] + '\n'
-        x_sequence = '>' + header + '\n' + str(alignment[header]).replace('-', 'X') + '\n'
-        file.write(sequence)
-        x_file.write(x_sequence)
-x_file.close()    
-file.close()
+#make a file containing all sequences above a certain length
+#one file contains all sequences gapped and one replaces the gaps with X's
+with open('{}.fasta'.format(outfile), 'a') as file1:
+    with open('{}_exes.fasta'.format(outfile), 'a') as Xfile1:
+        for key in alignment.keys():
+            fasta = alignment[key]
+            if len(fasta.replace('-', '')) > length:
+                sequence = '>' + key + '\n' + fasta + '\n'
+                x_sequence = '>' + key + '\n' + fasta.replace('-', 'X') + '\n'
+                file1.write(sequence)
+                Xfile1.write(x_sequence)
+        Xfile1.close()
+        file1.close()
