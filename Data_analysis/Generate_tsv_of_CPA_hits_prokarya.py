@@ -4,8 +4,10 @@ with open(diction) as json_file:
         data = json.load(json_file)
 
 intermediate = list(data.values())
-
-
+final_list = []
+for entry in intermediate:
+        final_list.append(entry[1])
+        
 print(len(final_list))
  with open('/nesi/nobackup/uc04105/CPA_hitBacteria28032025.tsv', 'a') as B:
     header = 'accesion' + '\t'+ 'CheckM2_completeness' + '\t' + 'CheckM2_contamination' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t'+ 'GTDB_taxonomy' + '\n'
