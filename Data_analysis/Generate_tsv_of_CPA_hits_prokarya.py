@@ -3,11 +3,9 @@ diction = '/nesi/nobackup/uc04105/Bacteria_hits_full_mar17.json'
 with open(diction) as json_file:
         data = json.load(json_file)
 
-final_list = []
 intermediate = list(data.values())
 
-for combi in intermediate:
-    final_list.append(combi[1])
+
 print(len(final_list))
  with open('/nesi/nobackup/uc04105/CPA_hitBacteria28032025.tsv', 'a') as B:
     header = 'accesion' + '\t'+ 'CheckM2_completeness' + '\t' + 'CheckM2_contamination' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t'+ 'GTDB_taxonomy' + '\n'
