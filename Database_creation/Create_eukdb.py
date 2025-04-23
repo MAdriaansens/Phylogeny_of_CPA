@@ -10,7 +10,7 @@ out_db = '/nesi/nobackup/uc04105/database/Euk_db_7April/Euk_db_7April.fasta'
 len(File_list)
 
 with open(out_tsv, 'a') as O:
-    header = 'Protein_id' + '\t' + 'Species_name' + '\t' +  'original_prot_id' + '\t' + 'Larger_grouping' + '\t' + 'NCBI_taxonomy' + 'Sequence'
+    header = 'Protein_id' + '\t' + 'Species_name' + '\t' +  'original_prot_id' + '\t' + 'Larger_grouping' + '\t' + 'NCBI_taxonomy' + '\t' + 'Sequence' + '\n'
     O.write(header)
     with open(out_db, 'a') as F:
         prot_count = 0
