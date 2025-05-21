@@ -1,0 +1,122 @@
+---
+title: "Euk_analysis"
+author: "Mick Adriaansens"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+Euk<- read.delim('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_hits_16may.tsv', sep = '\t')
+
+head(Euk)
+
+sum(Euk$CPA_count)
+```
+
+## Including Plots
+```{r}
+#first how was this data generated?
+#it was generated from a set of MMseq and HMMsearches, these were all summed and 
+# 3451 CPAs uniq protein ids across Eukarya
+
+#this set is still incomplete as cross reference with Inhouse Archaea HMM and Bacteria HMM need to be performed as well as an additional MMseq run with all the freshly hit sequences. 
+
+library(ggplot2)
+CPA_search <- read.delim('/home/mad149/CPA_EUK_searches.tsv',header=TRUE, stringsAsFactors = TRUE, sep=',')
+CPA_search$X.CPA.hit <- as.numeric(CPA_search$X.CPA.hit)
+CPA_search <- CPA_search[-6,]
+#didnt have time to make an histogram/barplot
+ggplot(CPA_search, aes(y=X.CPA.hit, x=CPA_search$HMMalignment_output, fill=CPA_search$Initial.search.method)) + geom_bar(stat = 'identity') + theme(axis.text.x = element_text(angle = 90))
+```
+
+You can also embed plots, for example:
+
+
+```{r}
+Non_protist <- c('Viridiplantae', 'Fungi', 'Metazoa')
+Euk$Protist[Euk$Major.tax %in% Non_protist] <- 'Multicellular'
+Euk$Protist[!Euk$Major.tax %in% Non_protist] <- 'Protist'
+Euk_genecount <- ggplot(data =Euk, mapping = aes(y= log(CPA_count +1 ),
+                                                 x=log(Gene_count),
+                                                 color=Major.tax)) +
+  geom_jitter() + theme_minimal()  + xlim(6,13) + ylim(0,6) + ggtitle('CPA presence vs Gene count')
+
+
+Euk_genecount
+```
+
+```{r}
+Chordata <- c('Branchiostoma_belcheri','Petromyzon_marinus','Takifugu_flavidus','Danio_rerio','Ornithorhynchus_anatinus','Mus_musculus','Homo_sapiens','Callorhinus_ursinus', 'Anas_platyrhynchos',
+              'Columba_livia','Pelodiscus_sinensis','Xenopus_laevis','Oikopleura_dioica','Ciona_intestinalis', 'Acanthaster_planci')
+Euk$Chordata[!Euk$Species %in% Chordata] <- 'Invertebrae' 
+Euk$Chordata[Euk$Species %in% Chordata] <- 'Chordata' 
+
+Others <- c('Ancyromonadida', 'Apusomonadida', 'Chaonoflagellata', 'Filasterea', 'Ichtyosporea', 'Malawimonada', 'Rotosphaerida')
+
+
+```
+
+
+```{r}
+require(gridExtra)
+Metazoa <- ggplot(data =Euk[Euk$Major.tax == 'Metazoa',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count), color = Chordata)) +
+  geom_point()  + xlim(6,13) + ylim(0,6) + ggtitle('Metazoa') + theme_minimal()
+
+Fungi <- ggplot(data =Euk[Euk$Major.tax == 'Fungi',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count))) + geom_point(col='coral4') + theme_minimal() + xlim(6,13) + ylim(0,6) + ggtitle('Fungi')
+
+
+Viridiplantae <- ggplot(data =Euk[Euk$Major.tax == 'Viridiplantae',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count))) +
+  geom_point(col='darkgreen') + theme_minimal() + xlim(6,13) + ylim(0,6) + ggtitle('Viridplantae')
+
+
+Amoebozoa <- ggplot(data =Euk[Euk$Major.tax == 'Amoebozoa',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count))) +
+  geom_point(col='deeppink1') + theme_minimal() + xlim(6,13) + ylim(0,6) + ggtitle('Amoebozoa')
+
+Discoba <- ggplot(data =Euk[Euk$Major.tax == 'Discoba',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count))) +
+  geom_point(col='cornsilk4') + theme_minimal() + xlim(6,13) + ylim(0,6) + ggtitle('Discoba')
+
+Metamonada <- ggplot(data =Euk[Euk$Major.tax == 'Metamonada',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count))) +
+  geom_point(col='blueviolet') + theme_minimal() + xlim(6,13) + ylim(0,6) + ggtitle('Metamonada')
+
+Rhodophyta <- ggplot(data =Euk[Euk$Major.tax == 'Rhodophyta',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count))) +
+  geom_point(col='red') + theme_minimal() + xlim(6,13) + ylim(0,6) + ggtitle('Rhodophyta')
+
+
+Rhizaria <- ggplot(data =Euk[Euk$Major.tax == 'Rhizaria',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count))) +
+  geom_point(col='deepskyblue') + theme_minimal() + xlim(6,13) + ylim(0,6) + ggtitle('Rhizaria')
+
+Stramenopiles <- ggplot(data =Euk[Euk$Major.tax == 'Stramenopiles',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count))) +
+  geom_point(col='peru') + theme_minimal() + xlim(6,13) + ylim(0,6) + ggtitle('Stramenopiles')
+
+
+
+Alveolata <- ggplot(data =Euk[Euk$Major.tax == 'Alveolata',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count))) +
+  geom_point(col='orchid') + theme_minimal() + xlim(6,13) + ylim(0,6) + ggtitle('Alveolata ')
+
+Cryptophyta <- ggplot(data =Euk[Euk$Major.tax == 'Cryptophyta',], mapping = aes(y= log(CPA_count +1 ), x=log(Gene_count))) +
+  geom_point(col='black') + theme_minimal() + xlim(6,13) + ylim(0,6) + ggtitle('Cryptophyta ')
+
+Others <- ggplot(data =Euk[Euk$Major.tax %in% Others,], mapping = aes(y=log(CPA_count+1), x=log(Gene_count), col=Major.tax)) +
+  geom_point()  + xlim(6,13) + ylim(0,6) + ggtitle('Other protists') + theme_minimal()
+
+BigPlot <- grid.arrange(Euk_genecount, Others, Metazoa, Fungi, Viridiplantae, Amoebozoa, Discoba, Rhodophyta, Metamonada, Alveolata,
+             Stramenopiles, Alveolata, Rhizaria, Cryptophyta, ncol=7)
+```
+
+```{r}
+library(dplyr)
+Abundance <- Euk|> group_by(Major.tax) |> summarize(observations=n(), groups = 'drops') |> arrange(desc(observations))
+print(Abundance)
+```
