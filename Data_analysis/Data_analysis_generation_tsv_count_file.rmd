@@ -1,0 +1,790 @@
+---
+title: 'Bacteria'
+author: 'Mick Adriaansens'
+date: '`r Sys.Date()`'
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup}
+IT_Bacteria <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_bacteria_28may.tsv', sep='\t', stringsAsFactors = TRUE)
+
+```
+
+
+```{r load_packages}
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+```
+
+
+```{r Taxonomic_break_down}
+IT_Bacteria %>% separate(GTDB_taxonomy, c('Domain_Phyla', 'Lower_class'), ';c__') -> IT_Bacteria
+IT_Bacteria %>% separate(Domain_Phyla, c('Domain', 'Phyla'), ';p__') ->IT_Bacteria
+IT_Bacteria %>% separate(Lower_class, c('Class', 'Lower_order'), ';o__') -> IT_Bacteria
+IT_Bacteria %>% separate(Lower_order, c('Order', 'Lower_family'), ';f__') -> IT_Bacteria
+IT_Bacteria %>% separate(Lower_family, c('Family', 'Lower_genera'), ';g__') -> IT_Bacteria
+IT_Bacteria %>% separate(Lower_genera, c('Genera', 'Species'), ';s__') -> IT_Bacteria
+```
+
+```{r Protein_data_wrangling}
+IT_Bacteria$IT_count <- IT_Bacteria$NhaB_count + IT_Bacteria$NhaC_count + IT_Bacteria$NhaD_count
+IT_Bacteria$Antiporter_count <- IT_Bacteria$CPA_count + IT_Bacteria$IT_count
+
+IT_Bacteria$IT_binary[IT_Bacteria$IT_count == 0] <- 0
+IT_Bacteria$IT_binary[IT_Bacteria$IT_count > 0] <- 1
+
+IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count == 0] <- 0
+IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count >0] <- 1
+
+IT_Bacteria$CPA_binary[IT_Bacteria$CPA_count == 0] <- 0
+IT_Bacteria$CPA_binary[IT_Bacteria$CPA_count > 0] <- 1
+
+IT_Bacteria$NhaB_binary[IT_Bacteria$NhaB_count == 0] <- 0
+IT_Bacteria$NhaB_binary[IT_Bacteria$NhaB_count > 0] <- 1
+
+
+IT_Bacteria$NhaC_binary[IT_Bacteria$NhaC_count == 0] <- 0
+IT_Bacteria$NhaC_binary[IT_Bacteria$NhaC_count > 0] <- 1
+
+IT_Bacteria$NhaD_binary[IT_Bacteria$NhaD_count == 0] <- 0
+IT_Bacteria$NhaD_binary[IT_Bacteria$NhaD_count > 0] <- 1
+
+write.csv(IT_Bacteria, 'Antiporter_across_all_GTDB_representatives.csv')
+```
+
+
+```{r}
+sum(IT_Bacteria$Antiporter_binary == 0)
+
+sum(IT_Bacteria$IT_binary == 0)
+
+sum(IT_Bacteria$CPA_binary == 0)
+
+sum(IT_Bacteria$NhaB_binary == 0)
+sum(IT_Bacteria$NhaC_binary == 0)
+sum(IT_Bacteria$NhaD_binary == 0)
+
+```
+
+
+```{r}
+
+top_phyla <- c('Aquificota', 'Acidobacteriota', 'Actinomycetota', 'Bacteroidota', 'Campylobacterota', 'Chloroflexota', 'Cyanobacteriota', 'Desulfobacterota','Gemmatimonadota' , 'Myxococcota', 'Nitrospirota', 'Patescibacteriota', 'Planctomycetota', 'Pseudomonadota', 'Verrucomicrobiota') 
+
+
+m <- ggplot(data=(IT_Bacteria[IT_Bacteria$Phyla %in% top_phyla,]), mapping = aes(x=Phyla, y= CPA_count, col=Phyla)) + geom_violin()
+m
+```
+```{r}
+IT_Bacteria %>% count(Phyla) -> Phyla_observations
+Phyla_observations %>% rename(Observations = n, taxonomic_group = Phyla) -> Phyla_observations
+Phyla_observations$level = 'Phyla'
+
+IT_Bacteria %>% count(Class) -> Class_observations
+Class_observations %>% rename(Observations = n, taxonomic_group = Class) -> Class_observations
+Class_observations$level = 'Class'
+
+IT_Bacteria %>% count(Order) -> Order_observations
+Order_observations %>% rename(Observations = n, taxonomic_group = Order) -> Order_observations
+Order_observations$level = 'Order'
+
+IT_Bacteria %>% count(Family) -> Family_observations
+Family_observations %>% rename(Observations = n, taxonomic_group = Family) -> Family_observations
+Family_observations$level = 'Family'
+
+IT_Bacteria %>% count(Genera) -> Genera_observations
+Genera_observations %>% rename(Observations = n, taxonomic_group = Genera) -> Genera_observations
+Genera_observations$level = 'Genera'
+
+IT_Bacteria %>% count(Species) -> Species_observations
+Species_observations %>% rename(Observations = n, taxonomic_group = Species) -> Species_observations
+Species_observations$level = 'Species'
+```
+
+
+
+```{r CPA_count}
+IT_Bacteria %>%
+  count(Phyla, CPA_count) %>%
+  complete(Phyla, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Phyla, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_phyla
+
+
+Count_per_phyla <- data.frame(Count_per_phyla, row.names = Count_per_phyla$Phyla)
+Count_per_phyla<-Count_per_phyla[,-1]
+
+Count_per_phyla$taxonomic_group <- rownames(Count_per_phyla)
+Count_per_phyla
+
+Count_per_phyla <- Count_per_phyla %>%
+  select(taxonomic_group, everything())
+
+Count_per_phyla <- merge(Count_per_phyla, Phyla_observations, by='taxonomic_group')
+Count_per_phyla <- Count_per_phyla %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+
+
+IT_Bacteria %>%
+  count(Class, CPA_count) %>%
+  complete(Class, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Class, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_Class
+
+
+Count_per_Class <- data.frame(Count_per_Class, row.names = Count_per_Class$Class)
+Count_per_Class<-Count_per_Class[,-1]
+
+Count_per_Class$taxonomic_group <- rownames(Count_per_Class)
+Count_per_Class
+
+Count_per_Class <- Count_per_Class %>%
+  select(taxonomic_group, everything())
+
+Count_per_Class <- merge(Count_per_Class, Class_observations, by='taxonomic_group')
+Count_per_Class <- Count_per_Class %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Order, CPA_count) %>%
+  complete(Order, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Order, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_Order
+
+
+Count_per_Order <- data.frame(Count_per_Order, row.names = Count_per_Order$Order)
+Count_per_Order<-Count_per_Order[,-1]
+
+Count_per_Order$taxonomic_group <- rownames(Count_per_Order)
+Count_per_Order
+
+Count_per_Order <- Count_per_Order %>%
+  select(taxonomic_group, everything())
+
+Count_per_Order <- merge(Count_per_Order, Order_observations, by='taxonomic_group')
+Count_per_Order <- Count_per_Order %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Family, CPA_count) %>%
+  complete(Family, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Family, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_Family
+
+
+Count_per_Family <- data.frame(Count_per_Family, row.names = Count_per_Family$Family)
+Count_per_Family<-Count_per_Family[,-1]
+
+Count_per_Family$taxonomic_group <- rownames(Count_per_Family)
+Count_per_Family
+
+Count_per_Family <- Count_per_Family %>%
+  select(taxonomic_group, everything())
+
+Count_per_Family <- merge(Count_per_Family, Family_observations, by='taxonomic_group')
+Count_per_Family <- Count_per_Family %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Genera, CPA_count) %>%
+  complete(Genera, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Genera, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_Genera
+
+
+Count_per_Genera <- data.frame(Count_per_Genera, row.names = Count_per_Genera$Genera)
+Count_per_Genera<-Count_per_Genera[,-1]
+
+Count_per_Genera$taxonomic_group <- rownames(Count_per_Genera)
+Count_per_Genera
+
+Count_per_Genera <- Count_per_Genera %>%
+  select(taxonomic_group, everything())
+
+Count_per_Genera <- merge(Count_per_Genera, Genera_observations, by='taxonomic_group')
+Count_per_Genera <- Count_per_Genera %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+
+IT_Bacteria %>%
+  count(Species, CPA_count) %>%
+  complete(Species, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Species, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_Species
+
+
+Count_per_Species <- data.frame(Count_per_Species, row.names = Count_per_Species$Species)
+Count_per_Species<-Count_per_Species[,-1]
+
+Count_per_Species$taxonomic_group <- rownames(Count_per_Species)
+Count_per_Species
+
+Count_per_Species <- Count_per_Species %>%
+  select(taxonomic_group, everything())
+
+Count_per_Species <- merge(Count_per_Species, Species_observations, by='taxonomic_group')
+Count_per_Species <- Count_per_Species %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+Complete_tax_CPA <- rbind(Count_per_phyla, Count_per_Class, Count_per_Order, Count_per_Family, Count_per_Genera, Count_per_Species)
+
+write.csv(Complete_tax_CPA, "Complete_CPA_presence_all_taxon.csv")
+```
+
+
+```{r NhaB_count}
+IT_Bacteria %>%
+  count(Phyla, NhaB_count) %>%
+  complete(Phyla, NhaB_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Phyla, names_from =NhaB_count, values_from = n, names_prefix = "Species with NhaB count") -> Count_per_phyla
+
+
+Count_per_phyla <- data.frame(Count_per_phyla, row.names = Count_per_phyla$Phyla)
+Count_per_phyla<-Count_per_phyla[,-1]
+
+Count_per_phyla$taxonomic_group <- rownames(Count_per_phyla)
+Count_per_phyla
+
+Count_per_phyla <- Count_per_phyla %>%
+  select(taxonomic_group, everything())
+
+Count_per_phyla <- merge(Count_per_phyla, Phyla_observations, by='taxonomic_group')
+Count_per_phyla <- Count_per_phyla %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+
+
+IT_Bacteria %>%
+  count(Class, NhaB_count) %>%
+  complete(Class, NhaB_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Class, names_from =NhaB_count, values_from = n, names_prefix = "Species with NhaB count") -> Count_per_Class
+
+
+Count_per_Class <- data.frame(Count_per_Class, row.names = Count_per_Class$Class)
+Count_per_Class<-Count_per_Class[,-1]
+
+Count_per_Class$taxonomic_group <- rownames(Count_per_Class)
+Count_per_Class
+
+Count_per_Class <- Count_per_Class %>%
+  select(taxonomic_group, everything())
+
+Count_per_Class <- merge(Count_per_Class, Class_observations, by='taxonomic_group')
+Count_per_Class <- Count_per_Class %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Order, NhaB_count) %>%
+  complete(Order, NhaB_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Order, names_from =NhaB_count, values_from = n, names_prefix = "Species with NhaB count") -> Count_per_Order
+
+
+Count_per_Order <- data.frame(Count_per_Order, row.names = Count_per_Order$Order)
+Count_per_Order<-Count_per_Order[,-1]
+
+Count_per_Order$taxonomic_group <- rownames(Count_per_Order)
+Count_per_Order
+
+Count_per_Order <- Count_per_Order %>%
+  select(taxonomic_group, everything())
+
+Count_per_Order <- merge(Count_per_Order, Order_observations, by='taxonomic_group')
+Count_per_Order <- Count_per_Order %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Family, NhaB_count) %>%
+  complete(Family, NhaB_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Family, names_from =NhaB_count, values_from = n, names_prefix = "Species with NhaB count") -> Count_per_Family
+
+
+Count_per_Family <- data.frame(Count_per_Family, row.names = Count_per_Family$Family)
+Count_per_Family<-Count_per_Family[,-1]
+
+Count_per_Family$taxonomic_group <- rownames(Count_per_Family)
+Count_per_Family
+
+Count_per_Family <- Count_per_Family %>%
+  select(taxonomic_group, everything())
+
+Count_per_Family <- merge(Count_per_Family, Family_observations, by='taxonomic_group')
+Count_per_Family <- Count_per_Family %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Genera, NhaB_count) %>%
+  complete(Genera, NhaB_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Genera, names_from =NhaB_count, values_from = n, names_prefix = "Species with NhaB count") -> Count_per_Genera
+
+
+Count_per_Genera <- data.frame(Count_per_Genera, row.names = Count_per_Genera$Genera)
+Count_per_Genera<-Count_per_Genera[,-1]
+
+Count_per_Genera$taxonomic_group <- rownames(Count_per_Genera)
+Count_per_Genera
+
+Count_per_Genera <- Count_per_Genera %>%
+  select(taxonomic_group, everything())
+
+Count_per_Genera <- merge(Count_per_Genera, Genera_observations, by='taxonomic_group')
+Count_per_Genera <- Count_per_Genera %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+
+IT_Bacteria %>%
+  count(Species, NhaB_count) %>%
+  complete(Species, NhaB_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Species, names_from =NhaB_count, values_from = n, names_prefix = "Species with NhaB count") -> Count_per_Species
+
+
+Count_per_Species <- data.frame(Count_per_Species, row.names = Count_per_Species$Species)
+Count_per_Species<-Count_per_Species[,-1]
+
+Count_per_Species$taxonomic_group <- rownames(Count_per_Species)
+Count_per_Species
+
+Count_per_Species <- Count_per_Species %>%
+  select(taxonomic_group, everything())
+
+Count_per_Species <- merge(Count_per_Species, Species_observations, by='taxonomic_group')
+Count_per_Species <- Count_per_Species %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+Complete_tax_NhaB <- rbind(Count_per_phyla, Count_per_Class, Count_per_Order, Count_per_Family, Count_per_Genera, Count_per_Species)
+
+write.csv(Complete_tax_NhaB, "Complete_NhaB_presence_all_taxon.csv")
+```
+
+
+```{r NhaC_count}
+IT_Bacteria %>%
+  count(Phyla, NhaC_count) %>%
+  complete(Phyla, NhaC_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Phyla, names_from =NhaC_count, values_from = n, names_prefix = "Species with NhaC count") -> Count_per_phyla
+
+
+Count_per_phyla <- data.frame(Count_per_phyla, row.names = Count_per_phyla$Phyla)
+Count_per_phyla<-Count_per_phyla[,-1]
+
+Count_per_phyla$taxonomic_group <- rownames(Count_per_phyla)
+Count_per_phyla
+
+Count_per_phyla <- Count_per_phyla %>%
+  select(taxonomic_group, everything())
+
+Count_per_phyla <- merge(Count_per_phyla, Phyla_observations, by='taxonomic_group')
+Count_per_phyla <- Count_per_phyla %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+
+
+IT_Bacteria %>%
+  count(Class, NhaC_count) %>%
+  complete(Class, NhaC_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Class, names_from =NhaC_count, values_from = n, names_prefix = "Species with NhaC count") -> Count_per_Class
+
+
+Count_per_Class <- data.frame(Count_per_Class, row.names = Count_per_Class$Class)
+Count_per_Class<-Count_per_Class[,-1]
+
+Count_per_Class$taxonomic_group <- rownames(Count_per_Class)
+Count_per_Class
+
+Count_per_Class <- Count_per_Class %>%
+  select(taxonomic_group, everything())
+
+Count_per_Class <- merge(Count_per_Class, Class_observations, by='taxonomic_group')
+Count_per_Class <- Count_per_Class %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Order, NhaC_count) %>%
+  complete(Order, NhaC_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Order, names_from =NhaC_count, values_from = n, names_prefix = "Species with NhaC count") -> Count_per_Order
+
+
+Count_per_Order <- data.frame(Count_per_Order, row.names = Count_per_Order$Order)
+Count_per_Order<-Count_per_Order[,-1]
+
+Count_per_Order$taxonomic_group <- rownames(Count_per_Order)
+Count_per_Order
+
+Count_per_Order <- Count_per_Order %>%
+  select(taxonomic_group, everything())
+
+Count_per_Order <- merge(Count_per_Order, Order_observations, by='taxonomic_group')
+Count_per_Order <- Count_per_Order %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Family, NhaC_count) %>%
+  complete(Family, NhaC_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Family, names_from =NhaC_count, values_from = n, names_prefix = "Species with NhaC count") -> Count_per_Family
+
+
+Count_per_Family <- data.frame(Count_per_Family, row.names = Count_per_Family$Family)
+Count_per_Family<-Count_per_Family[,-1]
+
+Count_per_Family$taxonomic_group <- rownames(Count_per_Family)
+Count_per_Family
+
+Count_per_Family <- Count_per_Family %>%
+  select(taxonomic_group, everything())
+
+Count_per_Family <- merge(Count_per_Family, Family_observations, by='taxonomic_group')
+Count_per_Family <- Count_per_Family %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Genera, NhaC_count) %>%
+  complete(Genera, NhaC_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Genera, names_from =NhaC_count, values_from = n, names_prefix = "Species with NhaC count") -> Count_per_Genera
+
+
+Count_per_Genera <- data.frame(Count_per_Genera, row.names = Count_per_Genera$Genera)
+Count_per_Genera<-Count_per_Genera[,-1]
+
+Count_per_Genera$taxonomic_group <- rownames(Count_per_Genera)
+Count_per_Genera
+
+Count_per_Genera <- Count_per_Genera %>%
+  select(taxonomic_group, everything())
+
+Count_per_Genera <- merge(Count_per_Genera, Genera_observations, by='taxonomic_group')
+Count_per_Genera <- Count_per_Genera %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+
+IT_Bacteria %>%
+  count(Species, NhaC_count) %>%
+  complete(Species, NhaC_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Species, names_from =NhaC_count, values_from = n, names_prefix = "Species with NhaC count") -> Count_per_Species
+
+
+Count_per_Species <- data.frame(Count_per_Species, row.names = Count_per_Species$Species)
+Count_per_Species<-Count_per_Species[,-1]
+
+Count_per_Species$taxonomic_group <- rownames(Count_per_Species)
+Count_per_Species
+
+Count_per_Species <- Count_per_Species %>%
+  select(taxonomic_group, everything())
+
+Count_per_Species <- merge(Count_per_Species, Species_observations, by='taxonomic_group')
+Count_per_Species <- Count_per_Species %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+Complete_tax_NhaC <- rbind(Count_per_phyla, Count_per_Class, Count_per_Order, Count_per_Family, Count_per_Genera, Count_per_Species)
+
+write.csv(Complete_tax_NhaC, "Complete_NhaC_presence_all_taxon.csv")
+```
+
+```{r NhaD_count}
+IT_Bacteria %>%
+  count(Phyla, NhaD_count) %>%
+  complete(Phyla, NhaD_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Phyla, names_from =NhaD_count, values_from = n, names_prefix = "Species with NhaD count") -> Count_per_phyla
+
+
+Count_per_phyla <- data.frame(Count_per_phyla, row.names = Count_per_phyla$Phyla)
+Count_per_phyla<-Count_per_phyla[,-1]
+
+Count_per_phyla$taxonomic_group <- rownames(Count_per_phyla)
+Count_per_phyla
+
+Count_per_phyla <- Count_per_phyla %>%
+  select(taxonomic_group, everything())
+
+Count_per_phyla <- merge(Count_per_phyla, Phyla_observations, by='taxonomic_group')
+Count_per_phyla <- Count_per_phyla %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+
+
+IT_Bacteria %>%
+  count(Class, NhaD_count) %>%
+  complete(Class, NhaD_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Class, names_from =NhaD_count, values_from = n, names_prefix = "Species with NhaD count") -> Count_per_Class
+
+
+Count_per_Class <- data.frame(Count_per_Class, row.names = Count_per_Class$Class)
+Count_per_Class<-Count_per_Class[,-1]
+
+Count_per_Class$taxonomic_group <- rownames(Count_per_Class)
+Count_per_Class
+
+Count_per_Class <- Count_per_Class %>%
+  select(taxonomic_group, everything())
+
+Count_per_Class <- merge(Count_per_Class, Class_observations, by='taxonomic_group')
+Count_per_Class <- Count_per_Class %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Order, NhaD_count) %>%
+  complete(Order, NhaD_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Order, names_from =NhaD_count, values_from = n, names_prefix = "Species with NhaD count") -> Count_per_Order
+
+
+Count_per_Order <- data.frame(Count_per_Order, row.names = Count_per_Order$Order)
+Count_per_Order<-Count_per_Order[,-1]
+
+Count_per_Order$taxonomic_group <- rownames(Count_per_Order)
+Count_per_Order
+
+Count_per_Order <- Count_per_Order %>%
+  select(taxonomic_group, everything())
+
+Count_per_Order <- merge(Count_per_Order, Order_observations, by='taxonomic_group')
+Count_per_Order <- Count_per_Order %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Family, NhaD_count) %>%
+  complete(Family, NhaD_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Family, names_from =NhaD_count, values_from = n, names_prefix = "Species with NhaD count") -> Count_per_Family
+
+
+Count_per_Family <- data.frame(Count_per_Family, row.names = Count_per_Family$Family)
+Count_per_Family<-Count_per_Family[,-1]
+
+Count_per_Family$taxonomic_group <- rownames(Count_per_Family)
+Count_per_Family
+
+Count_per_Family <- Count_per_Family %>%
+  select(taxonomic_group, everything())
+
+Count_per_Family <- merge(Count_per_Family, Family_observations, by='taxonomic_group')
+Count_per_Family <- Count_per_Family %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+IT_Bacteria %>%
+  count(Genera, NhaD_count) %>%
+  complete(Genera, NhaD_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Genera, names_from =NhaD_count, values_from = n, names_prefix = "Species with NhaD count") -> Count_per_Genera
+
+
+Count_per_Genera <- data.frame(Count_per_Genera, row.names = Count_per_Genera$Genera)
+Count_per_Genera<-Count_per_Genera[,-1]
+
+Count_per_Genera$taxonomic_group <- rownames(Count_per_Genera)
+Count_per_Genera
+
+Count_per_Genera <- Count_per_Genera %>%
+  select(taxonomic_group, everything())
+
+Count_per_Genera <- merge(Count_per_Genera, Genera_observations, by='taxonomic_group')
+Count_per_Genera <- Count_per_Genera %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+
+
+IT_Bacteria %>%
+  count(Species, NhaD_count) %>%
+  complete(Species, NhaD_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Species, names_from =NhaD_count, values_from = n, names_prefix = "Species with NhaD count") -> Count_per_Species
+
+
+Count_per_Species <- data.frame(Count_per_Species, row.names = Count_per_Species$Species)
+Count_per_Species<-Count_per_Species[,-1]
+
+Count_per_Species$taxonomic_group <- rownames(Count_per_Species)
+Count_per_Species
+
+Count_per_Species <- Count_per_Species %>%
+  select(taxonomic_group, everything())
+
+Count_per_Species <- merge(Count_per_Species, Species_observations, by='taxonomic_group')
+Count_per_Species <- Count_per_Species %>% 
+  select(taxonomic_group, level, Observations, everything())
+
+Complete_tax_NhaD <- rbind(Count_per_phyla, Count_per_Class, Count_per_Order, Count_per_Family, Count_per_Genera, Count_per_Species)
+
+write.csv(Complete_tax_NhaD, "Complete_NhaD_presence_all_taxon.csv")
+```
+
+
+```{r}
+IT_Bacteria %>%
+  count(Class, CPA_count) %>%
+  complete(Class, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Class, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_Class
+
+
+Count_per_Class <- data.frame(Count_per_Class, row.names = Count_per_Class$Class)
+Count_per_Class<-Count_per_Class[,-1]
+
+
+Count_per_Class
+```
+
+```{r}
+IT_Bacteria %>%
+  count(Order, CPA_count) %>%
+  complete(Order, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Order, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_Order
+
+
+Count_per_Order <- data.frame(Count_per_Order, row.names = Count_per_Order$Order)
+Count_per_Order<-Count_per_Order[,-1]
+
+
+Count_per_Order
+```
+
+
+```{r}
+IT_Bacteria %>%
+  count(Family, CPA_count) %>%
+  complete(Family, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Family, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_Family
+
+
+Count_per_Family <- data.frame(Count_per_Family, row.names = Count_per_Family$Family)
+Count_per_Family<-Count_per_Family[,-1]
+
+
+Count_per_Family
+```
+
+
+```{r}
+IT_Bacteria %>%
+  count(Genera, CPA_count) %>%
+  complete(Genera, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Genera, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_Genera
+
+
+Count_per_Genera <- data.frame(Count_per_Genera, row.names = Count_per_Genera$Genera)
+Count_per_Genera<-Count_per_Genera[,-1]
+
+
+Count_per_Genera
+```
+
+
+```{r}
+IT_Bacteria %>%
+  count(Species, CPA_count) %>%
+  complete(Species, CPA_count = 0:17, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Species, names_from =CPA_count, values_from = n, names_prefix = "Species with CPA count") -> Count_per_Species
+
+
+Count_per_Species <- data.frame(Count_per_Species, row.names = Count_per_Species$Species)
+Count_per_Species<-Count_per_Species[,-1]
+
+
+Count_per_Species
+```
+
+
+
+
+
+
+
+
+
+
+```{r}
+IT_Bacteria %>%
+  count(Phyla, NhaC_count) %>%
+  complete(Phyla, NhaC_count = 0:38, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Phyla, names_from =NhaC_count, values_from = n, names_prefix = "NhaC count") -> Count_per_phyla
+
+
+Count_per_phyla <- data.frame(Count_per_phyla, row.names = Count_per_phyla$Phyla)
+Count_per_phyla<-Count_per_phyla[,-1]
+
+
+Count_per_phyla
+```
+
+
+
+
+
+```{r}
+IT_Bacteria %>%
+  count(Phyla, NhaD_count) %>%
+  complete(Phyla, NhaD_count = 0:99, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Phyla, names_from =NhaD_count, values_from = n, names_prefix = "NhaD count") -> Count_per_phyla
+
+
+Count_per_phyla <- data.frame(Count_per_phyla, row.names = Count_per_phyla$Phyla)
+Count_per_phyla<-Count_per_phyla[,-1]
+
+
+Count_per_phyla
+```
+
+
+```{r}
+library(ggplot2)
+library(reshape2)
+CP <- as.matrix(Count_per_phyla[,c(11:0)])
+rownames(CP) <- rownames(Count_per_phyla)
+
+heatmap(CP, scale='row', Rowv=NA, Colv=NA)
+```
+
+
+
+
+
+
+
+```{r}
+#CPA
+Phyla_count_Bacteria <- aggregate(IT_Bacteria$CPA_count, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+Phyla_count_Bacteria <- Phyla_count_Bacteria %>% rename(
+    Phyla = Category,
+    total_CPA=x)
+
+Uniq_CPA_Phyla <- aggregate(IT_Bacteria$CPA_binary, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+
+#NhaB
+
+Uniq_NhaB_Phyla <- aggregate(IT_Bacteria$NhaB_binary, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+
+Phyla_count_Bacteria$NhaB<-(aggregate(IT_Bacteria$NhaB_count, by=list(Category=IT_Bacteria$Phyla), FUN=sum))[2]
+#NhaC
+
+
+Uniq_NhaC_Phyla <- aggregate(IT_Bacteria$NhaC_binary, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+
+
+#NhaD
+
+Uniq_NhaD_Phyla <- aggregate(IT_Bacteria$NhaD_binary, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+
+
+#IT
+
+
+Uniq_IT_Phyla <- aggregate(IT_Bacteria$IT_binary, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+
+
+#Antiporter 
+
+
+Uniq_Antiporter_Phyla <- aggregate(IT_Bacteria$Antiporter_binary, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+```
+
