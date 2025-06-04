@@ -1,6 +1,6 @@
 import os
 from Bio import SeqIO
-
+#note that Euk differs, so check out code for that
 def get_hits(direction, mmseq_dir, hmm_dir):
     hit_list = []
 
