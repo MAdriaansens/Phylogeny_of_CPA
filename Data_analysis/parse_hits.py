@@ -1,74 +1,49 @@
-import os
+
+import json
 from Bio import SeqIO
-#note that Euk differs, so check out code for that
-def get_hits(direction, mmseq_dir, hmm_dir):
-    hit_list = []
 
+HMS03553='/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Archaea_PF03553_aligned_hmmscanned_onlyPF03553.json'
+HMS03600='/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Archaea_PF03600_aligned_hmmscanned_onlyPF03600.json'
+HMS06450='/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Archaea_PF06450_aligned_hmmscanned_onlyPF06450.json'
 
-    MMseqdir_list = os.listdir('{}/{}'.format(direction, mmseq_dir))
-    for file in MMseqdir_list:
-        if 'faa.fasta' not in file:
-            pass
-        else:
-            for record in SeqIO.parse('{}/{}/{}'.format(direction, mmseq_dir, file), 'fasta'):
-                Cpahit_list.append(record.id)
-        HMMsearch_list = os.listdir('{}/{}'.format(direction, hmm_dir))
-    for file in HMMsearch_list:
-        if 'faa.fasta' not in file:
-            pass
-        else:
-            for record in SeqIO.parse('{}/{}/{}'.format(direction, hmm_dir, file), 'fasta'):
-                hit_list.append(record.id)
-    return(hit_list)
-   #returns all hits from HMMsearch and MMseq and does not filter them
+with open(HMS03600) as json_file:
+    NhaD_data=json.load(json_file)
+NhaD_tax_list = []
+for key in NhaD_data.keys():
+    output = NhaD_data[key]
+    if output[0] == 'PF03600':
+        NhaD_tax_list.append(key.split('_tax:')[-1])
+print(len(NhaD_tax_list))
 
-def parse_tax(in_list):
-    uniq_list = []
-    for i in (list(set(in_list))):
-        uniq_list.append(i.split('tax:')[1])
-    return(uniq_list)
-    #reduces the list to unique values and then takes the taxonomic component, this means that for some taxa multiple entries are present
-    #we use this to count the occurance of a taxa in the list
+with open(HMS03553) as json_file:
+    NhaC_data=json.load(json_file)
+NhaC_tax_list = []
+for key in NhaC_data.keys():
+    output = NhaC_data[key]
+    if output[0] == 'PF03553':
+        NhaC_tax_list.append(key.split('_tax:')[-1])
+print(len(list(set(NhaC_tax_list))))
 
-def parse_id(in_list):
-    uniq_id_list = []
-    for i in (list(set(in_list))):
-        uniq_id_list.append(i.split('_tax:')[0])
-    return(uniq_id_list)
-    #this def returns the unique ids
+with open(HMS06450) as json_file:
+    NhaB_data=json.load(json_file)
 
-direction = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF00999'
-mmseq_dir = 'MMseq/Manual_e03'
-hmm_dir ='HMMsearch'
+NhaB_tax_list = []
+for key in NhaB_data.keys():
+    output = NhaB_data[key]
+    if output[0] == 'PF06450':
+        NhaB_tax_list.append(key.split('_tax:')[-1])
+print(len(list(set(NhaB_tax_list))))
 
-Cpahit_list = get_hits(direction, mmseq_dir, hmm_dir)
-CPA_tax_list = parse_tax(Cpahit_list)
-CPA_uniq_ids = parse_id(Cpahit_list)
-#if you want the number of uniq taxa's  run (len(list(set(CPA_tax_list))))
+CPA_hit_list=[]
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/intermediate_PF00999/PF00999_Archaea_MERGED_alignedPF00999.faa', 'fasta'):
+    hit_id = record.id.split('|')[1]
+    CPA_hit_list.append(hit_id)
 
-direction = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF03600'
-mmseq_dir = 'MMseq'
-hmm_dir ='HMMsearch'
+CPA_tax_list=[]
+for i in CPA_hit_list:
+    uniq_id = i.split('tax:')[1]
+    CPA_tax_list.append(uniq_id)
 
-NhaDhit_list = get_hits(direction, mmseq_dir, hmm_dir)
-NhaD_tax_list = parse_tax(NhaDhit_list)
-NhaD_uniq_ids = parse_id(NhaDhit_list)
-
-direction = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF03553'
-mmseq_dir = 'MMseq'
-hmm_dir ='HMMsearch'
-
-NhaChit_list = get_hits(direction, mmseq_dir, hmm_dir)
-NhaC_tax_list = parse_tax(NhaChit_list)
-NhaC_uniq_ids = parse_id(NhaChit_list)
-
-direction = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF06450'
-mmseq_dir = 'MMseq'
-hmm_dir ='HMMsearch'
-
-NhaBhit_list = get_hits(direction, mmseq_dir, hmm_dir)
-NhaB_tax_list = parse_tax(NhaBhit_list)
-NhaB_uniq_ids = parse_id(NhaBhit_list)
 
 homedir ='/nesi/nobackup/uc04105/new_databases_May/GTDB_226'
 with open('{}/IT_bacteria_28may.tsv'.format(homedir), 'a') as IT:
