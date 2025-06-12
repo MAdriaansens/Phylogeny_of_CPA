@@ -1,0 +1,435 @@
+---
+title: "Untitled"
+author: "Mick Adriaansens"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup}
+IT_Bacteria <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Bacteria_11June.tsv', sep='\t', stringsAsFactors = TRUE)
+
+```
+
+
+```{r load_packages}
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+```
+
+
+```{r Taxonomic_break_down}
+IT_Bacteria %>% separate(GTDB_taxonomy, c('Domain_Phyla', 'Lower_class'), ';c__') -> IT_Bacteria
+IT_Bacteria %>% separate(Domain_Phyla, c('Domain', 'Phyla'), ';p__') ->IT_Bacteria
+IT_Bacteria %>% separate(Lower_class, c('Class', 'Lower_order'), ';o__') -> IT_Bacteria
+IT_Bacteria %>% separate(Lower_order, c('Order', 'Lower_family'), ';f__') -> IT_Bacteria
+IT_Bacteria %>% separate(Lower_family, c('Family', 'Lower_genera'), ';g__') -> IT_Bacteria
+IT_Bacteria %>% separate(Lower_genera, c('Genera', 'Species'), ';s__') -> IT_Bacteria
+```
+
+```{r Protein_data_wrangling}
+IT_Bacteria$IT_count <- IT_Bacteria$NhaB_count + IT_Bacteria$NhaC_count + IT_Bacteria$NhaD_count
+IT_Bacteria$Antiporter_count <- IT_Bacteria$CPA_count + IT_Bacteria$IT_count
+
+IT_Bacteria$IT_binary[IT_Bacteria$IT_count == 0] <- 0
+IT_Bacteria$IT_binary[IT_Bacteria$IT_count > 0] <- 1
+
+IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count == 0] <- 0
+IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count >0] <- 1
+
+IT_Bacteria$CPA_binary[IT_Bacteria$CPA_count == 0] <- 0
+IT_Bacteria$CPA_binary[IT_Bacteria$CPA_count > 0] <- 1
+
+IT_Bacteria$NhaB_binary[IT_Bacteria$NhaB_count == 0] <- 0
+IT_Bacteria$NhaB_binary[IT_Bacteria$NhaB_count > 0] <- 1
+
+
+IT_Bacteria$NhaC_binary[IT_Bacteria$NhaC_count == 0] <- 0
+IT_Bacteria$NhaC_binary[IT_Bacteria$NhaC_count > 0] <- 1
+
+IT_Bacteria$NhaD_binary[IT_Bacteria$NhaD_count == 0] <- 0
+IT_Bacteria$NhaD_binary[IT_Bacteria$NhaD_count > 0] <- 1
+
+#write.csv(IT_Bacteria, 'Antiporter_across_all_GTDB_representatives.csv')
+```
+
+
+
+
+
+```{r}
+
+top_phyla <- c('Aquificota', 'Acidobacteriota', 'Actinomycetota', 'Bacteroidota', 'Bacillota', 'Campylobacterota', 'Chloroflexota', 'Cyanobacteriota', 'Desulfobacterota','Fusobacteriota', 'Gemmatimonadota' , 'Myxococcota', 'Nitrospirota', 'Patescibacteriota', 'Planctomycetota', 'Pseudomonadota', 'Verrucomicrobiota') 
+
+#ggplot(data=IT_Bacteria[IT_Bacteria$Phyla %in% top_phyla,], mapping=aes(x=completeness, y=CPA_count, col=Phyla)) + geom_point()
+```
+
+
+```{r}
+IT_Bacteria %>%
+  count(Phyla, CPA_binary) %>%
+  complete(Phyla, CPA_binary = 0:1, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Phyla, names_from =CPA_binary, values_from = n, names_prefix = "Species_with_CPA_count") -> CPA_percent_per_phyla
+
+IT_Bacteria %>%
+  count(Phyla, IT_binary) %>%
+  complete(Phyla, IT_binary = 0:1, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Phyla, names_from =IT_binary, values_from = n, names_prefix = "Species_with_IT") -> IT_percent_per_phyla
+
+IT_percent_per_phyla$percentage_IT <- IT_percent_per_phyla$Species_with_IT1/(IT_percent_per_phyla$Species_with_IT0 + IT_percent_per_phyla$Species_with_IT1)
+IT_percent_per_phyla <- IT_percent_per_phyla %>% rename(
+    Taxonomic_group = Phyla)
+
+CPA_percent_per_phyla$percentage_CPA <- CPA_percent_per_phyla$Species_with_CPA_count1/(CPA_percent_per_phyla$Species_with_CPA_count0+ CPA_percent_per_phyla$Species_with_CPA_count1)
+
+
+CPA_percent_per_phyla <- CPA_percent_per_phyla %>% rename(
+    Taxonomic_group = Phyla)
+Antiporter_per_phyla <- merge(CPA_percent_per_phyla, IT_percent_per_phyla, by='Taxonomic_group')
+Antiporter_per_phyla$tax_rank <- 'Phyla'
+
+```
+
+
+```{r}
+IT_Bacteria %>%
+  count(Class, CPA_binary) %>%
+  complete(Class, CPA_binary = 0:1, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Class, names_from =CPA_binary, values_from = n, names_prefix = "Species_with_CPA_count") -> CPA_percent_per_Class
+
+IT_Bacteria %>%
+  count(Class, IT_binary) %>%
+  complete(Class, IT_binary = 0:1, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Class, names_from =IT_binary, values_from = n, names_prefix = "Species_with_IT") -> IT_percent_per_Class
+
+IT_percent_per_Class$percentage_IT <- IT_percent_per_Class$Species_with_IT1/(IT_percent_per_Class$Species_with_IT0 + IT_percent_per_Class$Species_with_IT1)
+IT_percent_per_Class <- IT_percent_per_Class %>% rename(
+    Taxonomic_group = Class)
+
+CPA_percent_per_Class$percentage_CPA <- CPA_percent_per_Class$Species_with_CPA_count1/(CPA_percent_per_Class$Species_with_CPA_count0+ CPA_percent_per_Class$Species_with_CPA_count1)
+
+
+CPA_percent_per_Class <- CPA_percent_per_Class %>% rename(
+    Taxonomic_group = Class)
+Antiporter_per_Class <- merge(CPA_percent_per_Class, IT_percent_per_Class, by='Taxonomic_group')
+Antiporter_per_Class$tax_rank <- 'Class'
+ggplot(Antiporter_per_Class, aes(x=percentage_CPA, y=percentage_IT)) + geom_point() + geom_smooth()
+```
+
+
+
+```{r}
+IT_Bacteria %>%
+  count(Order, CPA_binary) %>%
+  complete(Order, CPA_binary = 0:1, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Order, names_from =CPA_binary, values_from = n, names_prefix = "Species_with_CPA_count") -> CPA_percent_per_Order
+
+IT_Bacteria %>%
+  count(Order, IT_binary) %>%
+  complete(Order, IT_binary = 0:1, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Order, names_from =IT_binary, values_from = n, names_prefix = "Species_with_IT") -> IT_percent_per_Order
+
+IT_percent_per_Order$percentage_IT <- IT_percent_per_Order$Species_with_IT1/(IT_percent_per_Order$Species_with_IT0 + IT_percent_per_Order$Species_with_IT1)
+IT_percent_per_Order <- IT_percent_per_Order %>% rename(
+    Taxonomic_group = Order)
+
+CPA_percent_per_Order$percentage_CPA <- CPA_percent_per_Order$Species_with_CPA_count1/(CPA_percent_per_Order$Species_with_CPA_count0+ CPA_percent_per_Order$Species_with_CPA_count1)
+
+
+CPA_percent_per_Order <- CPA_percent_per_Order %>% rename(
+    Taxonomic_group = Order)
+Antiporter_per_Order <- merge(CPA_percent_per_Order, IT_percent_per_Order, by='Taxonomic_group')
+Antiporter_per_Order$tax_rank <- 'Order'
+ggplot(Antiporter_per_Order, aes(x=percentage_CPA, y=percentage_IT)) + geom_point() + geom_smooth()
+```
+
+
+```{r}
+IT_Bacteria %>%
+  count(Family, CPA_binary) %>%
+  complete(Family, CPA_binary = 0:1, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Family, names_from =CPA_binary, values_from = n, names_prefix = "Species_with_CPA_count") -> CPA_percent_per_Family
+
+IT_Bacteria %>%
+  count(Family, IT_binary) %>%
+  complete(Family, IT_binary = 0:1, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Family, names_from =IT_binary, values_from = n, names_prefix = "Species_with_IT") -> IT_percent_per_Family
+
+IT_percent_per_Family$percentage_IT <- IT_percent_per_Family$Species_with_IT1/(IT_percent_per_Family$Species_with_IT0 + IT_percent_per_Family$Species_with_IT1)
+IT_percent_per_Family <- IT_percent_per_Family %>% rename(
+    Taxonomic_group = Family)
+
+CPA_percent_per_Family$percentage_CPA <- CPA_percent_per_Family$Species_with_CPA_count1/(CPA_percent_per_Family$Species_with_CPA_count0+ CPA_percent_per_Family$Species_with_CPA_count1)
+
+
+CPA_percent_per_Family <- CPA_percent_per_Family %>% rename(
+    Taxonomic_group = Family)
+Antiporter_per_Family <- merge(CPA_percent_per_Family, IT_percent_per_Family, by='Taxonomic_group')
+Antiporter_per_Family$tax_rank <- 'Family'
+ggplot(Antiporter_per_Family, aes(x=percentage_CPA, y=percentage_IT)) + geom_point() + geom_smooth()
+```
+
+
+```{r}
+IT_Bacteria %>%
+  count(Genera, CPA_binary) %>%
+  complete(Genera, CPA_binary = 0:1, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Genera, names_from =CPA_binary, values_from = n, names_prefix = "Species_with_CPA_count") -> CPA_percent_per_Genera
+
+IT_Bacteria %>%
+  count(Genera, IT_binary) %>%
+  complete(Genera, IT_binary = 0:1, fill = list(n = 0)) %>%
+  pivot_wider(id_cols = Genera, names_from =IT_binary, values_from = n, names_prefix = "Species_with_IT") -> IT_percent_per_Genera
+
+IT_percent_per_Genera$percentage_IT <- IT_percent_per_Genera$Species_with_IT1/(IT_percent_per_Genera$Species_with_IT0 + IT_percent_per_Genera$Species_with_IT1)
+IT_percent_per_Genera <- IT_percent_per_Genera %>% rename(
+    Taxonomic_group = Genera)
+
+CPA_percent_per_Genera$percentage_CPA <- CPA_percent_per_Genera$Species_with_CPA_count1/(CPA_percent_per_Genera$Species_with_CPA_count0+ CPA_percent_per_Genera$Species_with_CPA_count1)
+
+
+CPA_percent_per_Genera <- CPA_percent_per_Genera %>% rename(
+    Taxonomic_group = Genera)
+Antiporter_per_Genera <- merge(CPA_percent_per_Genera, IT_percent_per_Genera, by='Taxonomic_group')
+Antiporter_per_Genera$tax_rank <- 'Genera'
+ggplot(Antiporter_per_Genera, aes(x=percentage_CPA, y=percentage_IT)) + geom_point() + geom_smooth()
+```
+
+
+
+```{r}
+AP_per_taxonomic_group <- rbind(Antiporter_per_phyla, Antiporter_per_Class, Antiporter_per_Order, Antiporter_per_Family, Antiporter_per_Genera)
+ggplot(data = AP_per_taxonomic_group, aes(y=percentage_CPA, x=percentage_IT, col=tax_rank)) + geom_smooth(method='lm', se=FALSE) + geom_point()
+```
+
+
+
+```{r}
+ggplot(data=IT_Bacteria[IT_Bacteria$Antiporter_binary==1,], aes(x=CPA_count, y=IT_count)) + geom_point() + geom_smooth(se=FALSE)
+```
+
+
+```{r}
+t.test(IT_Bacteria$completeness~IT_Bacteria$Antiporter_binary, var.equal=FALSE)
+
+```
+
+```{r}
+tapply(IT_Bacteria$completeness[IT_Bacteria$Phyla %in% top_phyla], IT_Bacteria$Phyla[IT_Bacteria$Phyla %in% top_phyla], mean)
+```
+
+
+
+```{r}
+
+Phyla_A_no_AP_count <- aggregate(IT_Bacteria$Antiporter_binary==0, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+
+Phyla_A_nothing_count <- aggregate(IT_Bacteria$Antiporter_binary==0, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+sum(Phyla_A_nothing_count$x)
+Phyla_A_no_AP_count <- Phyla_A_no_AP_count[Phyla_A_no_AP_count$Category %in% top_phyla,]
+Phyla_A_no_AP_count <- Phyla_A_no_AP_count %>% rename(
+    Phy = Category,
+    total_noAP=x)
+
+IT_present <- IT_Bacteria[IT_Bacteria$IT_binary == 1,] 
+
+both <- aggregate(IT_present$CPA_binary, by=list(Category=IT_present$Phyla), FUN=sum)
+both <- both[both$Category %in% top_phyla,]
+both <- both %>% rename(
+    Phyla = Category,
+    both_CPA_IT=x)
+
+
+IT_absent <- IT_Bacteria[IT_Bacteria$IT_binary == 0,] 
+
+no_IT_butCPA <- aggregate(IT_absent$CPA_binary, by=list(Category=IT_absent$Phyla), FUN=sum)
+no_IT_butCPA <- no_IT_butCPA[no_IT_butCPA$Category %in% top_phyla,]
+no_IT_butCPA <- no_IT_butCPA %>% rename(
+    Phyla = Category,
+    no_IT_butCPA=x)
+
+CPA_absent <- IT_Bacteria[IT_Bacteria$CPA_binary == 0,] 
+
+no_CPA_but_IT <- aggregate(CPA_absent$IT_binary, by=list(Category=CPA_absent$Phyla), FUN=sum)
+no_CPA_but_IT <- no_CPA_but_IT [no_CPA_but_IT $Category %in% top_phyla,]
+no_CPA_but_IT  <- no_CPA_but_IT  %>% rename(
+    Phyla = Category,
+    no_CPA_but_IT =x)
+
+Phyla_A_no_AP_count <- aggregate(IT_Bacteria$Antiporter_binary==0, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+
+Phyla_A_nothing_count <- aggregate(IT_Bacteria$Antiporter_binary==0, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+sum(Phyla_A_nothing_count$x)
+Phyla_A_no_AP_count <- Phyla_A_no_AP_count[Phyla_A_no_AP_count$Category %in% top_phyla,]
+Phyla_A_no_AP_count <- Phyla_A_no_AP_count %>% rename(
+    Phyla = Category,
+    total_noAP=x)
+
+Phyla_A_AP_count <- aggregate(IT_Bacteria$Antiporter_count, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+Phyla_A_AP_count <- Phyla_A_AP_count[Phyla_A_AP_count$Category %in% top_phyla,]
+Phyla_A_AP_count <- Phyla_A_AP_count %>% rename(
+    Phyla = Category,
+    total_AP=x)
+
+Phyla_A_NhaB_count <- aggregate(IT_Bacteria$NhaB_count, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+Phyla_A_NhaB_count <- Phyla_A_NhaB_count[Phyla_A_NhaB_count$Category %in% top_phyla,]
+Phyla_A_NhaB_count <- Phyla_A_NhaB_count %>% rename(
+    Phyla = Category,
+    total_NhaB=x)
+
+Phyla_A_NhaC_count <- aggregate(IT_Bacteria$NhaC_count, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+Phyla_A_NhaC_count <- Phyla_A_NhaC_count[Phyla_A_NhaC_count$Category %in% top_phyla,]
+Phyla_A_NhaC_count <- Phyla_A_NhaC_count %>% rename(
+    Phyla = Category,
+    total_NhaC=x)
+
+Phyla_A_NhaD_count <- aggregate(IT_Bacteria$NhaD_count, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+Phyla_A_NhaD_count <- Phyla_A_NhaD_count[Phyla_A_NhaD_count$Category %in% top_phyla,]
+Phyla_A_NhaD_count <- Phyla_A_NhaD_count %>% rename(
+    Phyla = Category,
+    total_NhaD=x)
+
+Phyla_A_CPA_count <- aggregate(IT_Bacteria$CPA_count, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+Phyla_A_CPA_count <- Phyla_A_CPA_count[Phyla_A_CPA_count$Category %in% top_phyla,]
+Phyla_A_CPA_count <- Phyla_A_CPA_count %>% rename(
+    Phyla = Category,
+    total_CPA=x)
+
+Phyla_A_AP_species_count <- aggregate(IT_Bacteria$Antiporter_binary, by=list(Category=IT_Bacteria$Phyla), FUN=sum)
+Phyla_A_AP_species_count <- Phyla_A_AP_species_count[Phyla_A_AP_species_count $Category %in% top_phyla,]
+Phyla_A_AP_species_count <- Phyla_A_AP_species_count %>% rename(
+    Phyla = Category,
+    species_with_AP=x)
+
+
+Phyla_A_observations <- IT_Bacteria[IT_Bacteria$Phyla %in% top_phyla,] %>% count(Phyla)
+Phyla_A_accounts <- merge(Phyla_A_no_AP_count, Phyla_A_observations, by='Phyla')
+Phyla_A_accounts <- merge(Phyla_A_accounts, no_IT_butCPA, by='Phyla')
+Phyla_A_accounts <- merge(Phyla_A_accounts, both, by='Phyla')
+Phyla_A_accounts <- merge(Phyla_A_accounts, no_CPA_but_IT, by='Phyla')
+Phyla_A_accounts <- merge(Phyla_A_accounts, Phyla_A_AP_count, by='Phyla')
+Phyla_A_accounts <- merge(Phyla_A_accounts, Phyla_A_AP_species_count, by='Phyla')
+Phyla_A_accounts <- merge(Phyla_A_accounts, Phyla_A_CPA_count, by='Phyla')
+
+Phyla_A_accounts <- merge(Phyla_A_accounts, Phyla_A_NhaB_count, by='Phyla')
+Phyla_A_accounts <- merge(Phyla_A_accounts, Phyla_A_NhaC_count, by='Phyla')
+Phyla_A_accounts <- merge(Phyla_A_accounts, Phyla_A_NhaD_count, by='Phyla')
+
+Phyla_A_accounts$IT_count <- Phyla_A_accounts$total_AP - Phyla_A_accounts$total_CPA
+
+
+
+Phyla_A_accounts$CPA_per_species <- Phyla_A_accounts$total_CPA/Phyla_A_accounts$species_with_AP
+Phyla_A_accounts$AP_per_species <- Phyla_A_accounts$total_AP/Phyla_A_accounts$species_with_AP
+Phyla_A_accounts$NhaB_per_species <- Phyla_A_accounts$total_NhaB/Phyla_A_accounts$species_with_AP
+Phyla_A_accounts$NhaC_per_species <- Phyla_A_accounts$total_NhaC/Phyla_A_accounts$species_with_AP
+Phyla_A_accounts$NhaD_per_species <- Phyla_A_accounts$total_NhaD/Phyla_A_accounts$species_with_AP
+
+Phyla_A_accounts$percentage_CPA1_IT0 <- 100*Phyla_A_accounts$no_IT_butCPA/Phyla_A_accounts$n
+Phyla_A_accounts$percentage_CPA1_IT1 <- 100*Phyla_A_accounts$both_CPA_IT/Phyla_A_accounts$n
+Phyla_A_accounts$percentage_CPA0_IT1 <- 100*Phyla_A_accounts$no_CPA_but_IT/Phyla_A_accounts$n
+Phyla_A_accounts$percentage_CPA0_IT0 <- 100*Phyla_A_accounts$total_noAP/Phyla_A_accounts$n
+```
+
+```{r}
+Antiporter_per_taxonomic_group <- rbind(Antiporter_per_phyla, Antiporter_per_Class, Antiporter_per_Order, Antiporter_per_Family, Antiporter_per_Genera)
+piNA<- ggplot(data=Antiporter_per_taxonomic_group, aes(x=percentage_IT, y=percentage_CPA, col=tax_rank)) + geom_point(size=1.5) +   geom_smooth(method = lm, color = "black")  + 
+  theme(axis.text.x = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "black", size = 25, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+        axis.title.y = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = .5, face = "plain"))
+piNA
+```
+
+
+```{r}
+Percentages_Phyla <- Phyla_A_accounts[,c(1,19,20,21)]
+Percentages_Phyla$Phyla <- as.factor(Percentages_Phyla$Phyla)
+
+pivot_percentages_MJTBAC <- Percentages_Phyla %>% pivot_longer(
+  cols=-Phyla,
+  names_to = 'status',
+  values_to = 'percentage') 
+
+pivot_percentages_MJTBAC$status <- factor(pivot_percentages_MJT$status, levels=c( 'percentage_CPA0_IT1', 'percentage_CPA1_IT1', 'percentage_CPA1_IT0' ))
+```
+
+```{r}
+
+pivA<-ggplot(pivot_percentages_MJTBAC, aes(y = Phyla, x=percentage, fill=status, alpha=status))+ geom_bar(stat='identity') + scale_fill_manual(values = c('brown1', 'darkviolet', 'deepskyblue1')) + scale_alpha_manual(values = c(0.3, 0.9, 0.5)) + theme_minimal() + theme(legend.position="none") + 
+  theme(axis.text.x = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "black", size = 25, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+        axis.title.y = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = .5, face = "plain"))
+pivA
+
+pdf(file = "Bacteria_Plot1.pdf",   # The directory you want to save the file in
+    width = 14, # The width of the plot in inches
+    height = 8)
+pivA
+dev.off()
+
+```
+
+
+```{r}
+Averages_Phyla_Bac <- Phyla_A_accounts[,c(1,14,16,17,18)]
+Averages_Phyla_Bac$Phyla <- as.factor(Averages_Phyla_Bac$Phyla)
+
+pivot_Averages_MJTBac <- Averages_Phyla %>% pivot_longer(
+  cols=-Phyla,
+  names_to = 'status',
+  values_to = 'Average') 
+
+pivot_Averages_MJTBc$status <- factor(pivot_Averages_MJT$status, levels=c( 'NhaD_per_species', 'NhaC_per_species', 'NhaB_per_species','CPA_per_species'))
+
+halves <- Phyla_A_accounts[,c(1,15)]
+halves$AP_per_species <- halves$AP_per_species/2
+pivA<-ggplot(pivot_Averages_MJT, aes(y = Phyla, x=Average, fill=status, alpha =status))+ geom_bar(stat='identity') + scale_fill_manual(values = c('brown1', 'gold', 'magenta', 'deepskyblue1')) + theme_minimal()  + scale_alpha_manual(values = c(0.3, 0.6, 0.8, 1)) + 
+  theme(axis.text.x = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "black", size = 25, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+        axis.title.y = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = .5, face = "plain"))
+
+pivA
+
+
+pdf(file = "Bacteria_Plot2.pdf",   # The directory you want to save the file in
+    width = 14, # The width of the plot in inches
+    height = 8)
+pivA
+
+dev.off()
+ 
+```
+
+
+
+
+
+
+
+```{r}
+#for other genes
+
+IT_Bacteria$NhaC_presence[IT_Bacteria$NhaC_binary ==0] <- 'Absent'
+IT_Bacteria$NhaC_presence[IT_Bacteria$NhaC_binary ==1] <- 'Present'
+
+IT_Bacteria$NhaC_presence <- as.factor(IT_Bacteria$NhaC_presence)
+ggplot(IT_Bacteria, aes(y=completeness, x=NhaC_presence, fill=NhaC_presence)) + geom_boxplot(outlier.alpha = 0.01) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal()
+
+```
+
+
+
+```{r}
+IT_Bacteria$CPA_presence[IT_Bacteria$CPA_binary ==0] <- 'Absent'
+IT_Bacteria$CPA_presence[IT_Bacteria$CPA_binary ==1] <- 'Present'
+
+IT_Bacteria$CPA_presence <- as.factor(IT_Bacteria$CPA_presence)
+ggplot(IT_Bacteria, aes(y=completeness, x=CPA_presence, fill=CPA_presence)) + geom_boxplot(outlier.alpha = 0.01) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal()
+
+```
