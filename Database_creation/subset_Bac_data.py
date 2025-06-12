@@ -1,6 +1,6 @@
 tinput = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_GTDB226_protein_May92025.faa'
 
-
+#og script is from BioPython
 def batch_iterator(iterator, batch_size):
     """Returns lists of length batch_size.
 
