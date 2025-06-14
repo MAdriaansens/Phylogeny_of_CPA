@@ -9,5 +9,5 @@ with open('/nesi/nobackup/uc04105/fasta_files/pfams/{}'.format(infile), 'a') as 
         if len(record.seq) < 257: #257 in case of PF00999
             pass
         else:
-            outline = '>' + record.id + '\n' + str(record.seq)
+            outline = '>' + record.id + '\n' + str(record.seq) + '\n'
             S.write(outline)
