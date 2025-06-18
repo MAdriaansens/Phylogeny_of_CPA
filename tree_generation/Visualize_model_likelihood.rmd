@@ -11,17 +11,17 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r load_packages}
+```{r ,load_packages}
 library(ggplot2)
 library(tidyr)
 library(dplyr)
 ```
 
-```{r load_Archaea}
+```{r ,load_models}
 Models <- read.delim('/nesi/nobackup/uc04105/All_models_likelihood.tsv', sep='\t', stringsAsFactors = TRUE)
 ```
 
-```{r}
+```{r , generate_plots}
 Splot <- ggplot(Models[Models$set=='Seed',], aes(y=likelihood, x=model, fill=model)) + geom_boxplot(outlier.alpha = 0) + geom_jitter(alpha=0.3) + ggtitle('Best models and their score from Seed') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold"),
                                                                                                                                                                 axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold")) + ylim(-72500, -50000)
 
@@ -36,7 +36,7 @@ Bplot <- ggplot(Models[Models$set=='Bac',], aes(y=likelihood, x=model, fill=mode
                                                                                                                                                                 axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold")) + ylim(-72500, -50000)
 ```
 
-```{r}
+```{r ,visualise}
 library(gridExtra)
 BF<-grid.arrange(Splot, Eplot, Aplot, Bplot, nrow = 1)
 BF
