@@ -8,7 +8,7 @@
 #SBATCH --output=slurm_output/00999_Homology_MMseq_Euk_part1_output%A.out
 #SBATCH --error=slurm_output/00999_Homology_MMseq_part1_Euk_error%A.err
 
-module load MMseqs2/12-113e3-gimkl-2020a
+module load MMseqs2/15-6f452-gompi-2023a
 module load Python/3.11.6-foss-2023a
 
 PWD=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May
