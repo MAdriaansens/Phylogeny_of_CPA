@@ -12,5 +12,5 @@ declare -a array=("0.6" "0.7" "0.8" "0.9")
 
 MMseq=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/MMseq/Archaea/PF00999
 
-
+#note that for bacteria the sequences have to be concatenated prior to running this 
 mmseqs easy-cluster --threads 30 -c 0.0 --min-seq-id ${array[$SLURM_ARRAY_TASK_ID]} ${MMseq}/Archaea_Manual_seq_e05_cov30.fasta ${MMseq}/Archaea_Manual_seq_e05_cov30_seqid${array[$SLURM_ARRAY_TASK_ID]}.faa tmp_${array[$SLURM_ARRAY_TASK_ID]}
