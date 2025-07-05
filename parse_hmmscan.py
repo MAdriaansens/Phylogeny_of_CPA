@@ -15,8 +15,14 @@ with open(HMMscan, 'r') as H:
             protein_id = line.split('_tax:')[0].split(' ')[-1]
             Taxonomy = (line.split('_tax:')[-1].split(' - ')[0])
             full_id = protein_id + '_tax:' + Taxonomy
-            prelim_evalue = line.split(' - ')[1]
-            #print(line)
+
+            #chunk added, if HMMs are made inhouse vs Pfam the '-' split becomes a problem, thus an if else statement is implemented
+            if line.count(' - ') ==1:
+                prelim_evalue = line.split(' - ')[1]
+            else: 
+                prelim_evalue = line.split(' - ')[2]
+            
+            
             for i in (list(set(prelim_evalue.split(' ')))):
                 if e_count == 0:
                     if 'e-' in i:
