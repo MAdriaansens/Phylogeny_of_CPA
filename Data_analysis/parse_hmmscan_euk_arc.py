@@ -1,4 +1,4 @@
-
+#this works for both Eukarya and Archaea since they are one singular hmmscan .tsv file per domain, Bacteria has been split up and the code is a bit different
 def best_hit_dict(HMMscan):
     scan_dict ={}
     count = 0
