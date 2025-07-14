@@ -35,7 +35,7 @@ for key in NhaB_data.keys():
 print(len(list(set(NhaB_tax_list))))
 
 CPA_hit_list=[]
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/intermediate_PF00999/PF00999_Archaea_MERGED_alignedPF00999.faa', 'fasta'):
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/merged_PFAM_HMMsearches_before_self_cross/PF00999_Archaea_MERGED_alignedPF00999_parsed_aligned258.faa_exes.fasta'', 'fasta'):
     hit_id = record.id.split('|')[1]
     CPA_hit_list.append(hit_id)
 
