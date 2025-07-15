@@ -29,7 +29,8 @@ def best_hit_dict(HMMscan, scan_dict):
                 elif scan_dict[full_id][1].split('-') > evalue.split('-'):
                     pass
                 else:
-                     scan_dict[full_id] =entry_list
+                    entry_list = (best_match_hmm, evalue)
+                    scan_dict[full_id] =entry_list
     return(scan_dict)
 import os
 
