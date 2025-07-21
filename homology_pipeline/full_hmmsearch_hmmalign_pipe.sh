@@ -39,23 +39,3 @@ hmmalign --amino --trim -o ${HMMalign}/EUK_HMM_e03vsArchaea.sthk /nesi/nobackup/
 python parse_stockholm_filter.py ${HMMalign}/EUK_HMM_e03vsArchaea.sthk ${HMMalign}/EUK_HMM_e03vsArchaea.fa 258
 
 python retrieve_fl.py EUK_HMM_e03vsArchaea.fa.fasta EUK_HMM_e03vsArchaea_fulllength.fa.fasta ${HMMalign} ${TSV}
-
-
-hmmscan --tblout ${HMMscan}/BAC_HMM_e03vsArchaea_PF00999_aligned_INHhmmscanned.tsv /nesi/nobackup/uc04105/results/HMM/HMM_db/INH_HMM_PF00999.hmm ${HMMalign}/BAC_HMM_e03vsArchaea_fulllength.fa.fasta
-
-python parse_hmmscan.py ${HMMscan}/BAC_HMM_e03vsArchaea_PF00999_aligned_INHhmmscanned.tsv PF00999 ${HMMscan}/BAC_HMM_e03vsArchaea_PF00999_aligned_INHhmmscanned.json
-
-hmmscan --tblout ${HMMscan}/BAC_HMM_e03vsArchaea_PF00999_aligned_Pfamhmmscanned.tsv /nesi/nobackup/uc04105/results/HMM/HMM_db/CPA_IT_pfam ${HMMalign}/BAC_HMM_e03vsArchaea_fulllength.fa.fasta
-
-python parse_hmmscan.py ${HMMscan}/BAC_HMM_e03vsArchaea_PF00999_aligned_Pfamhmmscanned.tsv PF00999 ${HMMscan}/BAC_HMM_e03vsArchaea_PF00999_aligned_Pfamhmmscanned.json
-
-
-
-hmmscan --tblout ${HMMscan}/EUK_HMM_e03vsArchaea_PF00999_aligned_INHhmmscanned.tsv /nesi/nobackup/uc04105/results/HMM/HMM_db/INH_HMM_PF00999.hmm ${HMMalign}/EUK_HMM_e03vsArchaea_fulllength.fa.fasta
-
-python parse_hmmscan.py ${HMMscan}/EUK_HMM_e03vsArchaea_PF00999_aligned_INHhmmscanned.tsv PF00999 ${HMMscan}/EUK_HMM_e03vsArchaea_PF00999_aligned_INHhmmscanned.json
-
-
-hmmscan --tblout ${HMMscan}/EUK_HMM_e03vsArchaea_PF00999_aligned_Pfamhmmscanned.tsv /nesi/nobackup/uc04105/results/HMM/HMM_db/CPA_IT_pfam ${HMMalign}/EUK_HMM_e03vsArchaea_fulllength.fa.fasta
-
-python parse_hmmscan.py ${HMMscan}/EUK_HMM_e03vsArchaea_PF00999_aligned_Pfamhmmscanned.tsv PF00999 ${HMMscan}/EUK_HMM_e03vsArchaea_PF00999_aligned_Pfamhmmscanned.json
