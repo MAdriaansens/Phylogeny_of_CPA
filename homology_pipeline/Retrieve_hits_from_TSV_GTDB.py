@@ -36,10 +36,8 @@ with open("{}".format(hit_file)) as infile:
 unique_list = unique(hits)
 print('length list: {}'.format(len(unique_list)))
 
-Precentage_list = (0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)
 with open("{}".format(fasta_tsv_file)) as infile:
     file1 = open("{}".format(output), "a")  # append mode
-    count = 0
     for line in infile:
         entry = line.split("\t")
         if entry[0] not in unique_list:
@@ -50,9 +48,5 @@ with open("{}".format(fasta_tsv_file)) as infile:
             else:
                 sequence = ('>'+ entry[0] + '_tax:' +  entry[2] + '\n' + entry[-1])
                 file1.write(sequence)
-                count = count + 1
-                if (count/len(unique_list)) in Precentage_list:
-                    print((count/len(unique_list))*10)
-                else:
-                    pass
+
     file1.close()
