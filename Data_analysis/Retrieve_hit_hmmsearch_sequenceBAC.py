@@ -1,6 +1,7 @@
 import os 
 from Bio import SeqIO
 
+HMMsearch_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMsearch/Bacteria/PF00999/hmmsearch_for_scan'
 
 Bac_seqs = {}
 #for PFAM
