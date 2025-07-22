@@ -47,12 +47,12 @@ print(len(Bac_seqs.keys()))
 print(len(Bac_borders))
 
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMsearch/subset_forhmmscan/PF00999HMMsearch_matchedseq_vsBacteria.fasta', 'w') as A:
-    for entry in Arc_borders.keys():
-        if entry not in list(Arc_seqs.keys()):
+    for entry in Bac_borders.keys():
+        if entry not in list(Bac_seqs.keys()):
             pass
         else:
-            start = int(Arc_borders[entry][0])-1
-            end = int(Arc_borders[entry][1])-1
-            sequence = Arc_seqs[entry] 
+            start = int(Bac_borders[entry][0])-1
+            end = int(Bac_borders[entry][1])-1
+            sequence = Bac_seqs[entry] 
             header = '>'  + '{}'.format(entry) +'_subset_{}_until_{}'.format(start,end) + '\n' + sequence + '\n'
             A.write(header)
