@@ -39,6 +39,8 @@ scanned_list = []
 
 import os
 Scan_dict1 = {}
+#for Bacteria HMMscan_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Bacteria/PF00999/'
+
 HMMscan_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Archaea'
 
 for entry in os.listdir(HMMscan_dir):
@@ -69,6 +71,7 @@ Scan_dict1 = {}
 
 for entry in os.listdir(HMMscan_dir):
     if 'All_Arc' in entry:
+        #for Bacteria it should be All_arc
         scan_dict = {}
         HMMscan = '{}/{}'.format(HMMscan_dir, entry)
         scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -82,6 +85,7 @@ print(len(set(scanned_list)))
 
 
 HMMalign_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/cross_domain'
+#For Bacteria HMMalign_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF00999/cross_domain_final'
 Seq_dict = {}
 for j in os.listdir(HMMalign_dir):
     if 'faa.fasta' in j:
@@ -90,6 +94,7 @@ for j in os.listdir(HMMalign_dir):
 print(len(Seq_dict.keys()))
 
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/ARC_hmmscanned_hmmaligned.fasta', 'a') as O:
+#For Bacteria with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/BAC_hmmscanned_hmmaligned.fasta', 'a') as O:
 
     for entry in set(scanned_list):
         sequence_id = entry.split('_tax')[0]
