@@ -10,14 +10,16 @@
 
 #3 the output fasta file of this script containing only the part of the sequences hit by the HMM, regardless of size. 
 
-
+import sys
 import os 
 from Bio import SeqIO
 
 
 #this sets the directory for the HMMsearch done with --domtblout, the --domtblout out contains the start and end of the HMMalignment to the given sequences
+Query_HMM = sys.argv[1]  #EUK, Bacteria, ARC or PF00999
+Bac_hmmsearch_seqdir= sys.argv[2] #'/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMsearch/Bacteria/PF00999/Pfam'
 
-HMMsearch_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMsearch/Bacteria/PF00999/hmmsearch_for_scan'
+#HMMsearch_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMsearch/Bacteria/PF00999/hmmsearch_for_scan'
 
 
 #set up a dictionairy of Bacteria protein ids as Key and sequences as Values. Hence the name Bac_seq
@@ -52,7 +54,7 @@ for search_tsv in os.listdir(HMMsearch_dir):
     #All_Bac means that it All bacteria sequences were the subject of the initial HMMsearch 
     if search_tsv.split('7juli')[0] == 'All_Bac':
         #what comes after the vs denotes the query
-       if search_tsv.split('.tsv')[0].split('vs')[-1] == 'PF00999':
+       if search_tsv.split('.tsv')[0].split('vs')[-1] == '{}'.format(Query_HMM):
            #print(search_tsv.split('.tsv')[0].split('vs')[-1])
            with open('{}/{}'.format(HMMsearch_dir,search_tsv), 'r') as lines:
                for line in lines:
@@ -81,7 +83,7 @@ print(len(Bac_seqs.keys()))
 print(len(Bac_borders))
 
 #here we write the fasta files
-with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMsearch/subset_forhmmscan/PF00999HMMsearch_matchedseq_vsBacteria.fasta', 'w') as A:
+with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMsearch/subset_forhmmscan/{}HMMsearch_matchedseq_vsBacteria.fasta'.format(Query_HMM), 'w') as A:
     for entry in Bac_borders.keys():
         if entry not in list(Bac_seqs.keys()):
             pass
