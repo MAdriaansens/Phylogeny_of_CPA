@@ -7,9 +7,6 @@ from Bio import SeqIO
 #get signles and multiples:
 
 
-Hit_list = []
-for record in SeqIO.parse(Arc_fasta, 'fasta'):
-    Hit_list.append(record.id)
 Tax_dict = {}
 import os
 for entry in os.listdir('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/cross_domain'):
