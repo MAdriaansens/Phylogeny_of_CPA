@@ -15,7 +15,13 @@ for entry in os.listdir('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/resul
         for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/cross_domain/{}'.format(entry), 'fasta'):
             Tax_dict[record.id.split('_tax:')[0]] = record.id.split('tax:d__')[1]
         
-        
+MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Archaea_allhmmscanned_final_clustered_at0.7.fasta_cluster.tsv'
+rep_list = []
+with open(MMseq, 'r') as clusters:
+    for cluster in clusters:
+        rep = cluster.split('\t')[0]
+        rep_list.append(rep)
+    clusters.close()        
 
 from collections import Counter
 
