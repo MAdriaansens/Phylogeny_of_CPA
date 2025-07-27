@@ -47,7 +47,10 @@ Bac_cluster = Counter(Bac_cluster_list)
 def Parse_hmmalign_to_list(infile):
     dom_dic =[]
     for record in SeqIO.parse('{}'.format(infile), 'fasta'):
-        dom_dic.append(record.id)
+        if '|' not in record.id:
+            dom_dic.append(record.id)
+        else:
+            dom_dic.append(record.id.split('|')[1])
     return(dom_dic)
 
 
