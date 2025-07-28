@@ -1,3 +1,4 @@
+from Bio import SeqIO
 def best_hit_dict(HMMscan, scan_dict):
     count = 0
     with open(HMMscan, 'r') as H:
