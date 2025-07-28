@@ -54,6 +54,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/clades_CPA_ph
                         children = (len(clade.get_terminals()))
                         passed_thres_count = passed_thres_count + 1
                         bootstrap_value  = 'good'
+                        #Phylo.draw_ascii(clade)
                 else:
                     #if you want we can include all clades which have a below 0.95 bootstrap
                     pass
