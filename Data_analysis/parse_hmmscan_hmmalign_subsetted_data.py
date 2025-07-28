@@ -42,6 +42,7 @@ Scan_dict1 = {}
 #for Bacteria HMMscan_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Bacteria/PF00999/'
 
 HMMscan_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Archaea'
+not_cpa_list = []
 
 for entry in os.listdir(HMMscan_dir):
     if 'All_euk' in entry:
@@ -49,10 +50,13 @@ for entry in os.listdir(HMMscan_dir):
         HMMscan = '{}/{}'.format(HMMscan_dir, entry)
         scan_dict = best_hit_dict(HMMscan, scan_dict)
         Scan_dict1.update(scan_dict)
+    
         
 for key in Scan_dict1.keys():
     if Scan_dict1[key][0] in CPA_list:
         scanned_list.append(key)
+    else:
+        not_cpa_list.append(Scan_dict1[key][0])
 
 Scan_dict1 = {}
 
@@ -66,6 +70,8 @@ for entry in os.listdir(HMMscan_dir):
 for key in Scan_dict1.keys():
     if Scan_dict1[key][0] in CPA_list:
         scanned_list.append(key)
+    else:
+        not_cpa_list.append(Scan_dict1[key][0])
 
 Scan_dict1 = {}
 
@@ -80,9 +86,16 @@ for entry in os.listdir(HMMscan_dir):
 for key in Scan_dict1.keys():
     if Scan_dict1[key][0] in CPA_list:
         scanned_list.append(key)
+    else:
+        not_cpa_list.append(Scan_dict1[key][0])
 
 print(len(set(scanned_list)))
 
+#if you want to parse the not CPA
+from collections import Counter
+print(len(not_cpa_list))
+print(len(scanned_list))
+print(Counter(not_cpa_list))
 
 HMMalign_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/cross_domain'
 #For Bacteria HMMalign_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF00999/cross_domain_final'
