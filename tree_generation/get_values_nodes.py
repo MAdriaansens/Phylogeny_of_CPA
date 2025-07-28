@@ -48,6 +48,8 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/clades_CPA_ph
                     if (is_semipreterminal(clade)) == True:
                         pass
                     else:
+
+                       #this part seems leaky, for some reason not all clades have >0.95 cut off
                        #we take the distance by taking the tree.root
                         distance_from_root = tree.distance(tree.root, '{}'.format(clade.name))
                         #print(clade, clade.confidence, clade.branch_length, distance_from_root)
