@@ -1,3 +1,6 @@
+from Bio import SeqIO
+not_cpa_list = []
+
 def best_hit_dict(HMMscan, scan_dict):
     count = 0
     with open(HMMscan, 'r') as H:
@@ -46,6 +49,8 @@ scan_dict = best_hit_dict(HMMscan, scan_dict)
 for key in scan_dict.keys():
     if scan_dict[key][0] in CPA_list:
         scanned_list.append(key)
+    else:
+        not_cpa_list.append(scan_dict[key][0])
 
 HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/cross_domain/7JULI_ARCHAEA_vsEukarya_PF00999hmmaligned_fl_FULLPFAMHMMscanned.tsv' #PFAM
 scan_dict = {}
@@ -56,6 +61,8 @@ scan_dict = best_hit_dict(HMMscan, scan_dict)
 for key in scan_dict.keys():
     if scan_dict[key][0] in CPA_list:
         scanned_list.append(key)
+    else:
+        not_cpa_list.append(scan_dict[key][0])
         
 HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/cross_domain/7JULI_BACTERIA_vsEukarya_PF00999hmmaligned_fl_FULLPFAMHMMscanned.tsv' #PFAM
 scan_dict = {}
@@ -66,7 +73,13 @@ scan_dict = best_hit_dict(HMMscan, scan_dict)
 for key in scan_dict.keys():
     if scan_dict[key][0] in CPA_list:
         scanned_list.append(key)
+    else:
+        not_cpa_list.append(scan_dict[key][0])
 
+from collections import Counter
+print(len(not_cpa_list))
+print(len(scanned_list))
+print(Counter(not_cpa_list))
 
 HMMalign_dir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/cross_domain'
 Seq_dict = {}
@@ -81,3 +94,4 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/Euk
         sequence = Seq_dict[entry]
         Line = '>{}'.format(sequence_id) + '\n' + str(sequence) + '\n'
         O.write(Line)
+
