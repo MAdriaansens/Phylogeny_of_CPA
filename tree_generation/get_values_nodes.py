@@ -48,6 +48,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/clades_CPA_ph
                     if (is_semipreterminal(clade)) == True:
                         pass
                     else:
+                       #we take the distance by taking the tree.root
                         distance_from_root = tree.distance(tree.root, '{}'.format(clade.name))
                         #print(clade, clade.confidence, clade.branch_length, distance_from_root)
                         children = (len(clade.get_terminals()))
