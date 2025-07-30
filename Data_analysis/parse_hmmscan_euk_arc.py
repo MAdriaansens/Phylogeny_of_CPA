@@ -18,12 +18,17 @@ def best_hit_dict(HMMscan):
                     prelim_evalue = line.split(' - ')[1]
                 
                 for i in (list(set(prelim_evalue.split(' ')))):
-                    if e_count == 0:
+                    if e_count == 0: #e count checks if an e-value has already been asigned
                         if 'e-' in i:
-                            evalue = i
-                            e_count =  1
+                            if i[0].isalpha() == False:
+                                evalue = i
+                                e_count =  1
+                            else:
+                                pass
                         else:
                             pass
+                    else:
+                        pass
                 if full_id not in scan_dict.keys():
                     entry_list = (best_match_hmm, evalue)
                     scan_dict[full_id] = entry_list
