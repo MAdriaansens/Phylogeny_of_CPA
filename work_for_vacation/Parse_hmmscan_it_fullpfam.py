@@ -1,3 +1,5 @@
+#make sure this gets incorperated into the full HMM of all GTDB
+
 def best_hit_dict(HMMscan, scan_dict):
     count = 0
     with open(HMMscan, 'r') as H:
