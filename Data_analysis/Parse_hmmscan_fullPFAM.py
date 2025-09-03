@@ -109,8 +109,7 @@ for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/res
     if record.id in hit_list:
         passed_list.append(record.id.split('tax:')[1])
 NhaD_list = passed_list
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan'
-scan_dict = {}
+
 
 
 import os
