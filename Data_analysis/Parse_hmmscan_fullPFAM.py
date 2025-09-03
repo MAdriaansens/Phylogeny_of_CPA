@@ -132,20 +132,6 @@ CPA_list = []
 for key in scanned_dict.keys():
     CPA_list.append(key.split('tax:')[1])
 print(len(set(CPA_list)))
-
-tax_list = []    
-Pfam_hitlist = []
-CPA_HMM_list = ('Manual_seq_cov30_e05_seqid0.7_genafpair_aligned', 'Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned', 'Na_H_Exchanger', 'Manual_vsBacteria_merged_e5_cov30_seqid0.6.faa_rep_seq_autoaligned','Na_H_antiport_1', 'CHX17_2nd', 'CHX17_C')
-scanned_dict = {}
-for key in scan_dict.keys():
-    value = scan_dict[key]
-    if value[0] in CPA_HMM_list:
-        scanned_dict[key] = value
-print(len(list(scanned_dict.keys())))
-CPA_list = []
-for key in scanned_dict.keys():
-    CPA_list.append(key.split('tax:')[1])
-print(len(set(CPA_list)))
 print(CPA_list[-1])
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', 'r') as Meta:
     with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_3SEPT.tsv', 'w') as Out:
