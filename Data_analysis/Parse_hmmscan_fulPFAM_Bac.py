@@ -136,19 +136,30 @@ for key in scanned_dict.keys():
     CPA_list.append(key.split('tax:')[1])
 print(len(set(CPA_list)))
 
+#returns all protein ids whom match with CPA PFAM
+Passed_all_list = {}
+HMMalign = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF00999/cross_domain_final/All_merged_Bacteria_FL.faa'
+for record in SeqIO.parse(HMMalign, 'fasta'):
+    if record.id in CPA_list:
+        Passed_all_list[record.id] = record.seq
+representatives_list = []
+        
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv', 'r') as Meta:
     with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Bacteria_3SEPT.tsv', 'w') as Out:
-        header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
+        header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'NCBI_type_material' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         for line in Meta:
             if line.split('\t')[18] != 't':
                 pass
             else:
+                NCBI_type_material = line.split('\t')[-26]
 
                 GTDB_id =line.split('\t')[0]
                 completeness = line.split('\t')[2]
                 contamination = line.split('\t')[3]
                 GTDB_tax = (line.split('\t')[19].replace(' ', '_'))
+                representatives_list.append(GTDB_tax)
+
                 NhaB_count = NhaB_binary = NhaC_count = NhaC_binary = NhaD_count = NhaD_binary = CPA_count = CPA_binary= 0
                 if GTDB_tax in NhaD_list:
                     NhaD_count = NhaD_list.count(GTDB_tax)
@@ -164,4 +175,13 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv
                     CPA_binary = 1
                 Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
                 Out.write(Wline)
-
+tax = []
+with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_passed_all_filters_Sep5_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
+    for key in Passed_all_list.keys():
+        if key.split('tax:')[1] in representatives_list:
+            header = key.split('_tax')[0]
+            tax.append(key.split('tax:')[1])
+            sequence = Passed_all_list[key]
+            line = '>' + header + '\n' + str(sequence) + '\n'
+            Passed.write(line)
+print(len(set(tax)))
