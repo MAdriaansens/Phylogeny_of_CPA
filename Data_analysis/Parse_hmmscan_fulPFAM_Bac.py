@@ -52,7 +52,7 @@ def best_hit_dict(HMMscan, scan_dict):
 scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan'
 from Bio import SeqIO
 
-#NhaD
+#NhaB
 HMMscan = '{}/Bacteria_06450_fullhmmscanned.tsv'.format(scandir)
 scan_dict = {}
 
