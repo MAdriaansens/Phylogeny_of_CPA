@@ -133,15 +133,27 @@ for key in scanned_dict.keys():
     CPA_list.append(key.split('tax:')[1])
 print(len(set(CPA_list)))
 print(CPA_list[-1])
+representatives_list = []
+
+#returns all protein ids whom match with CPA PFAM
+Passed_all_list = {}
+HMMalign = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/cross_domain/Arc_cross_domain_hmmaligned_pf00999.faa'
+for record in SeqIO.parse(HMMalign, 'fasta'):
+    if record.id in CPA_list:
+        Passed_all_list[record.id] = record.seq
+        
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', 'r') as Meta:
     with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_3SEPT.tsv', 'w') as Out:
-        header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
+        header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' +  + 'NCBI_type_material' + '\t'+ 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         for line in Meta:
             if line.split('\t')[18] != 't':
                 pass
             else:
                 GTDB_id =line.split('\t')[0]
+                NCBI_type_material = line.split('\t')[-26]
+                representatives_list.append(GTDB_tax)
+
                 completeness = line.split('\t')[2]
                 contamination = line.split('\t')[3]
                 GTDB_tax = (line.split('\t')[19].replace(' ', '_'))
@@ -158,5 +170,15 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv',
                 if GTDB_tax in CPA_list:
                     CPA_count = CPA_list.count(GTDB_tax)
                     CPA_binary = 1
-                Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
+                Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + NCBI_type_material + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
                 Out.write(Wline)
+tax = []
+with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_passed_all_filters_Sep5_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
+    for key in Passed_all_list.keys():
+        if key.split('tax:')[1] in representatives_list:
+            header = key.split('_tax')[0]
+            tax.append(key.split('tax:')[1])
+            sequence = Passed_all_list[key]
+            line = '>' + header + '\n' + str(sequence) + '\n'
+            Passed.write(line)
+print(len(set(tax)))
