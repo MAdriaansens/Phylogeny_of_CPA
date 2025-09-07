@@ -146,13 +146,13 @@ representatives_list = []
         
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv', 'r') as Meta:
     with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Bacteria_3SEPT.tsv', 'w') as Out:
-        header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'NCBI_type_material' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
+        header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'Sample' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         for line in Meta:
             if line.split('\t')[18] != 't':
                 pass
             else:
-                NCBI_type_material = line.split('\t')[-26]
+                Sample = line.split('\t')[-52]
 
                 GTDB_id =line.split('\t')[0]
                 completeness = line.split('\t')[2]
@@ -173,7 +173,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv
                 if GTDB_tax in CPA_list:
                     CPA_count = CPA_list.count(GTDB_tax)
                     CPA_binary = 1
-                Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
+                Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + Sample +'\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
                 Out.write(Wline)
 tax = []
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_passed_all_filters_Sep5_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
