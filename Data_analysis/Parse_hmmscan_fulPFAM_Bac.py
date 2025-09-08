@@ -132,8 +132,11 @@ for key in scan_dict.keys():
         scanned_dict[key] = value
 print(len(list(scanned_dict.keys())))
 CPA_list = []
+CPA_list_forIT=[]
 for key in scanned_dict.keys():
-    CPA_list.append(key.split('tax:')[1])
+    CPA_list_forIT.append(key.split('tax:')[1])
+
+    CPA_list.append(key)
 print(len(set(CPA_list)))
 
 #returns all protein ids whom match with CPA PFAM
@@ -170,8 +173,8 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv
                 if GTDB_tax in NhaB_list:
                     NhaB_count = NhaB_list.count(GTDB_tax)
                     NhaB_binary = 1
-                if GTDB_tax in CPA_list:
-                    CPA_count = CPA_list.count(GTDB_tax)
+                if GTDB_tax in CPA_list_forIT:
+                    CPA_count = CPA_list_forIT.count(GTDB_tax)
                     CPA_binary = 1
                 Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + Sample +'\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
                 Out.write(Wline)
