@@ -176,7 +176,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv',
                     CPA_count = CPA_list_forIT.count(GTDB_tax)
                     CPA_binary = 1
                 Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + Sample + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
-               # Out.write(Wline)
+                Out.write(Wline)
 tax = []
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_passed_all_filters_Sep5_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
     for key in Passed_all_list.keys():
