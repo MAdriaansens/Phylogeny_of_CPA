@@ -155,11 +155,12 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv',
             else:
                 GTDB_id =line.split('\t')[0]
                 Sample = line.split('\t')[-52]
-                representatives_list.append(GTDB_tax)
 
                 completeness = line.split('\t')[2]
                 contamination = line.split('\t')[3]
                 GTDB_tax = (line.split('\t')[19].replace(' ', '_'))
+                representatives_list.append(GTDB_tax)
+
                 NhaB_count = NhaB_binary = NhaC_count = NhaC_binary = NhaD_count = NhaD_binary = CPA_count = CPA_binary= 0
                 if GTDB_tax in NhaD_list:
                     NhaD_count = NhaD_list.count(GTDB_tax)
