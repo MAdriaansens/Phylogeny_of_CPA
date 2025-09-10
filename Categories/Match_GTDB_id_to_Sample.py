@@ -14,7 +14,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/Sample_sites - Bacteria cate
         Ct.write(header)
         for line in R:
             GTDB_id = (line.split('\t')[0])
-            Sample = line.split('\t')[4].lower()
+            Sample = line.split('\t')[4].lower() #Archaea remove the '.lower()'
             if Sample != 'none':
                 Category = Cat_dict[Sample]
                 print(Category)
