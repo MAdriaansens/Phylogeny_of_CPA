@@ -22,3 +22,5 @@ with open('/nesi/nobackup/uc04105/new_databases_May/Sample_sites - Bacteria cate
                 Category = 'none described'
             Wline = GTDB_id + '\t' + Category + '\n'
             Ct.write(Wline)
+#I then merge the Bacteria GTDB226 Categories file to the IT_Bacteria_9sept.tsv file,
+#this can also be repeated for Archaea
