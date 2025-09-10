@@ -91,7 +91,7 @@ for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/res
 NhaC_list = passed_list
 
 
-
+representatives_list.append(GTDB_tax)
 #NhaD
 HMMscan = '{}/Archaea_03600_fullhmmscanned.tsv'.format(scandir)
 scan_dict = {}
@@ -129,13 +129,8 @@ for key in scan_dict.keys():
         scanned_dict[key] = value
 print(len(list(scanned_dict.keys())))
 CPA_list = []
-CPA_list_forIT=[]
 for key in scanned_dict.keys():
-    CPA_list_forIT.append(key.split('tax:')[1])
-
     CPA_list.append(key)
-print(len(set(CPA_list)))
-print(CPA_list[-1])
 representatives_list = []
 
 #returns all protein ids whom match with CPA PFAM
@@ -144,9 +139,14 @@ HMMalign = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/A
 for record in SeqIO.parse(HMMalign, 'fasta'):
     if record.id in CPA_list:
         Passed_all_list[record.id] = record.seq
-        
+GTDB_ids_passed = {}
+
+CPA_list_forIT = []
+for key in Passed_all_list.keys():
+    CPA_list_forIT.append(key.split('tax:')[1])
+                          
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', 'r') as Meta:
-    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_3SEPT.tsv', 'w') as Out:
+    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_11SEPT.tsv', 'w') as Out:
         header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'Sample' + '\t'+ 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         for line in Meta:
@@ -155,13 +155,14 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv',
             else:
                 GTDB_id =line.split('\t')[0]
                 Sample = line.split('\t')[-52]
-
                 completeness = line.split('\t')[2]
                 contamination = line.split('\t')[3]
                 GTDB_tax = (line.split('\t')[19].replace(' ', '_'))
-                representatives_list.append(GTDB_tax)
 
                 NhaB_count = NhaB_binary = NhaC_count = NhaC_binary = NhaD_count = NhaD_binary = CPA_count = CPA_binary= 0
+                GTDB_ids_passed[GTDB_tax] = GTDB_id
+                representatives_list.append(GTDB_tax)
+
                 if GTDB_tax in NhaD_list:
                     NhaD_count = NhaD_list.count(GTDB_tax)
                     NhaD_binary = 1
@@ -175,7 +176,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv',
                     CPA_count = CPA_list_forIT.count(GTDB_tax)
                     CPA_binary = 1
                 Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + Sample + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
-                Out.write(Wline)
+               # Out.write(Wline)
 tax = []
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_passed_all_filters_Sep5_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
     for key in Passed_all_list.keys():
@@ -185,4 +186,23 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_passed_all_
             sequence = Passed_all_list[key]
             line = '>' + header + '\n' + str(sequence) + '\n'
             Passed.write(line)
+
 print(len(set(tax)))
+
+
+#if you want to test it with the GTDB tree if the values included are present in the GTDB tree.
+import Bio
+from Bio.Phylo.Consensus import *
+tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/GTDBK/RED_decorated_trees/RED_A53_ALIGNEDRED_30julift.nw', 'newick')
+termini = tree.get_terminals()
+leaves = []
+for termin in termini:
+    leaves.append(str(termin))
+count = 0
+for taxonomy in tax:
+    GTDB_id = GTDB_ids_passed[taxonomy]
+    if GTDB_id in leaves:
+
+        count = count + 1
+print(count)
+#with count equalling the number len(tax)
