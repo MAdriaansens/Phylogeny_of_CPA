@@ -132,18 +132,18 @@ for aligned_set in os.listdir(hmmaligned):
             prot_id =  record.id.split('_tax')[0]
             Prot_dict[prot_id] = tax, seq
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree_aligned_annotation_25JULI.tsv', 'a') as C:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree_aligned_annotation_13sept.tsv', 'a') as C:
 
     C.write('Protein_id' + '\t' + 'Sequence' + '\t' + 'ngaps' + '\t' + 'Motif' + '\t' + 'Domain' + '\t' + 'GTDB_taxonomy' + '\t' + 'Phyla' + '\t' + 'Seed' + '\t' + 'First_site' + '\t' + 'Second_site' + '\t' + 'last_site' + '\t' + 'Cluster_count' +  '\t' + 'USP' + '\t' + 'NhaA' + '\t' + 'TRK_N' + '\t' + 'TRK_C' + '\t' + 'CHX17' + '\t' + 'CHX17_C' + '\t' + 'cNMP' + '\t' + 'Nha1_C'+ '\n')
 
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/SG_seed_update_jan142024_135seq_PF00999aligned.fasta.fasta', 'fasta'):
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/fasta_files/Seed_NhaA//nesi/nobackup/uc04105/fasta_files/Seed_NhaA', 'fasta'):
         seq = str(record.seq)
         tax = record.id.split('|')[1]
         prot_id =  record.id.split('_')[-1] + '_' + record.id.split('_')[-2] + '_' + str(count)
         count = count + 1
         Prot_dict[prot_id] = tax, seq
 
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/tree_seqs/CPA_Phylogney_hmmscanned_hmmaligned_PF00999_25Juli.faa', 'fasta'):
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/CPA_phylogeny_alignedPF00999.faa', 'fasta'):
         NhaA = 'NA'
         TRK_N = 'NA'
         TRK_C = 'NA'
