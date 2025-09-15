@@ -139,15 +139,16 @@ print(CPA_list[-1])
 
 with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_metadata.tsv', 'r') as Meta:
     next(Meta, None)
-    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_eukarya_sep3.tsv', 'w') as Out:
+    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_15sept.tsv', 'w') as Out:
         
-        header=  'species_name'  + '\t' + 'Large_grouping' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' +'\t' + 'NhaC_binary' +'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
+        header=  'species_name'  + '\t' + 'Major_tax' +  '\t' + 'Tax' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' +'\t' + 'NhaC_binary' +'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         for line in Meta:
             species_name = (line.split('\t')[1])
             if species_name == 'Agaricus_bisporus_ var. bisporus H97':
                 species_name = 'Agaricus_bisporus_'
             Large_grouping = line.split('\t')[11]
+            Tax = (line.split('\t')[12])
             NhaB_count = NhaB_binary = NhaC_count = NhaC_binary = NhaD_count = NhaD_binary = CPA_count = CPA_binary= 0
             if species_name  in NhaD_list:
                 NhaD_count = NhaD_list.count(species_name)
@@ -161,5 +162,5 @@ with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_met
             if species_name  in CPA_list:
                 CPA_count = CPA_list.count(species_name)
                 CPA_binary = 1
-            Wline = species_name  + '\t' + Large_grouping + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
+            Wline = species_name  + '\t' + Large_grouping + '\t' + Tax + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
             Out.write(Wline)
