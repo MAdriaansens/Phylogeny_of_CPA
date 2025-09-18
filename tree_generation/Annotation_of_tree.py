@@ -271,3 +271,18 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree
         Motif = record.seq[145] + record.seq[146] + record.seq[300]
         C.write(record.id + '\t' + str(record.seq) + '\t' + ngaps + '\t' + Motif + '\t' + Domain + '\t' + GTDB_taxonomy + '\t' + Phyla + '\t' + Seed + '\t' + First_site + '\t' + Second_site + '\t' + last_site + '\t' + str(Cluster_count) +  '\t' + USP + '\t' + NhaA + '\t' + TRK_N + '\t' + TRK_C + '\t' + CHX17 + '\t' + CHX17_C + '\t' + cNMP + '\t' + Nha1_C + '\n')
 
+#check if annotation and alignment match
+
+from Bio import SeqIO
+
+alignment_list = []
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/CPA_phylogeny_alignedPF00999.faa', 'fasta'):
+    alignment_list.append(record.id)
+
+print(len(alignment_list))
+
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree_aligned_annotation_13sept.tsv', 'r') as A:
+    next(A, None)
+    for line in A:
+        if (line.split('\t')[0]) not in alignment_list:
+            print(line.split('\t')[0])
