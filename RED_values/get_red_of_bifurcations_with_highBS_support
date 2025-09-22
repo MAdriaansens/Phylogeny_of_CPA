@@ -1,0 +1,58 @@
+from Bio import Phylo
+from Bio.Phylo.Consensus import *
+#this code returns a node if it has a support => 95 and the associated RED. 
+#It counts the how often a RED value occurs and saves a .tsv file which can be used in R analysis.
+#This file can then be used to plot the distribution of RED values and help guide where to place a RED threshold
+tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/edit_trees/CPA_TREE_ALGINEDMMSEQ1_PF0099_28juli_fasttree_midrooted_REDNORM_final.nw', 'newick')
+count = 0
+#only give clade a number/name if it is not terminal
+# otherwise let it keep the same name, this prevents future back paddeling and renaming. 
+for clade in tree.find_clades():
+    if clade.is_terminal() == True:
+        pass
+    else:
+        clade.name = str(count)
+        count = count + 1
+
+
+Red_dict = {}
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/clades_CPA_phylogeny_FTtree_15sept.tsv', 'r') as clade_inf:
+    next(clade_inf, None)
+    for inf in clade_inf:
+        RED =(inf.split('\t')[5])
+        clade_id = inf.split('\t')[0]
+        Red_dict[clade_id] = RED
+print(len(Red_dict.keys()))
+for clade in tree.find_clades():
+    entry = str(clade.name)
+    clade.RED = float(Red_dict[entry])
+
+#will take 20 minutes
+RED_list = []
+for terminal in tree.get_terminals():
+    for bifurcation in tree.get_path(target=terminal):
+        if bifurcation.is_terminal() == False:
+            if isinstance(bifurcation.confidence, float) == False:
+                pass
+            else:
+                if bifurcation.confidence < 0.95:
+                    pass
+                else:
+                    RED_list.append(bifurcation.RED)
+count_dic = {}
+for RED in RED_list:
+    if RED in count_dic.keys():
+        pass
+    else:
+        obs = RED_list.count(RED)
+        count_dic[RED] = obs
+print(len(count_dic.keys()))
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/REDs_above_bootstrap95.tsv', 'w') as BS:
+    header = 'RED_value' + '\t' + 'Frequency' + '\n'
+    BS.write(header)
+    for key in count_dic.keys():
+        RED = key
+        frequency = count_dic[RED]
+        Line = str(RED) + '\t' + str(frequency) + '\n'
+        BS.write(Line)
+    BS.close()
