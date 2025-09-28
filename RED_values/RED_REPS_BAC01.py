@@ -12,8 +12,9 @@ with open('{}'.format(tsv) ,'r') as Proteins:
    for protein in Proteins:
        protein_id = protein.split('\t')[0]
        protein_tax = protein.split('\t')[2].replace(' ', '_')
-       
-       Allseq_dict[protein_id] = protein_tax
+       GTDB_id = protein.split('\t')[3]
+
+       Allseq_dict[protein_id] = 'GTDB_id{}__GTDB_tax:{}'.format(GTDB_id, protein_tax) 
        
 print(len(set(list(Allseq_dict.keys()))))
 
