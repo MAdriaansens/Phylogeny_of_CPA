@@ -24,10 +24,37 @@ def generate_all_pairs(input_list):
   return list(combinations(input_list, 2))
 
 #the tree contains the IDs we are interested in 
-tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/GTDBK/RED_decorated_trees/RED_A53_ALIGNEDRED_30julift.nw', 'newick')
 
+tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/GTDBK/RED_decorated_trees/RED_A53_ALIGNEDRED_30julift.nw', 'newick')
+count = 0
+#only give clade a number/name if it is not terminal
+# otherwise let it keep the same name, this prevents future back paddeling and renaming. 
+for clade in tree.find_clades():
+    if clade.is_terminal() == True:
+        pass
+    else:
+        clade.name = str(count)
+        count = count + 1
+        
 Allseqs = '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Archaea_allhmmscanned_final_clustered_at0.7.fasta_all_seqs.fasta'
 Allseq_list = []
+for record in SeqIO.parse(Allseqs, 'fasta'):
+    Allseq_list.append(record.id)
+    
+termini = tree.get_terminals()
+print(len(set(Allseq_list)))
+print(len(termini))
+
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/All_Arc_CPAseq_GTDB226_ids_tax.json', 'r') as F:
+    Allseq_dict = json.load(F)
+
+
+print(len(Allseq_dict.keys()))
+for key in Allseq_dict.keys():
+    print(Allseq_dict[key])
+    break
+
+
 
 
 MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Archaea_allhmmscanned_final_clustered_at0.7.fasta_cluster.tsv'
@@ -98,7 +125,7 @@ if 13829 - count != len(singleton_list):
 
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/RED_values_Archaea_clusters_12sep.tsv', 'w') as WRED:
 
-    Header = 'Cluster_representatitve' + '\t' + 'no_proteins_in_cluster' + '\t' + 'red_of_mrca' +  '\t' + 'red_of_mrca2noot' + '\t' + 'average_RED' +  '\t'+ 'common_taxonomic_grouping' + '\t' + 'shared_taxa' + '\t' + 'Phyla_in_cluster' + '\t' + 'no_cross_phyla_pairs' + '\t'+ 'no_cross_class_pairs' + '\t'+ 'no_cross_order_pairs' + '\t' + 'no_cross_family_pairs' + '\t' +  'no_cross_genera_pairs' + '\t' +'list_of_clusters' '\n'
+    Header = 'Cluster_representatitve' + '\t' + 'no_proteins_in_cluster' + '\t' + 'mrca' + '\t' + 'red_of_mrca' +  '\t' + 'red_of_mrca2noot' + '\t' + 'average_RED' +  '\t'+ 'common_taxonomic_grouping' + '\t' + 'shared_taxa' + '\t' + 'Phyla_in_cluster' + '\t' + 'no_cross_phyla_pairs' + '\t'+ 'no_cross_class_pairs' + '\t'+ 'no_cross_order_pairs' + '\t' + 'no_cross_family_pairs' + '\t' +  'no_cross_genera_pairs' + '\t' +'list_of_clusters' + '\t' + 'GTDB_id_in_cluster' + '\t' + 'most_distant_pairs' + '\n'
     WRED.write(Header)
     Shared_tax_list = [] 
     sumtax = 0
@@ -107,6 +134,10 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/RED_values_Ar
     RED_mrca_2_root = 0
     average_RED = 0
     for i in replist:
+        RED_mrca =0
+        RED_mrca_2_root = 0
+        average_RED = 0
+        
         taxP_list = []
         taxC_list = []
         taxO_list = []
@@ -117,8 +148,8 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/RED_values_Ar
         GTDBids_in_cluster = []
         #number cross taxonomic group in cluster
         for prot_id in ids_in_cluster:
-            tax = Allseq_dict[prot_id]
-            GTDB_id = GTDB_id_tax_dic[tax]
+            tax = Allseq_dict[prot_id].split('GTDB_tax:')[1]
+            GTDB_id = Allseq_dict[prot_id].split('__GTDB_tax:')[0].split('GTDB_id')[1]
             GTDBids_in_cluster.append(GTDB_id)
             taxP_list.append(tax.split(';')[1])
             taxC_list.append(tax.split(';')[2])
@@ -163,16 +194,21 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/RED_values_Ar
         Allpairs_GTDBids_cluster = generate_all_pairs(GTDBids_in_cluster )
         distance_pairs = 1.1
         distances_list = []
+
+        
         for pair in Allpairs_GTDBids_cluster:
         
             distance_pairs = (tree.distance(pair[0], pair[1]))
+            if distance_pairs > RED_mrca:
+                RED_mrca =  distance_pairs
+                most_distant_pairs = (pair[0], pair[1])
+                mrca = tree.common_ancestor(pair[0], pair[1])
             distances_list.append(distance_pairs)
-                
-        RED_mrca = (max(distances_list))
+        
         RED_mrca_2_root = 1-(RED_mrca/2)
         average_RED = sum(distances_list)/len(distances_list)
     
     
-        Line = (Cluster_rep + '\t' + str(no_proteins_in_cluster) + '\t' + str(RED_mrca) + '\t' + str(RED_mrca_2_root) + '\t' + str(average_RED) + '\t' +  common + '\t' + shared_taxonomy + '\t' + str(set(taxP_list)) + '\t' + no_cross_phyla_pairs + '\t' + no_cross_class_pairs + '\t' + no_cross_order_pairs + '\t' + no_cross_family_pairs + '\t' + no_cross_genera_pairs + '\t' + str(ids_in_cluster) + '\n')
+        Line = (Cluster_rep + '\t' + str(no_proteins_in_cluster) + '\t' + mrca.name + '\t' + str(RED_mrca) + '\t' + str(RED_mrca_2_root) + '\t' + str(average_RED) + '\t' +  common + '\t' + shared_taxonomy + '\t' + str(set(taxP_list)) + '\t' + no_cross_phyla_pairs + '\t' + no_cross_class_pairs + '\t' + no_cross_order_pairs + '\t' + no_cross_family_pairs + '\t' + no_cross_genera_pairs + '\t' + str(ids_in_cluster) +  '\t' + str(GTDBids_in_cluster) + '\t' + str(most_distant_pairs) + '\n')
         WRED.write(Line)
          
