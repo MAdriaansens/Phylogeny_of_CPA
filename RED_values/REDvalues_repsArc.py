@@ -28,59 +28,8 @@ tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/GTDBK/RED_d
 
 Allseqs = '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Archaea_allhmmscanned_final_clustered_at0.7.fasta_all_seqs.fasta'
 Allseq_list = []
-for record in SeqIO.parse(Allseqs, 'fasta'):
-    Allseq_list.append(record.id)
-    
-termini = tree.get_terminals()
-print(len(set(Allseq_list)))
-print(len(termini))
-
-GTDB_id_tax_dic = {}
-import json
-#make a dictionairy of all GTDB species in GTDB, with their taxonomy as the key and their GTDB id as the value
-with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', 'r') as Meta:
-    next(Meta, None)
-    for line in Meta:
-        if (line.split('\t')[18]) == 't':
-
-            GTDB_id = line.split('\t')[0]
-            GTDB_tax = line.split('\t')[19].replace(' ', '_')
-            GTDB_id_tax_dic[GTDB_tax] = GTDB_id
-
-print(len(GTDB_id_tax_dic.keys()))
 
 
-import os
-file_path = '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/All_Arc_seq_GTDB226_tax.json'
-if os.path.exists(file_path):
-    print('yah')
-    
-    with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/All_Arc_seq_GTDB226_tax.json', 'r') as F:
-        Allseq_dict = json.load(F)
-
-else:
-    Allseq_dict = {}
-    #make a dictionairy for representatives and what their GTDB_id is
-    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_GTDB226_protein_May92025.tsv' ,'r') as Proteins:
-        next(Proteins, None)
-        for protein in Proteins:
-            protein_id = protein.split('\t')[0]
-            protein_tax = protein.split('\t')[2].replace(' ', '_')
-            if protein_id in Allseq_list:
-                Allseq_dict[protein_id] = protein_tax
-            else:
-                pass
-    print(len(set(list(Allseq_dict.keys()))))
-    
-    with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/All_Arc_seq_GTDB226_tax.json', 'w') as outfile:
-        json.dump(Allseq_dict, outfile)
-print(type(Allseq_dict))
-if len(Allseq_dict.keys()) != len(set(Allseq_list)):
-    raise ValueError('Dictionary is wrong length of sequences')
-
-for key in Allseq_dict.keys():
-    print(key)
-    break
 MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Archaea_allhmmscanned_final_clustered_at0.7.fasta_cluster.tsv'
 rep_list = []
 
