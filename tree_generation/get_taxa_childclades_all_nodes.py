@@ -1,4 +1,6 @@
 #part 1
+#use this script to identify high confidence nodes were two taxa merge together 
+
 from Bio import Phylo
 from Bio.Phylo.Consensus import *
 import json
