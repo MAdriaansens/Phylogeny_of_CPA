@@ -140,6 +140,7 @@ for key in scanned_dict.keys():
 
 print(len(CPA_list))
 #returns all protein ids whom match with CPA PFAM
+Passed_all_list={}
 HMMalign = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/cross_domain/Arc_cross_domain_hmmaligned_pf00999.faa'
 for record in SeqIO.parse(HMMalign, 'fasta'):
     if record.id in CPA_list:
@@ -188,12 +189,18 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv',
                 Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + Sample + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
                 Out.write(Wline)
 tax = []
+
+
+domtbl_dic = {}
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMdombtlout/Archaea/All_vsArchaea_domtbl_pf00999.fasta', 'fasta'):
+    domtbl_dic[record.id.split('_subset')[0]] = str(record.seq)
+
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Archaea_passed_all_filters_2OKT_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
     for key in Passed_all_list.keys():
         if key.split('tax:')[1] in representatives_list:
             header = key.split('_tax')[0]
             tax.append(key.split('tax:')[1])
-            sequence = Passed_all_list[key]
+            sequence = domtbl_dic[key]
             line = '>' + header + '\n' + str(sequence) + '\n'
             Passed.write(line)
 
