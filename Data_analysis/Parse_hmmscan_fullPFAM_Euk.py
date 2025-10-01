@@ -145,14 +145,23 @@ for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database
     seq_dic[record.id] = str(record.seq)
 
 CPA_list = []
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_final_scanned_set_domtbl_2OKT.faa', 'w') as O:
 
+
+
+domtbl_dic = {}
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMsearch_domtbl/All_vs_Eukarya_domtbl_seq.fasta', 'fasta'):
+    domtbl_dic[record.id.split('_subset')[0]] = str(record.seq)
+
+
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_final_scanned_set_domtbl_2OKT.faa', 'w') as O:
     for key in scanned_dict:
         if (key.split('_subset')[0]) in seq_dic:
             CPA_list.append((key.split('_subset')[0].split('tax:')[1]))
-            sequence = seq_dic[(key.split('_subset')[0])]
+            sequence = domtbl_dic[(key.split('_subset')[0])]
             protein_id = (key.split('_subset')[0])
             line = '>' + protein_id + '\n' + sequence + '\n'
+            O.write(line)
+    O.close()
 with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_metadata.tsv', 'r') as Meta:
     next(Meta, None)
     with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_2OKT.tsv', 'w') as Out:
