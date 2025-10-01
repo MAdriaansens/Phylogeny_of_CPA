@@ -49,6 +49,8 @@ def best_hit_dict(HMMscan, scan_dict):
                     entry_list = (best_match_hmm, evalue)
                     scan_dict[full_id] =entry_list
     return(scan_dict)
+
+
 scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan'
 from Bio import SeqIO
 
@@ -70,6 +72,9 @@ for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/res
         passed_list.append(record.id.split('tax:')[1])
 
 NhaB_list = passed_list
+print(len(NhaB_list))
+
+
 
 #NhaC
 HMMscan = '{}/Archaea_03553_fullhmmscanned.tsv'.format(scandir)
@@ -89,9 +94,8 @@ for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/res
         passed_list.append(record.id.split('tax:')[1])
 
 NhaC_list = passed_list
+print(len(NhaC_list))
 
-
-representatives_list.append(GTDB_tax)
 #NhaD
 HMMscan = '{}/Archaea_03600_fullhmmscanned.tsv'.format(scandir)
 scan_dict = {}
@@ -109,13 +113,15 @@ for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/res
     if record.id in hit_list:
         passed_list.append(record.id.split('tax:')[1])
 NhaD_list = passed_list
+print(len(NhaD_list))
 
 
 
+scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/subset_sequence/Archaea'
 import os
-for hmmscan in os.listdir( '{}/Archaea'.format(scandir)):
+for hmmscan in os.listdir(scandir):
     if hmmscan.split('.')[-1] == 'tsv':
-        HMMscan = '{}/Archaea/{}'.format(scandir,hmmscan)
+        HMMscan = '{}/{}'.format(scandir,hmmscan)
         scan_dict = best_hit_dict(HMMscan, scan_dict)
         print(HMMscan)
 
@@ -130,11 +136,10 @@ for key in scan_dict.keys():
 print(len(list(scanned_dict.keys())))
 CPA_list = []
 for key in scanned_dict.keys():
-    CPA_list.append(key)
-representatives_list = []
+    CPA_list.append(key.split('_subset')[0])
 
+print(len(CPA_list))
 #returns all protein ids whom match with CPA PFAM
-Passed_all_list = {}
 HMMalign = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/cross_domain/Arc_cross_domain_hmmaligned_pf00999.faa'
 for record in SeqIO.parse(HMMalign, 'fasta'):
     if record.id in CPA_list:
@@ -144,11 +149,16 @@ GTDB_ids_passed = {}
 CPA_list_forIT = []
 for key in Passed_all_list.keys():
     CPA_list_forIT.append(key.split('tax:')[1])
+print(len(CPA_list_forIT))
+print(len(set(CPA_list_forIT)))
+
+
                           
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', 'r') as Meta:
-    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_11SEPT.tsv', 'w') as Out:
+    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_2OKTSEPT.tsv', 'w') as Out:
         header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'Sample' + '\t'+ 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
+        representatives_list = []
         for line in Meta:
             if line.split('\t')[18] != 't':
                 pass
@@ -178,7 +188,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv',
                 Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + Sample + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
                 Out.write(Wline)
 tax = []
-with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_passed_all_filters_Sep5_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Archaea_passed_all_filters_2OKT_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
     for key in Passed_all_list.keys():
         if key.split('tax:')[1] in representatives_list:
             header = key.split('_tax')[0]
@@ -188,21 +198,3 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_passed_all_
             Passed.write(line)
 
 print(len(set(tax)))
-
-
-#if you want to test it with the GTDB tree if the values included are present in the GTDB tree.
-import Bio
-from Bio.Phylo.Consensus import *
-tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/GTDBK/RED_decorated_trees/RED_A53_ALIGNEDRED_30julift.nw', 'newick')
-termini = tree.get_terminals()
-leaves = []
-for termin in termini:
-    leaves.append(str(termin))
-count = 0
-for taxonomy in tax:
-    GTDB_id = GTDB_ids_passed[taxonomy]
-    if GTDB_id in leaves:
-
-        count = count + 1
-print(count)
-#with count equalling the number len(tax)
