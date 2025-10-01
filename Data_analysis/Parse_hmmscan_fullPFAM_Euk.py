@@ -34,8 +34,8 @@ def best_hit_dict(HMMscan, scan_dict):
                 
                 else:
                     if any(x.isalpha() for x in j) == True:
-                        print(line)
-                        pass
+                        print(j)
+                        #this will return a teast exonuclease with a high evalue
                     else:
                         evalue = float(j)
                     
@@ -52,7 +52,7 @@ def best_hit_dict(HMMscan, scan_dict):
 scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan'
 from Bio import SeqIO
 
-#NhaD
+#NhaB
 HMMscan = '{}/PF06450_Eukarya_merged_alignedPF06450_FULLPFAM_scanned.tsv'.format(scandir)
 scan_dict = {}
 
@@ -114,32 +114,33 @@ NhaD_list = passed_list
 
 
 print(len(set(NhaD_list)))
-scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan'
+
+#CPA
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/subset'
 import os
-for hmmscan in os.listdir( '{}/cross_domain'.format(scandir)):
+
+scan_dict = {}
+for hmmscan in os.listdir(scandir):
     if hmmscan.split('.')[-1] == 'tsv':
-        HMMscan = '{}/cross_domain/{}'.format(scandir,hmmscan)
+        HMMscan = '{}/{}'.format(scandir,hmmscan)
         scan_dict = best_hit_dict(HMMscan, scan_dict)
         print(HMMscan)
-
-tax_list = []    
-Pfam_hitlist = []
-CPA_HMM_list = ('Manual_seq_cov30_e05_seqid0.7_genafpair_aligned', 'Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned', 'Na_H_Exchanger', 'Manual_vsBacteria_merged_e5_cov30_seqid0.6.faa_rep_seq_autoaligned','Na_H_antiport_1', 'CHX17_2nd', 'CHX17_C')
-scanned_dict = {}
-for key in scan_dict.keys():
-    value = scan_dict[key]
-    if value[0] in CPA_HMM_list:
-        scanned_dict[key] = value
-print(len(list(scanned_dict.keys())))
+seq_dic = {}
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/cross_domain/Eukarya_merged_PF00999hmmaligned.fasta', 'fasta'):
+    seq_dic[record.id] = str(record.seq)
 CPA_list = []
-for key in scanned_dict.keys():
-    CPA_list.append(key.split('tax:')[1])
-print((set(CPA_list)))
-print(CPA_list[-1])
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_final_scanned_set_domtbl_2OKT.faa', 'w') as O:
+
+    for key in scan_dict:
+        if (key.split('_subset')[0]) in seq_dic:
+            CPA_list.append((key.split('_subset')[0].split('tax:')[1]))
+            sequence = seq_dic[(key.split('_subset')[0])]
+            protein_id = (key.split('_subset')[0])
+            line = '>' + protein_id + '\n' + sequence + '\n'
 
 with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_metadata.tsv', 'r') as Meta:
     next(Meta, None)
-    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_15sept.tsv', 'w') as Out:
+    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_2OKT.tsv', 'w') as Out:
         
         header=  'species_name'  + '\t' + 'Major_tax' +  '\t' + 'Tax' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' +'\t' + 'NhaC_binary' +'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
@@ -164,3 +165,4 @@ with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_met
                 CPA_binary = 1
             Wline = species_name  + '\t' + Large_grouping + '\t' + Tax + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
             Out.write(Wline)
+    
