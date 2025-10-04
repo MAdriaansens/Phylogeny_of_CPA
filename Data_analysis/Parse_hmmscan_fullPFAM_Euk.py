@@ -49,6 +49,7 @@ def best_hit_dict(HMMscan, scan_dict):
                     entry_list = (best_match_hmm, evalue)
                     scan_dict[full_id] =entry_list
     return(scan_dict)
+
 scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan'
 from Bio import SeqIO
 
@@ -116,16 +117,16 @@ NhaD_list = passed_list
 print(len(set(NhaD_list)))
 
 #CPA
-scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/subset'
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/cross_domain'
 import os
 
 scan_dict = {}
 for hmmscan in os.listdir(scandir):
+    print(hmmscan)
     if hmmscan.split('.')[-1] == 'tsv':
         HMMscan = '{}/{}'.format(scandir,hmmscan)
         scan_dict = best_hit_dict(HMMscan, scan_dict)
         print(HMMscan)
-
 
 
 
@@ -143,28 +144,19 @@ print(len(list(scanned_dict.keys())))
 seq_dic = {}
 for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/cross_domain/Eukarya_merged_PF00999hmmaligned.fasta', 'fasta'):
     seq_dic[record.id] = str(record.seq)
-
 CPA_list = []
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_final_scanned_set_domtbl_3OKT.faa', 'w') as O:
 
-
-
-domtbl_dic = {}
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMsearch_domtbl/All_vs_Eukarya_domtbl_seq.fasta', 'fasta'):
-    domtbl_dic[record.id.split('_subset')[0]] = str(record.seq)
-
-
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_final_scanned_set_domtbl_2OKT.faa', 'w') as O:
-    for key in scanned_dict:
-        if (key.split('_subset')[0]) in seq_dic:
-            CPA_list.append((key.split('_subset')[0].split('tax:')[1]))
-            sequence = domtbl_dic[(key.split('_subset')[0])]
-            protein_id = (key.split('_subset')[0])
+    for key in scanned_dict.keys():
+        if key in seq_dic:
+            CPA_list.append((key.split('_tax:')[1]))
+            sequence = seq_dic[(key)]
+            protein_id = (key.split('_tax')[0])
             line = '>' + protein_id + '\n' + sequence + '\n'
             O.write(line)
-    O.close()
 with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_metadata.tsv', 'r') as Meta:
     next(Meta, None)
-    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_2OKT.tsv', 'w') as Out:
+    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_3OKT.tsv', 'w') as Out:
         
         header=  'species_name'  + '\t' + 'Major_tax' +  '\t' + 'Tax' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' +'\t' + 'NhaC_binary' +'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
@@ -172,6 +164,10 @@ with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_met
             species_name = (line.split('\t')[1])
             if species_name == 'Agaricus_bisporus_ var. bisporus H97':
                 species_name = 'Agaricus_bisporus_'
+            if species_name == 'Allomyces_macrogynus_ATCC 38327':
+                species_name = 'Allomyces_macrogynus_ATCC'
+            if species_name == 'Pecoramyces ruminantium':
+                species_name = 'Pecoramyces'
             Large_grouping = line.split('\t')[11]
             Tax = (line.split('\t')[12])
             NhaB_count = NhaB_binary = NhaC_count = NhaC_binary = NhaD_count = NhaD_binary = CPA_count = CPA_binary= 0
@@ -187,7 +183,12 @@ with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_met
             if species_name  in CPA_list:
                 CPA_count = CPA_list.count(species_name)
                 CPA_binary = 1
+            if species_name == 'Agaricus_bisporus_':
+                species_name = 'Agaricus_bisporus_ var. bisporus H97'
+            if species_name == 'Allomyces_macrogynus_ATCC':
+                species_name = 'Allomyces_macrogynus_ATCC 38327'
+            if species_name == 'Pecoramyces':
+                species_name = 'Pecoramyces ruminantium'
             Wline = species_name  + '\t' + Large_grouping + '\t' + Tax + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
             Out.write(Wline)
-
-    
+  
