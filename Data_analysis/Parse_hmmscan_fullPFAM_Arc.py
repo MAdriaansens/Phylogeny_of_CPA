@@ -202,7 +202,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Archaea_passe
         if key.split('tax:')[1] in representatives_list:
             header = key.split('_tax')[0]
             tax.append(key.split('tax:')[1])
-            sequence = domtbl_dic[key]
+            sequence = Passed_all_list[key]
             line = '>' + header + '\n' + str(sequence) + '\n'
             Passed.write(line)
 
