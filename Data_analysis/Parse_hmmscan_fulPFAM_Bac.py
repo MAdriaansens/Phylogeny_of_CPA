@@ -49,16 +49,16 @@ def best_hit_dict(HMMscan, scan_dict):
                     entry_list = (best_match_hmm, evalue)
                     scan_dict[full_id] =entry_list
     return(scan_dict)
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan'
+scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/subset_sequence/Bacteria'
 from Bio import SeqIO
 
 scan_dict = {}
 
 
 import os
-for hmmscan in os.listdir( '{}/Bacteria/PF00999'.format(scandir)):
+for hmmscan in os.listdir(scandir):
     if hmmscan.split('.')[-1] == 'tsv':
-        HMMscan = '{}/Bacteria/PF00999/{}'.format(scandir,hmmscan)
+        HMMscan = '{}/{}'.format(scandir,hmmscan)
         scan_dict = best_hit_dict(HMMscan, scan_dict)
         print(HMMscan)
 tax_list = []
@@ -87,6 +87,9 @@ for record in SeqIO.parse(HMMalign, 'fasta'):
         Passed_all_list[record.id] = str(record.seq)
 print(len(set(list(Passed_all_list.keys()))))
 #NhaB
+
+scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan'
+
 HMMscan = '{}/Bacteria_06450_fullhmmscanned.tsv'.format(scandir)
 scan_dict = {}
 
@@ -155,7 +158,7 @@ for key in Passed_all_list.keys():
     CPA_list_forIT.append(key.split('tax:')[1])
 
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv', 'r') as Meta:
-    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Bacteria_9SEPT.tsv', 'w') as Out:
+    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Bacteria_3OKT.tsv', 'w') as Out:
         header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'sample' + '\t'+ 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         for line in Meta:
@@ -191,13 +194,13 @@ print(len(set(CPA_list_forIT)))
 print(len(CPA_list_forIT))
 tax = []
 import json
-with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_tax.json', 'w') as outfile:
+with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_tax_3OKT.json', 'w') as outfile:
     json.dump(Tax_dict, outfile)
 
-with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_CPA_idseq.json', 'w') as outfile:
+with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_CPA_idseq_3OKT.json', 'w') as outfile:
     json.dump(Passed_all_list, outfile)
 
-with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_passed_all_filters_Sep11_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
+with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_passed_all_filters_OKT3_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
     for key in Passed_all_list.keys():
         if key.split('tax:')[1] in representatives_list:
             header = key.split('_tax')[0]
