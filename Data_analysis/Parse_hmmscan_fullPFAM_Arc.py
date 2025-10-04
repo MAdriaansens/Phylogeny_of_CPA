@@ -140,10 +140,14 @@ for key in scanned_dict.keys():
 
 print(len(CPA_list))
 #returns all protein ids whom match with CPA PFAM
+
+
+print(len(CPA_list))
+#returns all protein ids whom match with CPA PFAM
 Passed_all_list={}
 HMMalign = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/cross_domain/Arc_cross_domain_hmmaligned_pf00999.faa'
 for record in SeqIO.parse(HMMalign, 'fasta'):
-    if record.id in CPA_list:
+    if record.id in scanned_dict:
         Passed_all_list[record.id] = record.seq
 GTDB_ids_passed = {}
 
@@ -191,9 +195,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv',
 tax = []
 
 
-domtbl_dic = {}
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMdombtlout/Archaea/All_vsArchaea_domtbl_pf00999.fasta', 'fasta'):
-    domtbl_dic[record.id.split('_subset')[0]] = str(record.seq)
+
 
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Archaea_passed_all_filters_2OKT_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
     for key in Passed_all_list.keys():
