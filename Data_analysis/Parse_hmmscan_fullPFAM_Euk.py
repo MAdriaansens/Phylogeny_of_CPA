@@ -54,7 +54,7 @@ scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMM
 from Bio import SeqIO
 
 #NhaB
-HMMscan = '{}/PF06450_Eukarya_merged_alignedPF06450_FULLPFAM_scanned.tsv'.format(scandir)
+HMMscan = '{}/PF06450_Eukarya_merged_alignedPF06450_refilter_HMMscanned.tsv'.format(scandir)
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -63,18 +63,25 @@ hit_list = []
 for key in scan_dict.keys():
     domain = scan_dict[key][0]
     if domain == 'NhaB':
-        hit_list.append(key)
+        hit_list.append(key.split('|')[1])
 
 passed_list = []
+records_in = []
 for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF06450_Eukarya_merged_alignedPF06450.fasta.fasta', 'fasta'):
-    if record.id.split('|')[1] in hit_list:
-        passed_list.append(record.id.split('tax:')[1])
+    if record.id.split('|')[1] in list(set(hit_list)):
+        if record.id.split('|')[1] in records_in:
+            pass
+        else:
+            records_in.append(record.id.split('|')[1])
+            
+            passed_list.append(record.id.split('tax:')[1])
 
-NhaB_list = passed_list
-print(len(set(NhaB_list)))
+NhaB_list = list(set(passed_list))
+
+print(passed_list)
 
 #NhaC
-HMMscan = '{}/PF03553_Eukarya_merged_alignedPF03553_FULLPFAM_scanned.tsv'.format(scandir)
+HMMscan = '{}/PF03600_Eukarya_merged_alignedPF03600_refilter_HMMscanned.tsv'.format(scandir)
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -83,12 +90,17 @@ hit_list = []
 for key in scan_dict.keys():
     domain = scan_dict[key][0]
     if domain == 'Na_H_antiporter':
-        hit_list.append(key)
+        hit_list.append(key.split('|')[1])
 
 passed_list = []
 for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF03553_Eukarya_merged_alignedPF03553.fasta.fasta', 'fasta'):
-    if record.id.split('|')[1] in hit_list:
-        passed_list.append(record.id.split('tax:')[1])
+    if record.id.split('|')[1] in list(set(hit_list)):
+        if record.id.split('|')[1] in records_in:
+            pass
+        else:
+            records_in.append(record.id.split('|')[1])
+            
+            passed_list.append(record.id.split('tax:')[1])
 
 NhaC_list = passed_list
 
@@ -96,7 +108,7 @@ print(len(set(NhaC_list)))
 
 
 #NhaD
-HMMscan = '{}/PF03600_Eukarya_merged_alignedPF03600_FULLPFAM_scanned.tsv'.format(scandir)
+HMMscan = '{}/PF03600_Eukarya_merged_alignedPF03600_refilter_HMMscanned.tsv'.format(scandir)
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -105,16 +117,20 @@ hit_list = []
 for key in scan_dict.keys():
     domain = scan_dict[key][0]
     if domain == 'CitMHS':
-        hit_list.append(key)
+        hit_list.append(key.split('|')[1])
 
 passed_list = []
 for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF03600_Eukarya_merged_alignedPF03600.fasta.fasta', 'fasta'):
-    if record.id.split('|')[1] in hit_list:
-        passed_list.append(record.id.split('tax:')[1])
+    if record.id.split('|')[1] in list(set(hit_list)):
+        if record.id.split('|')[1] in records_in:
+            pass
+        else:
+            records_in.append(record.id.split('|')[1])
+            
+            passed_list.append(record.id.split('tax:')[1])
 NhaD_list = passed_list
 
 
-print(len(set(NhaD_list)))
 
 #CPA
 scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/cross_domain'
@@ -122,11 +138,9 @@ import os
 
 scan_dict = {}
 for hmmscan in os.listdir(scandir):
-    print(hmmscan)
     if hmmscan.split('.')[-1] == 'tsv':
         HMMscan = '{}/{}'.format(scandir,hmmscan)
         scan_dict = best_hit_dict(HMMscan, scan_dict)
-        print(HMMscan)
 
 
 
@@ -139,13 +153,12 @@ for key in scan_dict.keys():
     value = scan_dict[key]
     if value[0] in CPA_HMM_list:
         scanned_dict[key] = value
-print(len(list(scanned_dict.keys())))
 
 seq_dic = {}
 for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/cross_domain/Eukarya_merged_PF00999hmmaligned.fasta', 'fasta'):
     seq_dic[record.id] = str(record.seq)
 CPA_list = []
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_final_scanned_set_domtbl_3OKT.faa', 'w') as O:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_final_scanned_set_domtbl_7OKT.faa', 'w') as O:
 
     for key in scanned_dict.keys():
         if key in seq_dic:
@@ -156,7 +169,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_final
             O.write(line)
 with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_metadata.tsv', 'r') as Meta:
     next(Meta, None)
-    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_3OKT.tsv', 'w') as Out:
+    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_7OKT.tsv', 'w') as Out:
         
         header=  'species_name'  + '\t' + 'Major_tax' +  '\t' + 'Tax' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' +'\t' + 'NhaC_binary' +'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
