@@ -54,30 +54,31 @@ def best_hit_dict(HMMscan, scan_dict):
 scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan'
 from Bio import SeqIO
 
-#NhaB
-HMMscan = '{}/Archaea_06450_fullhmmscanned.tsv'.format(scandir)
-scan_dict = {}
+#NhaB, no NhaB passed threshold in Archaea
+NhaB_list = []
+#HMMscan = '{}/Archaea_06450_fullhmmscanned.tsv'.format(scandir)
+#scan_dict = {}
 
-scan_dict = best_hit_dict(HMMscan, scan_dict)
-from collections import Counter
-hit_list = []
-for key in scan_dict.keys():
-    domain = scan_dict[key][0]
-    if domain == 'NhaB':
-        hit_list.append(key)
+#scan_dict = best_hit_dict(HMMscan, scan_dict)
+##from collections import Counter
+#hit_list = []
+#for key in scan_dict.keys():
+#    domain = scan_dict[key][0]
+#    if domain == 'NhaB':
+#        hit_list.append(key)
 
-passed_list = []
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/Archaea_merged_PF06450_unique_aligned_PF06450.fasta.faa.fasta', 'fasta'):
-    if record.id in hit_list:
-        passed_list.append(record.id.split('tax:')[1])
+#passed_list = []
+#for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/Archaea_merged_PF06450_unique_aligned_PF06450.fasta.faa.fasta', 'fasta'):
+#    if record.id in hit_list:
+#        passed_list.append(record.id.split('tax:')[1])
 
-NhaB_list = passed_list
-print(len(NhaB_list))
+#NhaB_list = passed_list
+#print(len(NhaB_list))
 
 
 
 #NhaC
-HMMscan = '{}/Archaea_03553_fullhmmscanned.tsv'.format(scandir)
+HMMscan = '{}/PF03553_Archaea_merged_alignedPF03553_refilter_HMMscanned.tsv'.format(scandir)
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -97,7 +98,7 @@ NhaC_list = passed_list
 print(len(NhaC_list))
 
 #NhaD
-HMMscan = '{}/Archaea_03600_fullhmmscanned.tsv'.format(scandir)
+HMMscan = '{}/PF03600_Archaea_merged_alignedPF03600_refilter_HMMscanned.tsv'.format(scandir)
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -161,7 +162,7 @@ print(len(set(CPA_list_forIT)))
 
                           
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', 'r') as Meta:
-    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_2OKTSEPT.tsv', 'w') as Out:
+    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_7OKTSEPT.tsv', 'w') as Out:
         header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'Sample' + '\t'+ 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         representatives_list = []
@@ -198,7 +199,7 @@ tax = []
 
 
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Archaea_passed_all_filters_2OKT_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Archaea_passed_all_filters_7OKT_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
     for key in Passed_all_list.keys():
         if key.split('tax:')[1] in representatives_list:
             header = key.split('_tax')[0]
