@@ -8,7 +8,7 @@ diction_in = sys.argv[1]
 Allseqs = '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Bacteria_allhmmscanned_final_clustered_at0.7.fasta_all_seqs.fasta'
 Allseq_list = []
 
-print('parsing sequencces')
+print('parsing sequences')
 for record in SeqIO.parse(Allseqs, 'fasta'):
     Allseq_list.append(str(record.id))
 Allseq_list = set(Allseq_list)
