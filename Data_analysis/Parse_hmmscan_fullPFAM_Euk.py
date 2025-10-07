@@ -93,6 +93,7 @@ for key in scan_dict.keys():
         hit_list.append(key.split('|')[1])
 
 passed_list = []
+records_in = []
 for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF03553_Eukarya_merged_alignedPF03553.fasta.fasta', 'fasta'):
     if record.id.split('|')[1] in list(set(hit_list)):
         if record.id.split('|')[1] in records_in:
@@ -120,6 +121,7 @@ for key in scan_dict.keys():
         hit_list.append(key.split('|')[1])
 
 passed_list = []
+records_in = []
 for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF03600_Eukarya_merged_alignedPF03600.fasta.fasta', 'fasta'):
     if record.id.split('|')[1] in list(set(hit_list)):
         if record.id.split('|')[1] in records_in:
