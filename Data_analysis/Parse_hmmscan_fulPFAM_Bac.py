@@ -81,10 +81,14 @@ print(CPA_list[-1])
 
 #returns all protein ids whom match with CPA PFAM
 Passed_all_list = {}
+records_in ={}
 HMMalign = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF00999/cross_domain_final/All_merged_Bacteria_pf00999aligned.faa'
-for record in SeqIO.parse(HMMalign, 'fasta'):
-    if record.id in CPA_list:
-        Passed_all_list[record.id] = str(record.seq)
+    if record.id.split('|')[1] in list(set(hit_list)):
+        if record.id.split('|')[1] in records_in:
+            pass
+        else:
+            records_in[record.id.split('|')[1]] = 'in'
+            
 print(len(set(list(Passed_all_list.keys()))))
 #NhaB
 
@@ -102,9 +106,13 @@ for hmmscan in os.listdir(scandir):
         print(HMMscan)
 
 passed_list = []
+records_in ={}
 for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF06450/MERGED/PF06450_Bacteria_all_merged_aligned.fasta','fasta'):
-    if record.id.split('|')[1] in hit_list:
-        passed_list.append(record.id.split('tax:')[1])
+    if record.id.split('|')[1] in list(set(hit_list)):
+        if record.id.split('|')[1] in records_in:
+            pass
+        else:
+            records_in[record.id.split('|')[1]] = 'in'
 
 NhaB_list = passed_list
 print(len(set(NhaB_list)))
@@ -123,10 +131,14 @@ for key in scan_dict.keys():
     if domain == 'Na_H_antiporter':
         hit_list.append(key)
 
-passed_list = []
+passed_list = [] 
+records_in = {}
 for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF03553/MERGED/PF03553_Bacteria_all_merged_aligned.fasta', 'fasta'):
-    if record.id.split('|')[1] in hit_list:
-        passed_list.append(record.id.split('tax:')[1])
+    if record.id.split('|')[1] in list(set(hit_list)):
+        if record.id.split('|')[1] in records_in:
+            pass
+        else:
+            records_in[record.id.split('|')[1]] = 'in'
 
 NhaC_list = passed_list
 print(len(set(NhaC_list)))
