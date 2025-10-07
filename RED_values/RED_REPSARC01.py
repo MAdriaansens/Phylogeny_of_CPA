@@ -14,7 +14,7 @@ import json
 #the tree contains the IDs we are interested in 
 tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/GTDBK/RED_decorated_trees/RED_A53_ALIGNEDRED_30julift.nw', 'newick')
 
-Allseqs = '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Archaea_allhmmscanned_final_clustered_at0.7.fasta_all_seqs.fasta'
+Allseqs = '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/Archaea_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_all_seqs.fasta'
 Allseq_list = []
 for record in SeqIO.parse(Allseqs, 'fasta'):
     Allseq_list.append(record.id)
@@ -39,5 +39,5 @@ with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_GTDB226_pro
 print(len(set(list(Allseq_dict.keys()))))
 
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/All_Arc_CPAseq_GTDB226_ids_tax.json', 'w') as Out:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/All_Arc_CPAseq_GTDB226_ids_tax.json', 'w') as Out:
     json.dump(Allseq_dict, Out)
