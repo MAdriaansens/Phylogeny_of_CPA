@@ -36,7 +36,7 @@ for clade in tree.find_clades():
         clade.name = str(count)
         count = count + 1
         
-Allseqs = '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Archaea_allhmmscanned_final_clustered_at0.7.fasta_all_seqs.fasta'
+Allseqs = '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/Archaea_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_all_seqs.fasta'
 Allseq_list = []
 for record in SeqIO.parse(Allseqs, 'fasta'):
     Allseq_list.append(record.id)
@@ -45,7 +45,7 @@ termini = tree.get_terminals()
 print(len(set(Allseq_list)))
 print(len(termini))
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/All_Arc_CPAseq_GTDB226_ids_tax.json', 'r') as F:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/All_Arc_CPAseq_GTDB226_ids_tax.json', 'r') as F:
     Allseq_dict = json.load(F)
 
 
@@ -57,7 +57,7 @@ for key in Allseq_dict.keys():
 
 
 
-MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Archaea_allhmmscanned_final_clustered_at0.7.fasta_cluster.tsv'
+MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/Archaea_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv'
 rep_list = []
 
 
@@ -123,7 +123,7 @@ for i in replist:
 if 13829 - count != len(singleton_list):
     raise ValueError
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/RED_values_Archaea_clusters_12sep.tsv', 'w') as WRED:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/RED_values_Archaea_clusters_7OKT.tsv', 'w') as WRED:
 
     Header = 'Cluster_representatitve' + '\t' + 'no_proteins_in_cluster' + '\t' + 'mrca' + '\t' + 'red_of_mrca' +  '\t' + 'red_of_mrca2noot' + '\t' + 'average_RED' +  '\t'+ 'common_taxonomic_grouping' + '\t' + 'shared_taxa' + '\t' + 'Phyla_in_cluster' + '\t' + 'no_cross_phyla_pairs' + '\t'+ 'no_cross_class_pairs' + '\t'+ 'no_cross_order_pairs' + '\t' + 'no_cross_family_pairs' + '\t' +  'no_cross_genera_pairs' + '\t' +'list_of_clusters' + '\t' + 'GTDB_id_in_cluster' + '\t' + 'most_distant_pairs' + '\n'
     WRED.write(Header)
