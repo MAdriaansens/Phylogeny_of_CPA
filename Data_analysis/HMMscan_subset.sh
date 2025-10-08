@@ -8,6 +8,7 @@
 #SBATCH --output=slurm_bacoutput/euk6450Run_python_output%A-%a.out
 #SBATCH --error=slurm_bacoutput/euk6450Run_python_error%A-%a.err
 
+module load Python/3.11.6-foss-2023a
 
 
 HMMalign=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria
