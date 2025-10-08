@@ -172,7 +172,7 @@ print(len(set(NhaC_list)))
 
 #NhaD
 scan_dict = {}
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Bacteria/PF03600'
+scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Bacteria/PF03600/subset'
 
 for hmmscan in os.listdir(scandir):
     if hmmscan.split('.')[-1] == 'tsv':
@@ -182,8 +182,7 @@ for hmmscan in os.listdir(scandir):
 
 scan_cleaned = {}
 for key in scan_dict.keys():
-    if '|' in key:
-    
+    if '|' in key:   
         scan_cleaned[key.split('|')[1]] = scan_dict[key]
     else:
         print(key)
@@ -198,7 +197,6 @@ for key in scan_dict.keys():
 print(len(hit_list))
 print(len(set(hit_list)))
 
-print(hit_list[1])
 passed_list = []
 records_in ={}
 for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF03600/PF03600_merged_Bac_fl.fasta','fasta'):
