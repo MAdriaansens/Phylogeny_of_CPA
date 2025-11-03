@@ -58,7 +58,7 @@ subset_hit_domain = {}
 hmmscan_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/subset_sequence/Bacteria'
 CPA_list = ('Manual_seq_cov30_e05_seqid0.7_genafpair_aligned', 'Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned', 'Na_H_Exchanger', 'Manual_vsBacteria_merged_e5_cov30_seqid0.6.faa_rep_seq_autoaligned','Na_H_antiport_1', 'CHX17_2nd', 'CHX17_C')
 for hmmscan_output in os.listdir(hmmscan_dir):
-    if 'tsv' in hmmscan_fl_output:
+    if 'tsv' in hmmscan_output:
             
         with open('{}/{}'.format(hmmscan_dir, hmmscan_output), 'r') as flscan:
             for line in flscan:
