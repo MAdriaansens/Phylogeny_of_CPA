@@ -49,7 +49,7 @@ def best_hit_dict(HMMscan, scan_dict):
                     entry_list = (best_match_hmm, evalue)
                     scan_dict[full_id] =entry_list
     return(scan_dict)
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/subset_sequence/Bacteria'
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/subset'
 from Bio import SeqIO
 
 scan_dict = {}
@@ -81,7 +81,7 @@ print(CPA_list[-1])
 
 #returns all protein ids whom match with CPA PFAM
 Passed_all_list = {}
-HMMalign = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF00999/cross_domain_final/All_merged_Bacteria_pf00999aligned.faa'
+HMMalign = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/cross_domain/Eukarya_merged_PF00999hmmaligned.fasta'
 
 for record in SeqIO.parse(HMMalign, 'fasta'):
     if record.id in scanned_dict:
@@ -90,28 +90,20 @@ GTDB_ids_passed = {}
             
 print(len(set(list(Passed_all_list.keys()))))
 
+
+
 #NhaB
 
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Bacteria/PF06450'
+HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/Eukarya_PF06450_aligned_hmmscanned.tsv'
 
 
 scan_dict = {}
 
-
-for hmmscan in os.listdir(scandir):
-    if hmmscan.split('.')[-1] == 'tsv':
-        HMMscan = '{}/{}'.format(scandir,hmmscan)
-        scan_dict = best_hit_dict(HMMscan, scan_dict)
-        print(HMMscan)
+scan_dict = best_hit_dict(HMMscan, scan_dict)
 
 scan_cleaned = {}
 for key in scan_dict.keys():
-    if '|' in key:
-    
-        scan_cleaned[key.split('|')[1]] = scan_dict[key]
-    else:
-        print(key)
-
+    scan_cleaned[key] = scan_dict[key]
 scan_dict = scan_cleaned
 
 hit_list = []
@@ -119,36 +111,27 @@ for key in scan_dict.keys():
     domain = scan_dict[key][0]
     if domain == 'NhaB':
         hit_list.append(key)
-print(len(hit_list))
-print(len(set(hit_list)))
 
-print(hit_list[1])
+
 passed_list = []
 records_in ={}
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF06450/PF06450_merged_Bac_fl.fasta','fasta'):
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF06450_Eukarya_merged_alignedPF06450.fasta.fasta','fasta'):
     if record.id in list(set(hit_list)):
          passed_list.append(record.id.split('tax:')[1])
 
 NhaB_list = passed_list
 print(len(set(NhaB_list)))
-
+print('finished NhaB')
 #NhaC
 scan_dict = {}
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Bacteria/PF03553'
+HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/Eukarya_PF03553_aligned_hmmscanned.tsv'
 
-for hmmscan in os.listdir(scandir):
-    if hmmscan.split('.')[-1] == 'tsv':
-        HMMscan = '{}/{}'.format(scandir,hmmscan)
-        scan_dict = best_hit_dict(HMMscan, scan_dict)
-        print(HMMscan)
+scan_dict = best_hit_dict(HMMscan, scan_dict)
 
 scan_cleaned = {}
 for key in scan_dict.keys():
-    if '|' in key:
-    
-        scan_cleaned[key.split('|')[1]] = scan_dict[key]
-    else:
-        print(key)
+    scan_cleaned[key] = scan_dict[key]
+
 
 scan_dict = scan_cleaned
 
@@ -160,32 +143,28 @@ for key in scan_dict.keys():
 print(len(hit_list))
 print(len(set(hit_list)))
 
-print(hit_list[1])
+
 passed_list = []
 records_in ={}
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF03553/PF03553_merged_Bac_fl.fasta','fasta'):
-    if record.id in list(set(hit_list)):
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF03553_Eukarya_merged_alignedPF03553.fasta.fasta','fasta'):
+    if record.id.split('|')[1] in list(set(hit_list)):
          passed_list.append(record.id.split('tax:')[1])
 
 NhaC_list = passed_list
 print(len(set(NhaC_list)))
+print('finished NhaC')
 
 #NhaD
 scan_dict = {}
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Bacteria/PF03600/subset'
+HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/Eukarya_PF03600_aligned_hmmscanned.tsv'
 
-for hmmscan in os.listdir(scandir):
-    if hmmscan.split('.')[-1] == 'tsv':
-        HMMscan = '{}/{}'.format(scandir,hmmscan)
-        scan_dict = best_hit_dict(HMMscan, scan_dict)
-        print(HMMscan)
+
+scan_dict = best_hit_dict(HMMscan, scan_dict)
 
 scan_cleaned = {}
 for key in scan_dict.keys():
-    if '|' in key:   
-        scan_cleaned[key.split('|')[1]] = scan_dict[key]
-    else:
-        print(key)
+
+    scan_cleaned[key] = scan_dict[key]
 
 scan_dict = scan_cleaned
 
@@ -195,21 +174,23 @@ for key in scan_dict.keys():
     if domain == 'CitMHS':
         hit_list.append(key)
 print(len(hit_list))
+print(hit_list[1])
 print(len(set(hit_list)))
 
 passed_list = []
 records_in ={}
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF03600/PF03600_merged_Bac_fl.fasta','fasta'):
-    if record.id in list(set(hit_list)):
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF03600_Eukarya_merged_alignedPF03600.fasta.fasta','fasta'):
+
+    if record.id.split('|')[1] in list(set(hit_list)):
          passed_list.append(record.id.split('tax:')[1])
 
 NhaD_list = passed_list
 print(len(set(NhaD_list)))
 
 
+print('finished NhaD')
 
 
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan'
 count = 0
 Tax_dict={}
 representatives_list = []
@@ -217,58 +198,55 @@ representatives_list = []
 CPA_list_forIT = []
 for key in Passed_all_list.keys():
     CPA_list_forIT.append(key.split('tax:')[1])
-
-with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv', 'r') as Meta:
-    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Bacteria_7OKT.tsv', 'w') as Out:
-        header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'sample' + '\t'+ 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
+    
+with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_metadata.tsv', 'r') as Meta:
+    next(Meta, None)
+    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_4nov.tsv', 'w') as Out:
+        header=  'species_name'  + '\t' + 'Major_tax' +  '\t' + 'Tax' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' +'\t' + 'NhaC_binary' +'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         for line in Meta:
-            if line.split('\t')[18] == 't':
-                GTDB_id =line.split('\t')[0]
-                completeness = line.split('\t')[2]
-                contamination = line.split('\t')[3]
-                sample = line.split('\t')[-52]
-                GTDB_tax = (line.split('\t')[19].replace(' ', '_'))
-                representatives_list.append(GTDB_tax)
+            species_name = (line.split('\t')[1])
+            if species_name == 'Agaricus_bisporus_ var. bisporus H97':
+                species_name = 'Agaricus_bisporus_'
+            if species_name == 'Allomyces_macrogynus_ATCC 38327':
+                species_name = 'Allomyces_macrogynus_ATCC'
+            if species_name == 'Pecoramyces ruminantium':
+                species_name = 'Pecoramyces'
+            Large_grouping = line.split('\t')[11]
+            Tax = (line.split('\t')[12])
+            NhaB_count = NhaB_binary = NhaC_count = NhaC_binary = NhaD_count = NhaD_binary = CPA_count = CPA_binary= 0
+            if species_name  in NhaD_list:
+                NhaD_count = NhaD_list.count(species_name)
+                NhaD_binary = 1
+            if species_name  in NhaC_list:
+                NhaC_count = NhaC_list.count(species_name)
+                NhaC_binary = 1
+            if species_name  in NhaB_list:
+                NhaB_count = NhaB_list.count(species_name)
+                NhaB_binary = 1
+            if species_name  in CPA_list_forIT:
+                CPA_count = CPA_list_forIT.count(species_name)
+                CPA_binary = 1
+            if species_name == 'Agaricus_bisporus_':
+                species_name = 'Agaricus_bisporus_ var. bisporus H97'
+            if species_name == 'Allomyces_macrogynus_ATCC':
+                species_name = 'Allomyces_macrogynus_ATCC 38327'
+            if species_name == 'Pecoramyces':
+                species_name = 'Pecoramyces ruminantium'
+            Wline = species_name  + '\t' + Large_grouping + '\t' + Tax + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
 
-                NhaB_count = NhaB_binary = NhaC_count = NhaC_binary = NhaD_count = NhaD_binary = CPA_count = CPA_binary= 0
-                if GTDB_tax in NhaD_list:
-                    NhaD_count = NhaD_list.count(GTDB_tax)
-                    NhaD_binary = 1
-                if GTDB_tax in NhaC_list:
-                    NhaC_count = NhaC_list.count(GTDB_tax)
-                    NhaC_binary = 1
-                if GTDB_tax in NhaB_list:
-                    NhaB_count = NhaB_list.count(GTDB_tax)
-                    NhaB_binary = 1
-                if GTDB_tax in CPA_list_forIT:
-                    CPA_count = CPA_list_forIT.count(GTDB_tax)
-                    CPA_binary = 1
-                Tax_dict[GTDB_id] = GTDB_tax
-                Wline = GTDB_id + '\t' + GTDB_tax + '\t' + str(completeness) + '\t' + str(contamination) + '\t' + sample + '\t' + str(CPA_count) + '\t' + str(CPA_binary) + '\t' + str(NhaB_count) + '\t' +  str(NhaB_binary) + '\t' + str(NhaC_count) +'\t' + str(NhaC_binary) +'\t' + str(NhaD_count) + '\t' + str(NhaD_binary) + '\n'
-                Out.write(Wline)
-            else:
-                pass
-print(count)
-print(len(representatives_list))
+            Out.write(Wline)
 print(len(set(CPA_list_forIT)))
 print(len(CPA_list_forIT))
 tax = []
 import json
-#with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_tax_3OKT.json', 'w') as outfile:
-#    json.dump(Tax_dict, outfile)
 
-#with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_CPA_idseq_3OKT.json', 'w') as outfile:
-#    json.dump(Passed_all_list, outfile)
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_4nov_passed_all_setcpa.fsta', 'w') as Passed:
+    for key in Passed_all_list.keys():
+        header = key.split('_tax')[0]
+        tax.append(key.split('tax:')[1])
+        sequence = Passed_all_list[key]
+        line = '>' + header + '\n' + str(sequence) + '\n'
+        Passed.write(line)
 
-#with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_passed_all_filters_OKT3_GTDBreps_alignedPF00999.fasta', 'w') as Passed:
-#    for key in Passed_all_list.keys():
-#        if key.split('tax:')[1] in representatives_list:
-#            header = key.split('_tax')[0]
-#            tax.append(key.split('tax:')[1])
-#            sequence = Passed_all_list[key]
-#            line = '>' + header + '\n' + str(sequence) + '\n'
-#            Passed.write(line)
-#        else:
-#            print(key)
-#print(len(set(tax)))
+print(len(set(tax)))
