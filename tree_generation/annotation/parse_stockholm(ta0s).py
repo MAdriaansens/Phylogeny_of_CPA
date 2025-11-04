@@ -1,10 +1,12 @@
 import re
 import sys
-#this script is needed to parse the output for secondary domains in the HMMalign
+
 #Craig herbold has been instrumental in generating the 're' part, I do not like running re
 
 hit_file = sys.argv[1] # '/nesi/nobackup/uc04105/results/hmmalign/pipeline/CPA/Archaea_nhaA_TRKACpfam_align_CPAfold.sthk'  #sys.argv[1]  
 outfile = sys.argv[2]
+length = int(sys.argv[3])
+
 # define alignment
 alignment={}
 
@@ -37,7 +39,7 @@ with open(hit_file) as hmmalignment:
 with open('{}.fasta'.format(outfile), 'w') as file1:
     for key in alignment.keys():
         fasta = alignment[key]
-        if sum(1 for c in fasta if c.isupper()) < 263:
+        if sum(1 for c in fasta if c.isupper()) < length:
             pass
         else:   
             sequence = '>' + key + '\n' + fasta.upper().replace('-','') + '\n'
