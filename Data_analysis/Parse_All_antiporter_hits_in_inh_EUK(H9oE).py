@@ -93,8 +93,8 @@ print(len(set(list(Passed_all_list.keys()))))
 
 
 #NhaB
-
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/Eukarya_PF06450_aligned_hmmscanned.tsv'
+#HMMscan was performed on the part of the sequence whom matched with the HMMalign, then it was ran agianst the full pfam 
+HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/PF06450_Eukarya_merged_alignedPF06450_refilter_HMMscanned.tsv'
 
 
 scan_dict = {}
@@ -103,7 +103,7 @@ scan_dict = best_hit_dict(HMMscan, scan_dict)
 
 scan_cleaned = {}
 for key in scan_dict.keys():
-    scan_cleaned[key] = scan_dict[key]
+    scan_cleaned[key.split('|')[1]] = scan_dict[key]
 scan_dict = scan_cleaned
 
 hit_list = []
@@ -124,16 +124,16 @@ print(len(set(NhaB_list)))
 print('finished NhaB')
 #NhaC
 scan_dict = {}
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/Eukarya_PF03553_aligned_hmmscanned.tsv'
+HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/PF03553_Eukarya_merged_alignedPF03553_refilter_HMMscanned.tsv'
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
 
 scan_cleaned = {}
 for key in scan_dict.keys():
-    scan_cleaned[key] = scan_dict[key]
-
-
+    scan_cleaned[key.split('|')[1]] = scan_dict[key]
 scan_dict = scan_cleaned
+
+
 
 hit_list = []
 for key in scan_dict.keys():
@@ -156,16 +156,14 @@ print('finished NhaC')
 
 #NhaD
 scan_dict = {}
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/Eukarya_PF03600_aligned_hmmscanned.tsv'
+HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/PF03600_Eukarya_merged_alignedPF03600_refilter_HMMscanned.tsv'
 
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
 
 scan_cleaned = {}
 for key in scan_dict.keys():
-
-    scan_cleaned[key] = scan_dict[key]
-
+    scan_cleaned[key.split('|')[1]] = scan_dict[key]
 scan_dict = scan_cleaned
 
 hit_list = []
@@ -240,6 +238,8 @@ print(len(set(CPA_list_forIT)))
 print(len(CPA_list_forIT))
 tax = []
 import json
+
+
 
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_4nov_passed_all_setcpa.fsta', 'w') as Passed:
     for key in Passed_all_list.keys():
