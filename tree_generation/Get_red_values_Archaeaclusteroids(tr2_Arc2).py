@@ -44,7 +44,7 @@ for record in SeqIO.parse(Allseqs, 'fasta'):
 termini = tree.get_terminals()
 print(len(set(Allseq_list)))
 print(len(termini))
-
+#we need a seperate script (Get_red_values_Archaeaclusteroids(tr2_Arc1).py for this
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/All_Arc_CPAseq_GTDB226_ids_tax.json', 'r') as F:
     Allseq_dict = json.load(F)
 
