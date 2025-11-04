@@ -1,6 +1,6 @@
 import re
 import sys
-
+#this script is run when running the bash script to retrieve the sequences above a threshold after HMMalignment
 #Craig herbold has been instrumental in generating the 're' part, I do not like running re
 
 hit_file = sys.argv[1] # '/nesi/nobackup/uc04105/results/hmmalign/pipeline/CPA/Archaea_nhaA_TRKACpfam_align_CPAfold.sthk'  #sys.argv[1]  
