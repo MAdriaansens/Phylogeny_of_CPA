@@ -1,4 +1,4 @@
-
+#identifies eukarya in tree and picks out clades into subtrees
 from Bio import Phylo
 from Bio.Phylo.Consensus import *
 
