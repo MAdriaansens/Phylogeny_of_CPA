@@ -1,5 +1,5 @@
 #this script takes the RED values dictionary of all Bacteria clusteroids and turns them into JSON dictionaries
-
+#this script was made since parsing all the tsv files of Bacteria clusteroids and their RED values took to long, so we made it into a json
 import os
 import sys
 import json
