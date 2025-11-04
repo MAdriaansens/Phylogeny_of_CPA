@@ -9,7 +9,7 @@ Euk_meta = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May
 file_path = '/nesi/nobackup/uc04105/new_databases_May/Euk_ids_seq_tax.json'
 
 protein_ids_all = []
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/Eukarya_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_all_seqs.fasta', 'fasta'):
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/Eukarya_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_all_seqs.fasta', 'fasta'):
     protein_ids_all.append(record.id)
 if os.path.exists(file_path):
     print('yah')
