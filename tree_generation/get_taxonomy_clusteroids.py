@@ -1,4 +1,4 @@
-
+#important in analysis, this tells us if certain clusteroids are made up of different taxonomic groupings
 from Bio import SeqIO
 
 #diction contains all the protein_ids and matching accession id + taxonomy
