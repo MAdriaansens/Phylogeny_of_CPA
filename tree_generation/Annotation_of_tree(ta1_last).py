@@ -8,9 +8,9 @@ import random
 
 #count how many sequences a cluster rep actually represents.
 from collections import Counter
-ARCMMseq ='/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/Archaea_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv'
-BACMMseq ='/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/Bacteria_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv'
-EukMMseq ='/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/Eukarya_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv'
+ARCMMseq ='/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/Archaea_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv'
+BACMMseq ='/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/Bacteria_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv'
+EukMMseq ='/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/Euk_edited_4novall_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv'
 
 Euk_cluster_list =[]
 with open(EukMMseq, 'r') as E:
@@ -45,37 +45,37 @@ def Parse_hmmalign_to_list(infile):
     return(dom_dic)
 
 #NhaA
-Bac_NhaA = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Bacteria_fl_vsPF06965_NhaA.fasta')
-Arc_NhaA = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Archaea_fl_vsPF06965_NhaA.fasta')
-Euk_NhaA = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Eukarya_fl_vsPF06965_NhaA.fasta')
+Bac_NhaA = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Bacteria_fl_vsPF06965_NhaA.fasta')
+Arc_NhaA = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Archaea_fl_vsPF06965_NhaA.fasta')
+Euk_NhaA = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_se/HMMalign/Eukarya_fl_vsPF06965_NhaA.fasta')
 
 #TRK_N
-Bac_TRKN = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Bacteria_fl_vsPF02254_TrkN.fasta')
-Arc_TRKN = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Archaea_fl_vsPF02254_TrkN.fasta')
-Euk_TRKN = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Eukarya_fl_vsPF02254_TrkN.fasta')
+Bac_TRKN = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Bacteria_fl_vsPF02254_TrkN.fasta')
+Arc_TRKN = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Archaea_fl_vsPF02254_TrkN.fasta')
+Euk_TRKN = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Eukarya_fl_vsPF02254_TrkN.fasta')
 
 #TRK_C
-Bac_TRKC = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Bacteria_fl_vsPF02080_TrkC.fasta')
-Arc_TRKC = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Archaea_fl_vsPF02080_TrkC.fasta')
-Euk_TRKC = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Eukarya_fl_vsPF02080_TrkC.fasta')
+Bac_TRKC = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Bacteria_fl_vsPF02080_TrkC.fasta')
+Arc_TRKC = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Archaea_fl_vsPF02080_TrkC.fasta')
+Euk_TRKC = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Eukarya_fl_vsPF02080_TrkC.fasta')
 
 #CHX17
-Bac_CH17X = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Bacteria_fl_vsPF23256_CHX2nd.fasta')
-Arc_CH17X = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Archaea_fl_vsPF23256_CHX2nd.fasta')
-Euk_CH17X = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Eukarya_fl_vsPF23256_CHX2nd.fasta')
+Bac_CH17X = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Bacteria_fl_vsPF23256_CHX2nd.fasta')
+Arc_CH17X = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Archaea_fl_vsPF23256_CHX2nd.fasta')
+Euk_CH17X = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Eukarya_fl_vsPF23256_CHX2nd.fasta')
 
 #CHX17_C
-Bac_CH17XC = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Bacteria_fl_vsPF23259_CHXC.fasta')
-Arc_CH17XC = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Archaea_fl_vsPF23259_CHXC.fasta')
-Euk_CH17XC =Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Eukarya_fl_vsPF23259_CHXC.fasta')
+Bac_CH17XC = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Bacteria_fl_vsPF23259_CHXC.fasta')
+Arc_CH17XC = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Archaea_fl_vsPF23259_CHXC.fasta')
+Euk_CH17XC =Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Eukarya_fl_vsPF23259_CHXC.fasta')
 #Nha1_C
-Bac_Nha1_C = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Bacteria_fl_vsPF08619_NhaC1term.fasta')
-Arc_Nha1_C = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Archaea_fl_vsPF08619_NhaC1term.fasta')
-Euk_Nha1_C = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Eukarya_fl_vsPF08619_NhaC1term.fasta')
+Bac_Nha1_C = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Bacteria_fl_vsPF08619_NhaC1term.fasta')
+Arc_Nha1_C = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Archaea_fl_vsPF08619_NhaC1term.fasta')
+Euk_Nha1_C = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Eukarya_fl_vsPF08619_NhaC1term.fasta')
 #cNMP
-Bac_cNMP = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Bacteria_fl_vsPF00027_cNMP.fasta')
-Arc_cNMP = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Archaea_fl_vsPF00027_cNMP.fasta')
-Euk_cNMP = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/HMMalign/Eukarya_fl_vsPF00027_cNMP.fasta')
+Bac_cNMP = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Bacteria_fl_vsPF00027_cNMP.fasta')
+Arc_cNMP = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Archaea_fl_vsPF00027_cNMP.fasta')
+Euk_cNMP = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/HMMalign/Eukarya_fl_vsPF00027_cNMP.fasta')
 #Use last big file with taxonomic annotation
 
 import os
@@ -98,7 +98,7 @@ for aligned_set in os.listdir(hmmaligned):
             tax = record.id.split('tax:')[1]
             prot_id =  record.id.split('_tax')[0]
             Prot_dict[prot_id] = tax, seq
-hmmaligned = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/cross_domain'
+hmmaligned = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/cross_domain/'
 for aligned_set in os.listdir(hmmaligned):
     if 'fa.fasta'  in aligned_set:
         for record in SeqIO.parse('{}/{}'.format(hmmaligned, aligned_set), 'fasta'):
@@ -108,11 +108,11 @@ for aligned_set in os.listdir(hmmaligned):
             Prot_dict[prot_id] = tax, seq
 
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree_aligned_annotation_29thOct.tsv', 'w') as C:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree_aligned_annotation_3nov.tsv', 'w') as C:
 
     C.write('Protein_id' + '\t' + 'Sequence' + '\t' + 'ngaps' + '\t' + 'Motif' + '\t' + 'Domain' + '\t' + 'GTDB_taxonomy' + '\t' + 'Phyla' + '\t' + 'Seed' + '\t' + 'First_site' + '\t' + 'Second_site' + '\t' + 'last_site' + '\t' + 'Cluster_count' '\t' + 'NhaA' + '\t' + 'TRK_N' + '\t' + 'TRK_C' + '\t' + 'CHX17' + '\t' + 'CHX17_C' + '\t' + 'cNMP' + '\t' + 'Nha1_C'+ '\n')
 
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/SG_seed_update_jan142024_135seq_alignedPF009999_filtered.faa.fasta', 'fasta'):
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/SG_seed_update_jan142024_135seq_alignedPF009999_filtered.faa.fasta', 'fasta'):
         seq = str(record.seq)
         if '_d' in record.id:
             tax = record.id.split('_d')[1]
@@ -124,7 +124,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree
         count = count + 1
         Prot_dict[prot_id] = tax, seq
 
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/CPA_Phylogeny_redone_6Okt_PF00999_aligned_hmmscanned.fasta', 'fasta'):
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/CPA_phylogeny_3nov.fasta', 'fasta'):
         NhaA = 'NA'
         TRK_N = 'NA'
         TRK_C = 'NA'
@@ -253,12 +253,12 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree
 from Bio import SeqIO
 
 alignment_list = []
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/CPA_Phylogeny_redone_6Okt_PF00999_aligned_hmmscanned.fasta', 'fasta'):
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/CPA_phylogeny_3nov.fasta', 'fasta'):
     alignment_list.append(record.id)
 
 print(len(alignment_list))
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree_aligned_annotation_29thOct.tsv', 'r') as A:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree_aligned_annotation_3nov.tsv', 'r') as A:
     next(A, None)
     for line in A:
         if (line.split('\t')[0]) not in alignment_list:
