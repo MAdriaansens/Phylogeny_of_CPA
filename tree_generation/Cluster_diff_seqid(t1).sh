@@ -12,4 +12,6 @@ declare -a array=(0.6 0.65 0.7 0.75 0.8 0.85 0.9 1)
 
 MMseq=/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences
 cd /nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences
+
+#this script was run for Bacteria, but also can be run 
 mmseqs easy-cluster --threads 3 -c 0.0 --min-seq-id ${array[$SLURM_ARRAY_TASK_ID]} BAC_hmmscanned_hmmaligned.fasta ${MMseq}/MMseq/Bacteria_allhmmscanned_final_clustered_at${array[$SLURM_ARRAY_TASK_ID]}.fasta tmp_${array[$SLURM_ARRAY_TASK_ID]}
