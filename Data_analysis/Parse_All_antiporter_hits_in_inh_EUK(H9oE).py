@@ -100,10 +100,10 @@ HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMM
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
-
+#note that HMMalign sometimes wants to add an '|' to the front of a protein id
 scan_cleaned = {}
 for key in scan_dict.keys():
-    scan_cleaned[key.split('|')[1]] = scan_dict[key]
+    scan_cleaned[key] = scan_dict[key]
 scan_dict = scan_cleaned
 
 hit_list = []
