@@ -1,4 +1,4 @@
-
+#this scripts provides insight in how many representatves a sequence holds and how many representatives there thus are per clade
 from Bio import Phylo
 from Bio.Phylo.Consensus import *
 
