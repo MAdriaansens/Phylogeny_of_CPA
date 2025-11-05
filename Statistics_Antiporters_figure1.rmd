@@ -24,7 +24,7 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r, Load Eukarya data and wrangel it a bit}
 #these are the files containing all the antiporters, in our architecture it is called:
 IT_Eukarya <- read.delim('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_4nov.tsv', sep='\t', stringsAsFactors = TRUE)
-#IT_Bacteria <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_inhouseEukarya.tsv', sep='\t', stringsAsFactors = TRUE)
+#IT_Eukarya <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_inhouseEukarya.tsv', sep='\t', stringsAsFactors = TRUE)
 
 
 
