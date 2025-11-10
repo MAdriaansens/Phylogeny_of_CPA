@@ -1087,7 +1087,7 @@ pseudo<- Phyla_B_accounts[Phyla_B_accounts$Phyla %in% Pseudomonadati,]
 (sum(pseudo$species_NhaD)/sum(pseudo$n))*100 #65.98% of pseudo have NhaD
 
 pivot_percentages_MJTBAC$status <- factor(pivot_percentages_MJTBAC$status, levels=c( 'onlyIT', 'bothCPA_and_IT', 'onlyCPA' ))
-pivot_percentages_MJTBAC$Phyla <- factor(pivot_percentages_MJTBAC$Phyla, levels=Kingdoms_B)
+pivot_percentages_MJTBAC$Phyla <- factor(pivot_percentages_MJTBAC$Phyla, levels=Kingdoms_B) 
 pivB<-ggplot(pivot_percentages_MJTBAC, aes(y = Phyla, x=percentage, fill=status, alpha=status))+ geom_bar(stat='identity') + scale_fill_manual(values = c('brown1', 'darkviolet', 'deepskyblue1')) + scale_alpha_manual(values = c(0.3, 0.9, 0.5)) + theme_minimal() + 
   theme(axis.text.x = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "plain"),
         axis.text.y = element_text(color = "black", size = 40, angle = 0, hjust = 1, vjust = 0, face = "bold"),  
