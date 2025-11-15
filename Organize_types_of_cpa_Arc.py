@@ -1,5 +1,4 @@
 import json
-#incomplete code, needs a bit more work, missing 19 CPAs??
 clade_dic = {}
 
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_clade_bigfamily_12nov_lgcatgamma.tsv', 'r') as LG_Cat_Gamma_clade:
@@ -97,7 +96,8 @@ print(len(set(CPA2_dict.keys())))
 print(len(set(Kef_dict.keys())))        
 print(len(set(NhaA_dict.keys())))
 print(len(set(Uncharacterized.keys())))
-    
+print('all summed:')
+print(len(set(CPA1_dict.keys())) + len(set(CPA2_dict.keys())) + len(set(NhaA_dict.keys())) + len(set(Kef_dict.keys())) + len(set(Uncharacterized.keys())))
 #make sure this some is similar to grep -c '>' Archaea input file
 
 CPA1_list_tax = []
@@ -135,13 +135,13 @@ print(len(Unc_list_tax))
 
 
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Types_CPA_in_ArchaeaGTDB226.tsv', 'w') as TAX_TYPE:
-    header = 'GTDB_id' + '\t' + 'Uncharcterized' + '\t' + 'Kef' + '\t' + 'CPA1' + '\t' + 'CPA2' + '\n'
+    header = 'GTDB_id' + '\t' + 'Uncharcterized' + '\t' + 'Kef' + '\t' + 'CPA1' + '\t' + 'CPA2' +  '\t' + 'NhaA' + '\n'
     TAX_TYPE.write(header)
     total_count = 0
     for tax in Tax_list:
         GTDB_tax = tax
-        line = GTDB_tax + '\t' + str(Unc_list_tax.count(GTDB_tax)) + '\t' + str(Kef_list_tax.count(GTDB_tax)) + '\t' + str(CPA1_list_tax.count(GTDB_tax)) + '\t' +  str(CPA2_list_tax.count(GTDB_tax)) + '\n'
-        total_count = total_count + Unc_list_tax.count(GTDB_tax) + Kef_list_tax.count(GTDB_tax) + CPA1_list_tax.count(GTDB_tax) + CPA2_list_tax.count(GTDB_tax)
+        line = GTDB_tax + '\t' + str(Unc_list_tax.count(GTDB_tax)) + '\t' + str(Kef_list_tax.count(GTDB_tax)) + '\t' + str(CPA1_list_tax.count(GTDB_tax)) + '\t' +  str(CPA2_list_tax.count(GTDB_tax)) +  '\t' + str(NhaA_list_tax.count(GTDB_tax)) + '\n'
+        total_count = total_count + Unc_list_tax.count(GTDB_tax) + Kef_list_tax.count(GTDB_tax) + CPA1_list_tax.count(GTDB_tax) + CPA2_list_tax.count(GTDB_tax) + NhaA_list_tax.count(GTDB_tax)
         TAX_TYPE.write(line)
 print(total_count)                                                                                                             
         
