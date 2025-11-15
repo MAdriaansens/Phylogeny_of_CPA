@@ -1,0 +1,182 @@
+import json
+
+clade_dic = {}
+
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_clade_bigfamily_12nov_lgcatgamma.tsv', 'r') as LG_Cat_Gamma_clade:
+    next(LG_Cat_Gamma_clade, None)
+    for line in LG_Cat_Gamma_clade:
+        if 'Bac226' in line:
+            protein_id = line.split('\t')[0]
+            domain = line.split('\t')[1]
+            clade_dic[protein_id] = domain
+domain_list = []
+for key in clade_dic.keys():
+    domain_list.append(clade_dic[key])
+
+from collections import Counter
+print(Counter(domain_list))
+
+
+Tax_dic = {}
+Tax_list = []
+
+import os
+
+for json_entry in os.listdir('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/'):
+    if 'All_Bac_CPAseq_GTDB226_ids_tax_' in json_entry:
+        with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/{}'.format(json_entry))as json_file:
+            d = json.load(json_file)
+            for key in d.keys():
+                    Protein_id =  key
+
+                    Taxonomy  = d[key].split('__GTDB_tax:')[0].split('_id')[1]
+                    Tax_dic[Protein_id] = Taxonomy
+                    Tax_list.append(Taxonomy)
+Tax_list = set(Tax_list)
+print(len(Tax_list))
+print(len(Tax_dic.keys()))
+
+#not the problem
+Reps_dic = {}
+count = 0
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/RED_values_Bacteria_clusters_22sep.tsv', 'r') as Reps_Bac:
+    next(Reps_Bac, None)
+    for line in Reps_Bac:
+        Rep = (line.split('\t')[1]).replace('"', '').replace('"', '')
+        Clusteroids = (line.split('\t')[15])
+        Reps_dic[Rep] = Clusteroids
+
+
+CPA1_dict = {}
+CPA2_dict = {}
+Kef_dict = {}
+NhaA_dict = {}
+Uncharacterized  = {}
+
+print(len(Reps_dic))
+for key in Reps_dic.keys():
+    print(key)
+    break
+#in bac this should be 27414, only uses the representatives not the singletons
+
+
+
+
+
+
+
+for key in clade_dic.keys():
+    if 'Bac' in key:
+        if key[0].isnumeric():
+            pass
+        else:
+            if clade_dic[key] == '35427':
+                #now we unpack the representatives
+                if key in Reps_dic:
+
+                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                        CPA1_dict[entry] = 'CPA1'
+                else:
+
+                    CPA1_dict[key] = 'CPA1'
+                
+    
+            elif clade_dic[key] == '13164':
+                            #now we unpack the representatives
+                if key in Reps_dic:
+                    
+                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                        Kef_dict[entry] = 'Kef'
+                else:
+                    Kef_dict[key] = 'Kef'
+            elif clade_dic[key] == '4':
+                                            #now we unpack the representatives
+                if key in Reps_dic:
+                    
+                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                        CPA2_dict[entry] = 'CPA2'
+                else:
+                    CPA2_dict[key] = 'CPA2'
+            elif clade_dic[key] == '27962':
+                                                            #now we unpack the representatives
+                if key in Reps_dic:
+                    
+                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                        NhaA_dict[entry] = 'NhaA'
+                else:
+                    NhaA_dict[key] = 'NhaA'
+            else:
+                                                            #now we unpack the representatives
+                if key in Reps_dic:
+                    
+                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                       Uncharacterized[entry] = 'Unc'
+                else:
+                    Uncharacterized[key] = 'Unc'
+            
+print(len(set(CPA1_dict.keys())))
+
+
+print(len(set(CPA2_dict.keys())))  
+print(len(set(Kef_dict.keys())))        
+print(len(set(NhaA_dict.keys())))
+print(len(set(Uncharacterized.keys())))
+
+
+    
+#make sure this some is similar to grep -c '>' Archaea input file
+
+CPA1_list_tax = []
+CPA1_tax_id = []
+for key in CPA1_dict.keys():
+    key =(key.replace('"', ''))
+    CPA1_list_tax.append(Tax_dic[key])
+    #WORK ON THIS AFTER NZMS
+    #info_list = []
+    #info_list.append(Tax_dic[key])
+    #info_list.append('CPA1')
+print(len(CPA1_list_tax))
+print(CPA1_list_tax[1])
+
+CPA2_list_tax = []
+for key in CPA2_dict.keys():
+    key =(key.replace('"', ''))
+
+    CPA2_list_tax.append(Tax_dic[key])
+print(len(CPA2_list_tax))
+
+NhaA_list_tax = []
+for key in NhaA_dict.keys():
+    key =(key.replace('"', ''))
+
+    NhaA_list_tax.append(Tax_dic[key])
+print(len(NhaA_list_tax))
+
+Kef_list_tax = []
+for key in Kef_dict.keys():
+    key =(key.replace('"', ''))
+
+    Kef_list_tax.append(Tax_dic[key])
+print(len(Kef_list_tax))
+
+
+Unc_list_tax = []
+for key in Uncharacterized.keys():
+    key =(key.replace('"', ''))
+
+    Unc_list_tax.append(Tax_dic[key])
+print(len(Unc_list_tax))
+
+
+
+
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Types_CPA_in_BacteriaGTDB226.tsv', 'w') as TAX_TYPE:
+    header = 'GTDB_id' + '\t' + 'Uncharcterized' + '\t' + 'Kef' + '\t' + 'CPA1' + '\t' + 'CPA2' + '\t' + 'NhaA' + '\n'
+    TAX_TYPE.write(header)
+    total_count = 0
+    for tax in Tax_list:
+        GTDB_tax = tax
+        line = GTDB_tax + '\t' + str(Unc_list_tax.count(GTDB_tax)) + '\t' + str(Kef_list_tax.count(GTDB_tax)) + '\t' + str(CPA1_list_tax.count(GTDB_tax)) + '\t' +  str(CPA2_list_tax.count(GTDB_tax)) + '\t' + str(NhaA_list_tax.count(GTDB_tax)) + '\n'
+        total_count = total_count + Unc_list_tax.count(GTDB_tax) + Kef_list_tax.count(GTDB_tax) + CPA1_list_tax.count(GTDB_tax) + CPA2_list_tax.count(GTDB_tax) + NhaA_list_tax.count(GTDB_tax)
+        TAX_TYPE.write(line)
+print(total_count)
