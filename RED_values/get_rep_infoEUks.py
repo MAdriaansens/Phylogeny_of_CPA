@@ -6,7 +6,7 @@ Euk_meta = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May
 file_path = '/nesi/nobackup/uc04105/new_databases_May/Euk_ids_seq_tax.json'
 
 protein_ids_all = []
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/Eukarya_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_all_seqs.fasta', 'fasta'):
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/Euk_edited_4novall_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv', 'fasta'):
     protein_ids_all.append(record.id)
 if os.path.exists(file_path):
     print('yah')
@@ -19,9 +19,9 @@ else:
     with open(Euk_meta, 'r') as Euks:
         for Euk in Euks:
             protein_id = Euk.split('\t')[0]
-            if protein_id in protein_ids_all:
-                Tax_inf = Euk.split('\t')[1] +'_Taxa:' + Euk.split('\t')[4]
-                data[protein_id] = Tax_inf 
+
+            Tax_inf = Euk.split('\t')[1] +'_Taxa:' + Euk.split('\t')[4]
+            data[protein_id] = Tax_inf 
     with open('/nesi/nobackup/uc04105/new_databases_May/Euk_ids_seq_tax_tax.json', 'w') as J:
         json.dump(data, J)
 
@@ -29,7 +29,7 @@ else:
 
 
 
-MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/prefered_sequences/MMseq/Eukarya_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv'
+MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/Euk_edited_4novall_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv'
 
 rep_list = []
 
@@ -295,7 +295,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_clust
                                             Taxonomy =  'Eukarya_' + minor[0] + '_' + minor_1[0] +'_' + minor_2[0] + '_' + minor_3[0] + '_' + minor_4[0] + '_'  + minor_5[0] + '_' + minor_6[0]
                                             
                                             Line = Representative_id + '\t' + str(No_proteins_in_cluster) + '\t' + str(No_diff_species) +  '\t' + Shared_tax + '\t' + MJ + '\t' +  Taxonomy + '\t' + Taxa +'\t' + str(set(Species_list)) + '\t' + str(clusteroid_list) + '\n'
-                                            same_species_count8 +=1/nesi/nobackup/uc04105/new_databases_May/Euk_ids_seq_tax_tax.json
+                                            same_species_count8 +=1
                                          else:
                                              if len(set(minor_8)) !=1:
                                                 Shared_tax = (i.split(';')[11])
