@@ -23,7 +23,7 @@ When you click the **Knit** button a document will be generated that includes bo
 #for each gene per species, if the gene count == 0 (0) or > 0 (1), a binary gene presence/absence is noted. 
 ```{r, make not in function}
 '%!in%' <- function(x,y)!('%in%'(x,y))
-
+library(dplyr)
 ```
 
 
@@ -346,12 +346,14 @@ PERE
 
 
 ```{r load_Archaea}
+library(tidyr)
 #these are the files containing all the antiporters, in our architecture it is called:
 IT_Archaea <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_7OKTSEPT.tsv', sep='\t', stringsAsFactors = TRUE)
 #IT_Archaea <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_ArchaeaGTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
 
-IT_Archaea <- IT_Archaea %>% rename(
-    "Completeness(%)" = Completeness)
+
+
+
 sum(IT_Archaea$CPA_count)
 IT_Archaea %>% separate(GTDB_tax, c('Domain_Phyla', 'Lower_class'), ';c__') -> IT_Archaea
 #split archaea taxonomy into different taxonomic groups
@@ -360,10 +362,6 @@ IT_Archaea %>% separate(Lower_class, c('Class', 'Lower_order'), ';o__') -> IT_Ar
 IT_Archaea %>% separate(Lower_order, c('Order', 'Lower_family'), ';f__') -> IT_Archaea
 IT_Archaea %>% separate(Lower_family, c('Family', 'Lower_genera'), ';g__') -> IT_Archaea
 IT_Archaea %>% separate(Lower_genera, c('Genera', 'Species'), ';s__') -> IT_Archaea
-
-```
-
-```{r Taxonomic_/Protein_data_wrangling_Arc}
 IT_Archaea$IT_count <- IT_Archaea$NhaB_count + IT_Archaea$NhaC_count + IT_Archaea$NhaD_count
 IT_Archaea$Antiporter_count <- IT_Archaea$CPA_count + IT_Archaea$IT_count
 
@@ -373,15 +371,35 @@ IT_Archaea$IT_binary[IT_Archaea$IT_count > 0] <- 1
 IT_Archaea$Antiporter_binary[IT_Archaea$Antiporter_count == 0] <- 0
 IT_Archaea$Antiporter_binary[IT_Archaea$Antiporter_count > 0] <- 1
 
+IT_Archaea$CPA_presence[IT_Archaea$CPA_binary ==0] <- 'Absent'
+IT_Archaea$CPA_presence[IT_Archaea$CPA_binary ==1] <- 'Present'
 
 IT_Archaea$IT_binary[IT_Archaea$IT_count == 0] <- 0
 IT_Archaea$IT_binary[IT_Archaea$IT_count > 0] <- 1
 
-#write.table(IT_Archaea, file='Archaea_7okt_edited.tsv', quote=FALSE, sep='\t')
+TypesA <- read.delim('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Types_CPA_in_ArchaeaGTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
 
-PhylaA_observations <- IT_Archaea %>% count(Phyla)
-Phyla_observations <- PhylaA_observations[PhylaA_observations$n >1,] #this excludes huberarchaeota
-PhylaA_observations <- PhylaA_observations %>% rename('Species_total' = n)
+IT_Archaea <- merge(IT_Archaea, TypesA, by ='GTDB_id', all =TRUE)
+IT_Archaea[is.na(IT_Archaea)] <- 0
+#generate which CPA types are present in which CPAs
+
+rm(TypesA)
+write.table(IT_Archaea, file='Antiporter_across_all_GTDB226_Archaea_30July_representatives.csv', quote=FALSE, sep=',')
+
+```
+
+```{r Taxonomic_/Protein_data_wrangling_Arc}
+#generate a Archaea set of only high quality genomes
+
+GTDB_Arc <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
+GTDB_Arc$GTDB_id <- GTDB_Arc$accession
+
+
+IT_Archaea <- merge(IT_Archaea, GTDB_Arc, by = 'GTDB_id')
+rm(GTDB_Arc)
+
+IT_Archaea <- IT_Archaea[IT_Archaea$Completeness> 90 & IT_Archaea$Contamination < 5 & IT_Archaea$trna_aa_count > 17,]
+
 ```
 
 
@@ -394,7 +412,8 @@ PhylaA_observations <- PhylaA_observations %>% rename('Species_total' = n)
 ```{r, count number of species per phyla}
 
 #count NhaX/CPA genes per phyla
-
+PhylaA_observations <- IT_Archaea %>% count(Phyla)
+PhylaA_observations <- PhylaA_observations %>% rename('Species_total' = n)
 #CPA per Phyla
 PhylaA_CPAobservations <- IT_Archaea[IT_Archaea$CPA_binary == 1,] %>%count(Phyla)
 PhylaA_CPAobservations<- merge(PhylaA_observations, PhylaA_CPAobservations, phyla = 'Phyla')
@@ -436,6 +455,8 @@ Both_AONLY_Species_count_per_phyla <- Both_AONLY_SPECIES %>% count(Phyla)
 
 
 Both_AONLY_Species_count_per_phyla <- merge(Both_AONLY_Species_count_per_phyla, Observations_ABoth_only, phyla = 'Phyla')
+
+#B1Sed does not have both, only has
 ```
 
 ```{r, complete_cpa_only}
@@ -535,40 +556,6 @@ mergedA_all$average_IT <- mergedA_all$total_IT/mergedA_all$n_species_onlyIT
 
 
 
-
-
-```{r handle_archaea taxonomy, create kingdom specific sets}
-
-
-
-
-Nanobdellati <- c('Nanobdellota','Aenigmatarchaeota','Nanohalarchaeota','EX4484-52','SpSt-1190','Undinarchaeota', 'Micrarchaeota', 'Iainarchaeota', 'B1Sed10-29', 'Altiarchaeota')
-Nano <- IT_Archaea[IT_Archaea$Phyla %in% Nanobdellati,]
-100*sum(Nano$CPA_binary)/nrow(Nano) #82.14%
-100*sum(Nano$NhaD_binary)/nrow(Nano) #11.63%
-100*sum(Nano$NhaC_binary)/nrow(Nano) #0.05%
-#highest percentage of species with CPA in a kingdom
-
-
-TACK<- c('Thermoproteota', 'Korarchaeota','Asgardarchaeota')
-TACK <- IT_Archaea[IT_Archaea$Phyla %in% TACK,]
-100*sum(TACK$CPA_binary)/nrow(TACK) #75.17
-100*sum(TACK$NhaD_binary)/nrow(TACK) #61.7%
-100*sum(TACK$NhaC_binary)/nrow(TACK) #2.78%
-
-Halo<- c('Halobacteriota', 'Thermoplasmatota', 'Methanobacteriota', 'Hydrothermarchaeota', 'Methanobacteriota_B', 'JACRDV01', 'Hadarchaeota')
-Halo<- IT_Archaea[IT_Archaea$Phyla %in% Halo,]
-100*sum(Halo$CPA_binary)/nrow(Halo) #80.75%
-100*sum(Halo$NhaD_binary)/nrow(Halo) #69.42%
-100*sum(Halo$NhaC_binary)/nrow(Halo) #22.40%
-
-#percentage of NhaD present in Halo proteomes is  high at 69%, as is the number of proteomes with NhaC presence at 22.40
-```
-
-
-
-
-
 ```{r, phyla with no antiporters}
 
 Phyla_A_no_AP_count <- aggregate(IT_Archaea$Antiporter_binary==0, by=list(Phyla=IT_Archaea$Phyla), FUN=sum)
@@ -584,7 +571,6 @@ IT_present <- IT_Archaea[IT_Archaea$IT_binary == 1,]
 both <- aggregate(IT_present$CPA_binary, by=list(Phyla=IT_present$Phyla), FUN=sum)
 both <- both %>% rename(both_CPA_IT=x)
 
-
 IT_absent <- IT_Archaea[IT_Archaea$IT_binary == 0,] 
 
 no_IT_butCPA <- aggregate(IT_absent$CPA_binary, by=list(Phyla=IT_absent$Phyla), FUN=sum)
@@ -594,8 +580,16 @@ no_IT_butCPA <- no_IT_butCPA %>% rename(no_IT_butCPA=x)
 JACRDV01 <- c('JACRDV01', 0)
 SpSt1190 <- c('SpSt-1190', 0)
 Nanohalarchaeota <- c('Nanohalarchaeota', 0)
+Altiarchaeota <- c('Altiarchaeota', 0)
+Methanobacteriota_B <- c('Methanobacteriota_B', 0)
+Undinarchaeoata <- c('Undinarchaeota', 0)
+Korarchaeota <- c('Korarchaeota', 0)
 
-no_IT_butCPA <- rbind(no_IT_butCPA, JACRDV01)
+B1Sed <- c('B1Sed10-29', 0)
+EX4484 <- c('EX4484-52', 0)
+both <- rbind(both, B1Sed)
+
+no_IT_butCPA <- rbind(no_IT_butCPA, JACRDV01,Altiarchaeota, SpSt1190, Korarchaeota, Undinarchaeoata)
 no_IT_butCPA$no_IT_butCPA <- as.numeric(no_IT_butCPA$no_IT_butCPA)
 
 CPA_absent <- IT_Archaea[IT_Archaea$CPA_binary == 0,] 
@@ -604,9 +598,8 @@ no_CPA_but_IT <- aggregate(CPA_absent$IT_binary, by=list(Phyla=CPA_absent$Phyla)
 no_CPA_but_IT  <- no_CPA_but_IT  %>% rename(no_CPA_but_IT =x)
 
 
-no_CPA_but_IT <- rbind(no_CPA_but_IT, JACRDV01)
-no_CPA_but_IT <- rbind(no_CPA_but_IT, Nanohalarchaeota)
-no_CPA_but_IT <- rbind(no_CPA_but_IT, SpSt1190)
+no_CPA_but_IT <- rbind(no_CPA_but_IT, JACRDV01, EX4484, Altiarchaeota, Nanohalarchaeota, Undinarchaeoata, B1Sed, Methanobacteriota_B, SpSt1190)
+
 
 no_CPA_but_IT$no_CPA_but_IT <- as.numeric(no_CPA_but_IT$no_CPA_but_IT)
 Phyla_A_no_AP_count <- aggregate(IT_Archaea$Antiporter_binary==0, by=list(Phyla=IT_Archaea$Phyla), FUN=sum)
@@ -652,10 +645,15 @@ Phyla_A_NhaD_count <- aggregate(IT_Archaea$NhaD_count, by=list(Phyla=IT_Archaea$
 Phyla_A_NhaD_count <- Phyla_A_NhaD_count %>% rename(total_NhaD=x)
 
 
+
+```
+
+```{r}
 Phyla_A_observations <- IT_Archaea%>% count(Phyla)
 
 #merge all previous dataframes into one
 Phyla_A_accounts <- merge(Phyla_A_no_AP_count, Phyla_A_observations, by='Phyla')
+
 Phyla_A_accounts <- merge(Phyla_A_accounts, no_IT_butCPA, by='Phyla')
 Phyla_A_accounts <- merge(Phyla_A_accounts, both, by='Phyla')
 Phyla_A_accounts <- merge(Phyla_A_accounts, no_CPA_but_IT, by='Phyla')
@@ -675,35 +673,11 @@ Phyla_A_accounts$CPA_per_species <- Phyla_A_accounts$total_CPA/Phyla_A_accounts$
 Phyla_A_accounts$AP_per_species <- Phyla_A_accounts$total_AP/Phyla_A_accounts$species_with_AP
 
 Phyla_A_accounts$onlyCPA <- 100*Phyla_A_accounts$no_IT_butCPA/Phyla_A_accounts$n
-Phyla_A_accounts$bothCPA_and_IT <- 100*Phyla_A_accounts$both_CPA_IT/Phyla_A_accounts$n
+Phyla_A_accounts$bothCPA_and_IT <- 100*as.numeric(Phyla_A_accounts$both_CPA_IT)/Phyla_A_accounts$n
 Phyla_A_accounts$onlyIT <- 100*Phyla_A_accounts$no_CPA_but_IT/Phyla_A_accounts$n
 
 ```
 
-
-```{r}
-
-Nano <- IT_Archaea[IT_Archaea$Phyla %in% Nanobdellati,]
-100*sum(Nano$CPA_binary)/nrow(Nano) #82.14%
-100*sum(Nano$NhaD_binary)/nrow(Nano) #11.63%
-100*sum(Nano$NhaC_binary)/nrow(Nano) #0.05%
-#highest percentage of species with CPA in a kingdom
-
-
-TACK<- c('Thermoproteota', 'Korarchaeota','Asgardarchaeota')
-TACK <- IT_Archaea[IT_Archaea$Phyla %in% TACK,]
-100*sum(TACK$CPA_binary)/nrow(TACK) #75.17
-100*sum(TACK$NhaD_binary)/nrow(TACK) #61.7%
-100*sum(TACK$NhaC_binary)/nrow(TACK) #2.78%
-
-Halo<- c('Halobacteriota', 'Thermoplasmatota', 'Methanobacteriota', 'Hydrothermarchaeota', 'Methanobacteriota_B', 'JACRDV01', 'Hadarchaeota')
-Halo<- IT_Archaea[IT_Archaea$Phyla %in% Halo,]
-100*sum(Halo$CPA_binary)/nrow(Halo) #80.75%
-100*sum(Halo$NhaD_binary)/nrow(Halo) #69.42%
-100*sum(Halo$NhaC_binary)/nrow(Halo) #22.40%
-
-#percentage of NhaD present in Halo proteomes is  high at 69%, as is the number of proteomes with NhaC presence at 22.40
-```
 
 ```{r,Archaea_plot}
 
@@ -758,7 +732,7 @@ PERA
 ```{r load_Bacteria}
 #these are the files containing all the antiporters, in our architecture it is called:
 IT_Bacteria <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Bacteria_7OKT.tsv', sep='\t', stringsAsFactors = TRUE)
-#IT_Bacteria <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_BacteriaGTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
+
 
 IT_Bacteria %>% separate(GTDB_tax, c('Domain_Phyla', 'Lower_class'), ';c__') -> IT_Bacteria
 IT_Bacteria %>% separate(Domain_Phyla, c('Domain', 'Phyla'), ';p__') ->IT_Bacteria
@@ -766,43 +740,47 @@ IT_Bacteria %>% separate(Lower_class, c('Class', 'Lower_order'), ';o__') -> IT_B
 IT_Bacteria %>% separate(Lower_order, c('Order', 'Lower_family'), ';f__') -> IT_Bacteria
 IT_Bacteria %>% separate(Lower_family, c('Family', 'Lower_genera'), ';g__') -> IT_Bacteria
 IT_Bacteria %>% separate(Lower_genera, c('Genera', 'Species'), ';s__') -> IT_Bacteria
-sum(IT_Bacteria$CPA_count)
+
+
+
+GTDB_Bac <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
+GTDB_Bac$GTDB_id <- GTDB_Bac$accession
+
+IT_Bacteria <- merge(IT_Bacteria, GTDB_Bac, by = 'GTDB_id')
+#Antiporters_Bacteria$selected_cols_sum <- rowSums(Antiporters_Bacteria[, c("Kef", "CPA1", "CPA2","Uncharcterized", "NhaA")]) - Antiporters_Bacteria$CPA_count
+
+IT_Bacteria <- IT_Bacteria[IT_Bacteria$Completeness> 90 & IT_Bacteria$Contamination < 5 & IT_Bacteria$trna_aa_count > 17,]
+
+IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Bacteroidota_A'] <- 'Bacteroidota'
+IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Desulfobacterota_B'] <- 'Desulfobacterota'
+IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Desulfobacterota_I'] <- 'Desulfobacterota'
+rm(GTDB_Bac)
 ```
 
-
-```{r boxplot completeness}
+```{r}
 #the factorization of the binary CPA is donflip graphe to make it more intuitive for the figure
 
 IT_Bacteria <- IT_Bacteria %>% rename(
     "Completeness(%)" = Completeness)
 IT_Bacteria$CPA_presence[IT_Bacteria$CPA_binary ==0] <- 'Absent'
 IT_Bacteria$CPA_presence[IT_Bacteria$CPA_binary ==1] <- 'Present'
-ITB<- ggplot(IT_Bacteria, aes(y=`Completeness(%)`, x=CPA_presence, fill=CPA_presence)) + geom_boxplot(outlier.alpha = 0.01, lwd=3) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal() + ggtitle('Completeness Bacteria') +
-  theme(plot.title = element_text(size = 20, face = "bold")) + theme(axis.text.x = element_text(color = "black", size = 50, angle = 0, hjust = .5, vjust = .5, face = "bold"),
-                                                                     axis.text.y = element_text(color = "black", size = 30, angle = 0, hjust = 1, vjust = 0, face = "plain"), 
-                                                                     axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = 0, face = "bold"),
-                                                                     axis.title.y = element_text(color = "black", size = 40, angle = 90, hjust = .5, vjust = .5, face = "bold")) + ylim(40,100) +theme(plot.title = element_text(size = 50, face = "bold",hjust = 0.5))+
-  theme(plot.title = element_text(size = 50, face='bold' ),
-        plot.subtitle = element_text(size = 20)) +theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
-ITB
 
+IT_Bacteria$IT_count <- IT_Bacteria$NhaB_count + IT_Bacteria$NhaC_count + IT_Bacteria$NhaD_count
+IT_Bacteria$Antiporter_count <- IT_Bacteria$CPA_count + IT_Bacteria$IT_count
 
-#the factorization of the binary CPA is done to make it more intuitive for the figure
-IT_Archaea$CPA_presence[IT_Archaea$CPA_binary ==0] <- 'Absent'
-IT_Archaea$CPA_presence[IT_Archaea$CPA_binary ==1] <- 'Present'
+IT_Bacteria$IT_binary[IT_Bacteria$IT_count == 0] <- 0
+IT_Bacteria$IT_binary[IT_Bacteria$IT_count > 0] <- 1
+
+IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count == 0] <- 0
+IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count >0] <- 1
 
 
 
-IT_Archaea$CPA_presence <- as.factor(IT_Archaea$CPA_presence)
-ITA<- ggplot(IT_Archaea, aes(y=`Completeness(%)`, x=CPA_presence, fill=CPA_presence)) + geom_boxplot(outlier.alpha = 0.01,lwd=3) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal() + ggtitle('Completeness Archaea')  + 
-  theme(plot.title = element_text(size = 20, face = "bold")) + theme(axis.text.x = element_text(color = "black", size = 50, angle = 0, hjust = .5, vjust = .5, face = "bold"),
-                                                                     axis.text.y = element_text(color = "black", size = 30, angle = 0, hjust = 1, vjust = 0, face = "plain"), 
-                                                                     axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = 0, face = "bold"),
-                                                                     axis.title.y = element_text(color = "black", size = 40, angle = 90, hjust = .5, vjust = .5, face = "bold"))+ ylim(40,100) +theme(plot.title = element_text(size = 50, face = "bold",hjust = 0.5)) +
-  theme(plot.title = element_text(size = 50, face='bold' ),
-        plot.subtitle = element_text(size = 20)) +theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
-ITA
 ```
+
+
+
+
 
 ```{r Protein_data_wrangling_Bac}
 IT_Bacteria$IT_count <- IT_Bacteria$NhaB_count + IT_Bacteria$NhaC_count + IT_Bacteria$NhaD_count
@@ -813,6 +791,7 @@ IT_Bacteria$IT_binary[IT_Bacteria$IT_count > 0] <- 1
 
 IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count == 0] <- 0
 IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count >0] <- 1
+
 
 ```
 
@@ -841,16 +820,6 @@ PhylaB_CPAobservations <- IT_Bacteria[IT_Bacteria$CPA_binary == 1,] %>%count(Phy
 
 PhylaB_observations <- IT_Bacteria %>%count(Phyla)
 
-
-no_absent_phyla = 0
-
-
-for (phyla in PhylaB_observations$Phyla) {
-  if (phyla %!in% PhylaB_CPAobservations$Phyla) {
-    no_absent_phyla = no_absent_phyla + 1
-    print(phyla)
-  }
-}
 ```
 
 
@@ -923,6 +892,8 @@ no_CPA_but_IT <- no_CPA_but_IT [no_CPA_but_IT $Major_tax %in% top_Bac_phyla,]
 no_CPA_but_IT  <- no_CPA_but_IT  %>% rename(
     Phyla = Major_tax,
     no_CPA_but_IT =x)
+Deinococcota <- c('Deinococcota', '0')
+no_CPA_but_IT <- rbind(no_CPA_but_IT, Deinococcota)
 
 Phyla_B_no_AP_count <- aggregate(IT_Bacteria$Antiporter_binary==0, by=list(Major_tax=IT_Bacteria$Phyla), FUN=sum)
 
@@ -1029,12 +1000,10 @@ Phyla_B_accounts$AP_per_species <- Phyla_B_accounts$total_AP/Phyla_B_accounts$sp
 
 Phyla_B_accounts$onlyCPA <- 100*Phyla_B_accounts$no_IT_butCPA/Phyla_B_accounts$n
 Phyla_B_accounts$bothCPA_and_IT <- 100*Phyla_B_accounts$both_CPA_IT/Phyla_B_accounts$n
-Phyla_B_accounts$onlyIT <- 100*Phyla_B_accounts$no_CPA_but_IT/Phyla_B_accounts$n
+Phyla_B_accounts$onlyIT <- 100*as.numeric(Phyla_B_accounts$no_CPA_but_IT)/Phyla_B_accounts$n
 
 Phyla_B_accounts$CPA_presence <- (Phyla_B_accounts$both_CPA_IT + Phyla_B_accounts$no_IT_butCPA)/Phyla_B_accounts$n
 
-#write supplementary table x
-#write.csv(Phyla_B_accounts, 'Antiporter_across_all_GTDB226_Bacteria_30July_representatives.csv')
 
 
 ```
@@ -1052,40 +1021,6 @@ pivot_percentages_MJTBAC <- Percentages_BacPhyla %>% pivot_longer(
 #kingdoms are those divined by Goker and oren et al.2024 (see literature reference Oren)
 Kingdoms_B <- c('Acidobacteriota', 'Bacteroidota','Campylobacterota' ,'Desulfobacterota','Gemmatimonadota', 'Planctomycetota', 'Pseudomonadota','Spirochaetota','Verrucomicrobiota','Actinomycetota','Armatimonadota','Bacillota','Chloroflexota','Cyanobacteriota','Deinococcota','Synergistota','Thermotogota','Fusobacteriota','Patescibacteriota','Vulcanimicrobiota')
 
-
-#divide into kingdoms
-Pseudomonadati <-c('Acidobacteriota', 'Bacteroidota' , 'Campylobacterota', 'Desulfobacterota', 'Gemmatimonadota', 'Planctomycetota', 'Pseudomonadota','Spirochaetota','Verrucomicrobiota')
-
-Bacilati <-c('Actinomycetota','Armatimonadota','Bacillota','Chloroflexota','Cyanobacteriota')
-
-Thermotogati <- c('Deinococcota','Synergistota','Thermotogota')
-
-Bacil<- Phyla_B_accounts[Phyla_B_accounts$Phyla %in% Bacilati,]
-(sum(Bacil$both_CPA_IT) + sum(Bacil$no_IT_butCPA))/sum(Bacil$n) #77.71% of Bacilati have a CPA
-(sum(Bacil$both_CPA_IT) + sum(Bacil$no_CPA_but_IT))/sum(Bacil$n) #64.04% of Bacilati have IT
-
-(sum(Bacil$species_NhaB)/sum(Bacil$n))*100 #0.12% of Bacilati have NhaB
-(sum(Bacil$species_NhaC)/sum(Bacil$n))*100 #26.98% of Bacilati have NhaC
-(sum(Bacil$species_NhaD)/sum(Bacil$n))*100 #55.19% of Bacilati have NhaD
-
-
-thermotogati<- Phyla_B_accounts[Phyla_B_accounts$Phyla %in% Thermotogati,]
-(sum(thermotogati$both_CPA_IT) + sum(thermotogati$no_IT_butCPA))/sum(thermotogati$n) #69% of Thermotogati species have a CPA
-(sum(thermotogati$both_CPA_IT) + sum(thermotogati$no_CPA_but_IT))/sum(thermotogati$n) #91.4% of Thermotogati species have a IT
-#Thermotogati have the highest percentage of species with IT. 
-
-(sum(thermotogati$species_NhaB)/sum(thermotogati$n))*100 #0.32% of thermotogati have NhaB
-(sum(thermotogati$species_NhaC)/sum(thermotogati$n))*100 #43.75% of thermotogati have NhaC
-(sum(thermotogati$species_NhaD)/sum(thermotogati$n))*100 #78.78% of thermotogati have NhaD
-
-pseudo<- Phyla_B_accounts[Phyla_B_accounts$Phyla %in% Pseudomonadati,]
-(sum(pseudo$both_CPA_IT) + sum(pseudo$no_IT_butCPA))/sum(pseudo$n) #90.4% of Pseudomonadati species have CPA
-(sum(pseudo$both_CPA_IT) + sum(pseudo$no_CPA_but_IT))/sum(pseudo$n) #71.09% of Pseudomonadati species have CPA
-#Pseudomonadati have the highest percentage of species with CPA
-
-(sum(pseudo$species_NhaB)/sum(pseudo$n))*100 #6.68% of pseudo have NhaB
-(sum(pseudo$species_NhaC)/sum(pseudo$n))*100 #27.43% of pseudo have NhaC
-(sum(pseudo$species_NhaD)/sum(pseudo$n))*100 #65.98% of pseudo have NhaD
 
 pivot_percentages_MJTBAC$status <- factor(pivot_percentages_MJTBAC$status, levels=c( 'onlyIT', 'bothCPA_and_IT', 'onlyCPA' ))
 pivot_percentages_MJTBAC$Phyla <- factor(pivot_percentages_MJTBAC$Phyla, levels=Kingdoms_B) 
@@ -1236,12 +1171,13 @@ PERB<- ggplot(pivot_Bac, aes(fill=status, y=Count, x=Phyla)) + geom_bar(position
         axis.text.y = element_text(color = "black", size = 20, angle = 0, hjust = 1, vjust = 0.5, face = "bold"),  
         axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "plain"),
         axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) + geom_vline(xintercept = c(1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5, 19.5)) + geom_hline(yintercept = mean(IT_Bacteria$Antiporter_count[IT_Bacteria$Antiporter_binary==1]), lty='dashed') +
-  scale_y_continuous(limits = c(0,8), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(0,9), expand = c(0, 0)) +
   labs(title = "Bacteria",
        subtitle = "Average antiporter per species grouped by antiporter presence"
        )+
   theme(plot.title = element_text(size = 50, face='bold' ),
         plot.subtitle = element_text(size = 20)) + theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold')) 
+PERB
 ```
 
 
@@ -1256,8 +1192,7 @@ pdf(file = "Archaea.pdf",   # The directory you want to save the file in
     width = 60, # The width of the plot in inches
     height = 30) 
 
-AF<-grid.arrange(pivArc, ITA, nrow = 1)
-AF
+pivArc
 
 dev.off()
 ```
@@ -1267,11 +1202,10 @@ dev.off()
 library(gridExtra)
 
 png(file = "Archaea.png",   # The directory you want to save the file in
-    width = 6000, # The width of the plot in inches
-    height = 3000) 
+    width = 8000, # The width of the plot in inches
+    height = 4000) 
 
-AF<-grid.arrange(pivArc, ITA, nrow = 1)
-AF
+pivArc
 
 dev.off()
 ```
@@ -1284,8 +1218,7 @@ pdf(file = "Bacteria.pdf",   # The directory you want to save the file in
     width = 60, # The width of the plot in inches
     height = 30) 
 
-BF<-grid.arrange(pivB, ITB, nrow = 1)
-BF
+pivB
 
 dev.off()
 ```
@@ -1295,12 +1228,10 @@ dev.off()
 library(gridExtra)
 
 png(file = "Bacteria.png",   # The directory you want to save the file in
-    width = 6000, # The width of the plot in inches
-    height = 3000) 
+    width = 8000, # The width of the plot in inches
+    height = 4000) 
 
-AF<-grid.arrange(pivB, ITB, nrow = 1)
-AF
-
+pivB
 dev.off()
 ```
 
@@ -1324,11 +1255,48 @@ dev.off()
 library(gridExtra)
 
 png(file = "Eukarya.png",   # The directory you want to save the file in
-    width = 6000, # The width of the plot in inches
-    height = 3000) 
+    width = 8000, # The width of the plot in inches
+    height = 4000) 
 
 pivE
 
+dev.off()
+```
+
+
+```{r, arrange_archaea_plot}
+
+library(gridExtra)
+
+png(file = "Eukaryacount.png",   # The directory you want to save the file in
+    width = 8000, # The width of the plot in inches
+    height = 4000) 
+
+PERE
+dev.off()
+```
+
+```{r, arrange_archaea_plot}
+
+library(gridExtra)
+
+png(file = "Aerchaeacount.png",   # The directory you want to save the file in
+    width = 8000, # The width of the plot in inches
+    height = 4000) 
+
+PERA
+dev.off()
+```
+
+```{r, arrange_archaea_plot}
+
+library(gridExtra)
+
+png(file = "Bacteriacount.png",   # The directory you want to save the file in
+    width = 8000, # The width of the plot in inches
+    height = 4000) 
+
+PERB
 dev.off()
 ```
 
@@ -1346,7 +1314,19 @@ MF
 dev.off()
 ```
 
+```{r, arrange_figure}
 
+library(gridExtra)
+
+png(file = "All.png",   # The directory you want to save the file in
+    width = 12000, # The width of the plot in inches
+    height = 6000) 
+
+MF<-grid.arrange(PERB, PERA, PERE, nrow = 1)
+MF
+
+dev.off()
+```
 
 ```{r, supplementary figure of distribution of number of species}
 dev.off()
