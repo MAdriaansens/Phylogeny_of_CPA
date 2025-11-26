@@ -22,8 +22,9 @@ When you click the **Knit** button a document will be generated that includes bo
 
 
 ```{r, Load Eukarya data and wrangel it a bit}
+#these are the files containing all the antiporters, in our architecture it is called:
 IT_Eukarya <- read.delim('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_4nov.tsv', sep='\t', stringsAsFactors = TRUE)
-
+#IT_Eukarya <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_inhouseEukarya.tsv', sep='\t', stringsAsFactors = TRUE)
 
 
 
@@ -46,9 +47,6 @@ IT_Eukarya$Major_tax[IT_Eukarya$Major_tax == 'Hapophyta'] <- 'Haptophyta'
 
 IT_Eukarya$Antiporter_binary[IT_Eukarya$Antiporter_count == 0] <- 0
 IT_Eukarya$Antiporter_binary[IT_Eukarya$Antiporter_count >0] <- 1
-
-
-IT_Eukarya_subset <- IT_Eukarya[IT_Eukarya$Antiporter_binary == 1,]
 
 #write.table(IT_Eukarya, file='Eukarya_7okt_edited.tsv', quote=FALSE, sep='\t')
 
@@ -76,7 +74,11 @@ summary(LM4)
 ```
 
 ```{r load_Archaea}
+#these are the files containing all the antiporters, in our architecture it is called:
 IT_Archaea <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_7OKTSEPT.tsv', sep='\t', stringsAsFactors = TRUE)
+
+#IT_Archaea <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_ArchaeaGTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
+
 IT_Archaea <- IT_Archaea %>% rename(
     "Completeness(%)" = Completeness)
 sum(IT_Archaea$CPA_count)
@@ -178,7 +180,9 @@ summary(LM5)
 
 
 ```{r load_Bacteria}
+#these are the files containing all the antiporters, in our architecture it is called:
 IT_Bacteria <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Bacteria_7OKT.tsv', sep='\t', stringsAsFactors = TRUE)
+#IT_Bacteria <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_BacteriaGTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
 
 IT_Bacteria %>% separate(GTDB_tax, c('Domain_Phyla', 'Lower_class'), ';c__') -> IT_Bacteria
 IT_Bacteria %>% separate(Domain_Phyla, c('Domain', 'Phyla'), ';p__') ->IT_Bacteria
@@ -234,8 +238,6 @@ IT_Bacteria$IT_binary[IT_Bacteria$IT_count > 0] <- 1
 IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count == 0] <- 0
 IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count >0] <- 1
 
-IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count == 0] <- 0
-IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count > 0] <-1
 ```
 
 ```{r}
