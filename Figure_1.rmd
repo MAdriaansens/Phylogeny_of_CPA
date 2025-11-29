@@ -194,7 +194,8 @@ pivE<-ggplot(pivot_percentages_MJT, aes(y = Major_tax, x=percentage, fill=status
         axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) +theme(axis.text=element_text(size=30), legend.text = element_text(size=25)) + ggtitle('Eukarya') +theme(plot.title = element_text(size = 45, face = "bold")) +
   theme(plot.title = element_text(size = 50, face='bold' ),
         plot.subtitle = element_text(size = 20)) + theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
-pivE
+ggsave("Eukarya_presence.pdf") 
+
 
 ```
 
