@@ -189,7 +189,7 @@ pivot_percentages_MJT$Major_tax <- factor(pivot_percentages_MJT$Major_tax, level
 
 pivE<-ggplot(pivot_percentages_MJT, aes(y = Major_tax, x=percentage, fill=status, alpha=status))+ geom_bar(stat='identity') + scale_fill_manual(values = c('brown1', 'darkviolet', 'deepskyblue1')) + scale_alpha_manual(values = c(0.3, 0.9, 0.5)) + theme_minimal()  + 
   theme(axis.text.x = element_text(color = "black", size = 30, angle = 0, hjust = .5, vjust = .5, face = "plain"),
-        axis.text.y = element_text(color = "black", size = 40, angle = 0, hjust = 1, vjust = 0, face = "bold"),  
+        axis.text.y = element_text(color = "black", size = 36, angle = 0, hjust = 1, vjust = 0, face = "italic"),  
         axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "plain"),
         axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) +theme(axis.text=element_text(size=30), legend.text = element_text(size=25)) + ggtitle('Eukarya') +theme(plot.title = element_text(size = 45, face = "bold")) +
   theme(plot.title = element_text(size = 50, face='bold' ),
@@ -199,15 +199,14 @@ ggsave("Eukarya_presence.pdf")
 
 ```
 
-```{r, create_subset_euks}
-Major_tax_observations <- IT_Eukarya %>% count(Major_tax)
-Major_tax_observations <- Major_tax_observations[Major_tax_observations$n != '1',]
-```
+
 
 ```{r, make_group_only_species_with_both antiporters}
 #we generate a set of percentages for 4 groups, Both IT and CPA, only CPA, only IT, and neither (which we do not call, but do generate by the sum of percentages)
 Both_EONLY_SPECIES <- IT_Eukarya[IT_Eukarya$IT_count >0 & IT_Eukarya$CPA_count > 0 & IT_Eukarya$Major_tax %in% Major_tax_observations$Major_tax,]
-print(Both_EONLY_SPECIES)
+
+Missing_data <- data.frame(Major_tax = c('Rotosphaerida'), n = c(1000), total_Both = c(0.1))
+
 
 Observations_EBoth_only<- aggregate(as.numeric(Both_EONLY_SPECIES$Antiporter_count), by=list(Major_tax=Both_EONLY_SPECIES$Major_tax), FUN=sum)
 Observations_EBoth_only <- Observations_EBoth_only %>% rename(
@@ -221,6 +220,8 @@ rm(Both_EONLY_SPECIES)
 rm(Both_EONLY_Species_count)
 
 Both_EONLY_Species_count_per_phyla <- merge(Both_EONLY_Species_count_per_phyla, Observations_EBoth_only, phyla = 'Major_tax')
+Both_EONLY_Species_count_per_phyla <-rbind(Both_EONLY_Species_count_per_phyla, Missing_data)
+
 ```
 
 ```{r, complete_cpa_only}
@@ -331,17 +332,18 @@ MeanEuk <-  mean(IT_Eukarya$Antiporter_count[IT_Eukarya$Antiporter_binary==1 & I
 pivot_Euk$Major_tax <- factor(pivot_Euk$Major_tax, levels=c(List_MJ))
 pivot_Euk$status <- factor(pivot_Euk$status, levels=c('average_CPA', 'average_Both', 'average_IT'))
 PERE<-ggplot(pivot_Euk[pivot_Euk$Major_tax != 'Cryptophyta' & pivot_Euk$Major_tax != 'Stramenopiles',], aes(fill=status, y=Count, x=Major_tax)) + geom_bar(position = 'dodge', stat='identity') + theme_minimal()  + scale_fill_manual(values = c('deepskyblue1', 'darkviolet', 'brown1')) + scale_alpha_manual(values = c(0.3, 0.9, 0.5)) +
-  theme(axis.text.x = element_text(color = "black", size = 45, angle = 90, hjust = .5, vjust = .5, face = "bold"),
+  theme(axis.text.x = element_text(color = "black", size = 36, angle = 90, hjust = .5, vjust = .5, face = "italic"),
         axis.text.y = element_text(color = "black", size = 20, angle = 0, hjust = 1, vjust = 0.5, face = "bold"),  
         axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "plain"),
-        axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) + geom_vline(xintercept = c(1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5))  + geom_hline(yintercept = MeanEuk, lty='dashed') +
+        axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) + geom_vline(xintercept = c(1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5, 13.5, 14.5, 15.5, 16.5, 17.5))  + geom_hline(yintercept = MeanEuk, lty='dashed') +
   scale_y_continuous(limits = c(0,40), expand = c(0, 0)) +
   labs(title = "Eukarya",
        subtitle = "Average antiporter per species grouped by antiporter presence"
        )+
   theme(plot.title = element_text(size = 50, face='bold' ),
         plot.subtitle = element_text(size = 20)) + theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
-PERE
+ggsave("Eukarya_count.pdf") 
+
 ```
 
 
@@ -400,7 +402,7 @@ IT_Archaea <- merge(IT_Archaea, GTDB_Arc, by = 'GTDB_id')
 rm(GTDB_Arc)
 
 IT_Archaea <- IT_Archaea[IT_Archaea$Completeness> 90 & IT_Archaea$Contamination < 5 & IT_Archaea$trna_aa_count > 17,]
-
+IT_Archaea <- IT_Archaea[IT_Archaea$Phyla != 'Undinarchaeota',]
 ```
 
 
@@ -697,12 +699,12 @@ pivot_percentages_MJTARC$Phyla <- factor(pivot_percentages_MJTARC$Phyla, levels=
 
 pivArc<-ggplot(pivot_percentages_MJTARC, aes(y = Phyla, x=percentage, fill=status, alpha=status))+ geom_bar(stat='identity') + scale_fill_manual(values = c('brown1', 'darkviolet', 'deepskyblue1')) + scale_alpha_manual(values = c(0.3, 0.9, 0.5)) + theme_minimal() + 
   theme(axis.text.x = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "plain"),
-        axis.text.y = element_text(color = "black", size = 40, angle = 0, hjust = 1, vjust = 0, face = "bold"),  
+        axis.text.y = element_text(color = "black", size = 36, angle = 0, hjust = 1, vjust = 0, face = "italic"),  
         axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "plain"),
         axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) +theme(axis.text=element_text(size=30), legend.text = element_text(size=25)) + ggtitle('Archaea') +
   theme(plot.title = element_text(size = 50, face='bold' ),
         plot.subtitle = element_text(size = 20)) + theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
-pivArc
+ggsave("Archaea_presence.pdf") 
 ```
 
 ```{r}
@@ -714,10 +716,10 @@ pivot_Arc<- mergedA_all %>% pivot_longer(cols=-Phyla, names_to = 'status',values
 pivot_Arc$Phyla <- factor(pivot_Arc$Phyla, levels=c(List_PhylaA))
 pivot_Arc$status <- factor(pivot_Arc$status, levels=c('average_CPA', 'average_Both', 'average_IT'))
 PERA<-ggplot(pivot_Arc, aes(fill=status, y=Count, x=Phyla)) + geom_bar(position = 'dodge', stat='identity') + theme_minimal()  + scale_fill_manual(values = c( 'deepskyblue1', 'darkviolet','brown1')) + scale_alpha_manual(values = c(0.3, 0.9, 0.5)) +
-  theme(axis.text.x = element_text(color = "black", size = 45, angle = 90, hjust = .5, vjust = .5, face = "bold"),
+  theme(axis.text.x = element_text(color = "black", size = 36, angle = 90, hjust = .5, vjust = .5, face = "italic"),
         axis.text.y = element_text(color = "black", size = 20, angle = 0, hjust = 1, vjust = 0.5, face = "bold"),  
         axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "bold"),
-        axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) + geom_vline(xintercept = c(1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5, 19.5)) + geom_hline(yintercept = mean(IT_Archaea$Antiporter_count[IT_Archaea$Antiporter_binary==1]), lty='dashed') +
+        axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) + geom_vline(xintercept = c(1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5)) + geom_hline(yintercept = mean(IT_Archaea$Antiporter_count[IT_Archaea$Antiporter_binary==1]), lty='dashed') +
   scale_y_continuous(limits = c(0,8), expand = c(0, 0)) +
   labs(title = "Archaea",
        subtitle = "Average antiporter per species per phyla grouped by antiporter presence"
@@ -725,7 +727,7 @@ PERA<-ggplot(pivot_Arc, aes(fill=status, y=Count, x=Phyla)) + geom_bar(position 
   theme(plot.title = element_text(size = 50, face='bold' ),
         plot.subtitle = element_text(size = 20)) +theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
 
-PERA
+ggsave("Archaea_count.pdf") 
 ```
 
 
@@ -1027,14 +1029,14 @@ pivot_percentages_MJTBAC$status <- factor(pivot_percentages_MJTBAC$status, level
 pivot_percentages_MJTBAC$Phyla <- factor(pivot_percentages_MJTBAC$Phyla, levels=Kingdoms_B) 
 pivB<-ggplot(pivot_percentages_MJTBAC, aes(y = Phyla, x=percentage, fill=status, alpha=status))+ geom_bar(stat='identity') + scale_fill_manual(values = c('brown1', 'darkviolet', 'deepskyblue1')) + scale_alpha_manual(values = c(0.3, 0.9, 0.5)) + theme_minimal() + 
   theme(axis.text.x = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "plain"),
-        axis.text.y = element_text(color = "black", size = 40, angle = 0, hjust = 1, vjust = 0, face = "bold"),  
+        axis.text.y = element_text(color = "black", size = 36, angle = 0, hjust = 1, vjust = 0, face = "italic"),  
         axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "plain"),
         axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) +theme(axis.text=element_text(size=30), legend.text = element_text(size=25))  + ggtitle('Bacteria') +
   theme(plot.title = element_text(size = 50, face='bold' ),
         plot.subtitle = element_text(size = 20)) +
   theme(plot.title = element_text(size = 50, face='bold' ),
         plot.subtitle = element_text(size = 20)) + theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
-pivB
+ggsave("Bacteria_presence.pdf") 
 ```
 
 
@@ -1168,7 +1170,7 @@ pivot_Bac$Phyla <- factor(pivot_Bac$Phyla, levels=c(List_PhylaB))
 
 pivot_Bac$status <- factor(pivot_Bac$status, levels=c('average_CPA', 'average_Both', 'average_IT'))
 PERB<- ggplot(pivot_Bac, aes(fill=status, y=Count, x=Phyla)) + geom_bar(position = 'dodge', stat='identity') + theme_minimal()  + scale_fill_manual(values = c( 'deepskyblue1', 'darkviolet','brown1')) + scale_alpha_manual(values = c(0.3, 0.9, 0.5)) +
-  theme(axis.text.x = element_text(color = "black", size = 45, angle = 90, hjust = .5, vjust = .5, face = "bold"),
+  theme(axis.text.x = element_text(color = "black", size = 36, angle = 90, hjust = .5, vjust = .5, face = "italic"),
         axis.text.y = element_text(color = "black", size = 20, angle = 0, hjust = 1, vjust = 0.5, face = "bold"),  
         axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "plain"),
         axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) + geom_vline(xintercept = c(1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5, 19.5)) + geom_hline(yintercept = mean(IT_Bacteria$Antiporter_count[IT_Bacteria$Antiporter_binary==1]), lty='dashed') +
@@ -1178,156 +1180,9 @@ PERB<- ggplot(pivot_Bac, aes(fill=status, y=Count, x=Phyla)) + geom_bar(position
        )+
   theme(plot.title = element_text(size = 50, face='bold' ),
         plot.subtitle = element_text(size = 20)) + theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold')) 
-PERB
+ggsave("Bacteria_count.pdf") 
 ```
 
-
-
-
-
-```{r, arrange_archaea_plot}
-
-library(gridExtra)
-
-pdf(file = "Archaea.pdf",   # The directory you want to save the file in
-    width = 60, # The width of the plot in inches
-    height = 30) 
-
-pivArc
-
-dev.off()
-```
-
-```{r, arrange_archaea_plot}
-
-library(gridExtra)
-
-png(file = "Archaea.png",   # The directory you want to save the file in
-    width = 8000, # The width of the plot in inches
-    height = 4000) 
-
-pivArc
-
-dev.off()
-```
-
-```{r, arrange_bacteria_plot}
-
-library(gridExtra)
-
-pdf(file = "Bacteria.pdf",   # The directory you want to save the file in
-    width = 60, # The width of the plot in inches
-    height = 30) 
-
-pivB
-
-dev.off()
-```
-
-```{r, arrange_archaea_plot}
-
-library(gridExtra)
-
-png(file = "Bacteria.png",   # The directory you want to save the file in
-    width = 8000, # The width of the plot in inches
-    height = 4000) 
-
-pivB
-dev.off()
-```
-
-
-```{r, arrange_euk_plot}
-
-library(gridExtra)
-
-pdf(file = "Eukarya.pdf",   # The directory you want to save the file in
-    width = 30, # The width of the plot in inches
-    height = 30) 
-
-pivE
-
-dev.off()
-```
-
-
-```{r, arrange_archaea_plot}
-
-library(gridExtra)
-
-png(file = "Eukarya.png",   # The directory you want to save the file in
-    width = 8000, # The width of the plot in inches
-    height = 4000) 
-
-pivE
-
-dev.off()
-```
-
-
-```{r, arrange_archaea_plot}
-
-library(gridExtra)
-
-png(file = "Eukaryacount.png",   # The directory you want to save the file in
-    width = 8000, # The width of the plot in inches
-    height = 4000) 
-
-PERE
-dev.off()
-```
-
-```{r, arrange_archaea_plot}
-
-library(gridExtra)
-
-png(file = "Aerchaeacount.png",   # The directory you want to save the file in
-    width = 8000, # The width of the plot in inches
-    height = 4000) 
-
-PERA
-dev.off()
-```
-
-```{r, arrange_archaea_plot}
-
-library(gridExtra)
-
-png(file = "Bacteriacount.png",   # The directory you want to save the file in
-    width = 8000, # The width of the plot in inches
-    height = 4000) 
-
-PERB
-dev.off()
-```
-
-```{r, arrange_figure}
-
-library(gridExtra)
-
-pdf(file = "ALL.pdf",   # The directory you want to save the file in
-    width = 90, # The width of the plot in inches
-    height = 40) 
-
-MF<-grid.arrange(PERB, PERA, PERE, nrow = 1)
-MF
-
-dev.off()
-```
-
-```{r, arrange_figure}
-
-library(gridExtra)
-
-png(file = "All.png",   # The directory you want to save the file in
-    width = 12000, # The width of the plot in inches
-    height = 6000) 
-
-MF<-grid.arrange(PERB, PERA, PERE, nrow = 1)
-MF
-
-dev.off()
-```
 
 ```{r, supplementary figure of distribution of number of species}
 dev.off()
