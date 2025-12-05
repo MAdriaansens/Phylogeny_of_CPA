@@ -106,59 +106,9 @@ def get_subset_inlcuding_terminal(tree,lowerlimit,upperlimit, clade_2_exclude):
 
     return(parent_list)
 
-
-
 parent_list =[]
-parent_list = get_subset_inlcuding_terminal(tree, 0.07, 0.99, 27958)
-print('genus')
-node_dic7 = {}
-print(len(parent_list))
-for entry in parent_list:
-    if entry.is_terminal() == False:
-        termini_list = entry.get_terminals()
-        for terminus in termini_list:
-
-            node_dic7[str(terminus)] = entry.name
-print(len(node_dic7.keys()))
-
-genus_list = []
-genus = parent_list
-
-parent_list =[]
-parent_list = get_subset_inlcuding_terminal(tree, 0.07, 0.265, 27958)
-print('family')
-node_dic6 = {}
-print(len(parent_list))
-for entry in parent_list:
-    if entry.is_terminal() == False:
-        termini_list = entry.get_terminals()
-        for terminus in termini_list:
-
-            node_dic6[str(terminus)] = entry.name
-print(len(node_dic6.keys()))
-family_list = []
-family_list =  parent_list
-print(len(family_list))
-
-parent_list =[]
-parent_list = get_subset_inlcuding_terminal(tree, 0.07, 0.28, 27958)
-print('order')
-node_dic5 = {}
-print(len(parent_list))
-for entry in parent_list:
-    if entry.is_terminal() == False:
-        termini_list = entry.get_terminals()
-        for terminus in termini_list:
-
-            node_dic5[str(terminus)] = entry.name
-print(len(node_dic5.keys()))
-order_list = []
-order_list =  parent_list
-print(len(order_list))
-
-parent_list =[]
-parent_list = get_subset_inlcuding_terminal(tree, 0.07, 0.292, 27958)
-print('class')
+parent_list = get_subset_inlcuding_terminal(tree, 0.73, 1,'None')
+print('Subgroup')
 node_dic4 = {}
 print(len(parent_list))
 for entry in parent_list:
@@ -168,29 +118,14 @@ for entry in parent_list:
 
             node_dic4[str(terminus)] = entry.name
 print(len(node_dic4.keys()))
-class_list = []
-class_list =  parent_list
-print(len(class_list))
+Subgroup_list = []
+Subgroup_list =  parent_list
+print(len(Subgroup_list))
+
 
 parent_list =[]
-parent_list = get_subset_inlcuding_terminal(tree, 0.07, 0.31, 27958)
-print('Phylum2')
-node_dic3 = {}
-print(len(parent_list))
-for entry in parent_list:
-    if entry.is_terminal() == False:
-        termini_list = entry.get_terminals()
-        for terminus in termini_list:
-
-            node_dic3[str(terminus)] = entry.name
-print(len(node_dic3.keys()))
-Phylum1_list = []
-Phylum1_list =  parent_list
-print(len(Phylum1_list))
-
-parent_list =[]
-parent_list = get_subset_inlcuding_terminal(tree, 0.07, 0.32, 27958)
-print('Phylum1')
+parent_list = get_subset_inlcuding_terminal(tree, 0.479, 0.729, 'None')
+print('Subclade')
 node_dic2 = {}
 print(len(parent_list))
 for entry in parent_list:
@@ -200,13 +135,13 @@ for entry in parent_list:
 
             node_dic2[str(terminus)] = entry.name
 print(len(node_dic2.keys()))
-Phylum2_list = []
-Phylum2_list =  parent_list
-print(len(Phylum2_list))
+Subclade_list = []
+Subclade_list =  parent_list
+print(len(Subclade_list))
 
 parent_list =[]
-parent_list = get_subset_inlcuding_terminal(tree,0.07, 0.35, 27958)
-print('Domain')
+parent_list = get_subset_inlcuding_terminal(tree, 0.14, 0.478, 'None')
+print('Clade')
 node_dic1 = {}
 print(len(parent_list))
 for entry in parent_list:
@@ -217,12 +152,48 @@ for entry in parent_list:
             node_dic1[str(terminus)] = entry.name
 
 print(len(node_dic1.keys()))
-Domain_list = []
-Domain_list =  parent_list
-print(len(Domain_list))
+Clade_list = []
+Clade_list =  parent_list
+print(len(Clade_list))
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_clade_bigfamily_12nov.tsv', 'w') as Big:
-    header = 'protein_id' + '\t' + 'Domain' + '\t' + 'Phyla1' + '\t' + 'Phyla2' + '\t' + 'Class' + '\t' + 'Order' + '\t' + 'Family' + '\t' + 'Genus' + '\n'
+
+parent_list =[]
+parent_list = get_subset_inlcuding_terminal(tree, 0.001, 0.14, 'None')
+print('Subfamily')
+node_dic3 = {}
+print(len(parent_list))
+for entry in parent_list:
+    if entry.is_terminal() == False:
+        termini_list = entry.get_terminals()
+        for terminus in termini_list:
+
+            node_dic3[str(terminus)] = entry.name
+print(len(node_dic3.keys()))
+Subfamily_list = []
+Subfamily_list =  parent_list
+print(len(Subfamily_list))
+
+
+parent_list =[]
+parent_list = get_subset_inlcuding_terminal(tree, 0.001, 0.31, 27958)
+print('Family')
+node_dic8 = {}
+print(len(parent_list))
+for entry in parent_list:
+    if entry.is_terminal() == False:
+        termini_list = entry.get_terminals()
+        for terminus in termini_list:
+
+            node_dic8[str(terminus)] = entry.name
+print(len(node_dic8.keys()))
+Family_list = []
+Family_list =  parent_list
+print(len(Family_list))
+
+
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_clade_20_lg_cat_gamma_RED_interval.tsv', 'w') as Big:
+    header = 'Protein_id' + '\t' + 'Family' + '\t' + 'Subfamily' + '\t' + 'Clade' + '\t' + 'Subclade' + '\t' + 'Subgroup' + '\n'
+    
     Big.write(header)
 
     for clade in tree.find_clades():
@@ -238,35 +209,27 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_
                 else:
                     clade.temp = clade.name
                 if str(clade.temp) in node_dic1.keys():
-                    Domain = node_dic1[str(clade.temp)]
+                    Clade = node_dic1[str(clade.temp)]
                 else:
-                    Domain = 'RR'
+                    Clade = 'RR'
                 if str(clade.temp) in node_dic2.keys():
-                    Phyla1 = node_dic2[str(clade.temp)]
+                    Subclade = node_dic2[str(clade.temp)]
                 else:
-                    Phyla1 = 'RR'
+                    Subclade = 'RR'
                 if str(clade.temp) in node_dic3.keys():
-                    Phyla2 = node_dic3[str(clade.temp)]
+                    Subfamily = node_dic3[str(clade.temp)]
                 else:
-                    Phyla2 = 'RR'
-                if str(clade.temp) in node_dic4.keys():
-                    Class = node_dic4[str(clade.temp)]
-                else:
-                    Class = 'RR'
-                if str(clade.temp) in node_dic5.keys():
-                    Order = node_dic5[str(clade.temp)]
-                else:
-                    Order = 'RR'
-                if str(clade.temp) in node_dic6.keys():
-                    Family = node_dic6[str(clade.temp)]
+                    Subfamily = 'RR'
+                if str(clade.temp) in node_dic8.keys():
+                    Family = node_dic8[str(clade.temp)]
                 else:
                     Family = 'RR'
-                if str(clade.temp) in node_dic7.keys():
-                    Genus = node_dic7[str(clade.temp)]
+                if str(clade.temp) in node_dic4.keys():
+                    Subgroup = node_dic4[str(clade.temp)]
                 else:
-                    Genus = 'RR'
-    
+                    Subgroup = 'RR'
+               
                 protein_id = clade.name
 
-                Line = protein_id + '\t' + Domain + '\t' + Phyla1 + '\t' + Phyla2 + '\t' + Class + '\t' + Order + '\t' + Family + '\t' + Genus + '\n'
+                Line = protein_id + '\t' +  Family + '\t' + Subfamily + '\t' + Clade + '\t' + Subclade + '\t' + Subgroup + '\n'
                 Big.write(Line)
