@@ -219,3 +219,11 @@ for key in UncProk_dict.keys():
     UncProk_list_tax.append(Tax_dic[key])
 print(len(UncProk_list_tax))
 
+
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Types_CPA_in_Eukarya_GTDB226.tsv', 'w') as TAX_TYPE:
+    header = 'species_name' + '\t' + 'Uncharcterized' + '\t' + 'Kef' + '\t' + 'CPA1' + '\t' + 'CPA2' + '\t' + 'NhaA' + '\t' + 'NhaS5' + '\t' + 'Uncharacterized_Archaea' + '\t' + 'Uncharacterized_prokarya' + '\t' + 'DxK_Pseudomonadota' + '\t' + 'NxK_Gammaproteobacteriota' + '\t' + 'Latescibacteriota' + '\n'
+    TAX_TYPE.write(header)
+    for tax in Tax_list:
+        Organism_id = tax
+        line = Organism_id+ '\t' + str(Unc_list_tax.count(tax)) + '\t' + str(Kef_list_tax.count(tax)) + '\t' + str(CPA1_list_tax.count(tax)) + '\t' +  str(CPA2_list_tax.count(tax)) + '\t' + str(NhaA_list_tax.count(tax)) + '\t'+ str(NhaS5_list_tax.count(tax)) + '\t' +  str(UncArc_list_tax.count(tax)) + '\t' +str(UncProk_list_tax.count(tax)) + '\t' +  str(DxK_pseudo_list_tax.count(tax)) + '\t' +  str(NxKGamma_list_tax.count(tax)) + '\t' + str(Lates_list_tax.count(tax)) + '\n'
+        TAX_TYPE.write(line)
