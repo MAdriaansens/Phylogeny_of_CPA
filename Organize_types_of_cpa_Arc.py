@@ -15,7 +15,7 @@ for key in clade_dic.keys():
 from collections import Counter
 print(Counter(domain_list))
 
-
+#this matches the family to which a termini belongs
 Tax_dic = {}
 Tax_list = []
 
@@ -30,16 +30,51 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MM
         Tax_dic[Protein_id] = Taxonomy
         Tax_list.append(Taxonomy)
 Tax_list = set(Tax_list)
+
+#print uniq taxa with CPA, should be 5551 species. 
 print(len(Tax_list))
+
+#print total number of sequences, should be equal to 14101 (total number of CPAs)
 print(len(Tax_dic.keys()))
 
+from Bio import SeqIO
+
+All_ids = []
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Archaea_passed_all_filters_7OKT_GTDBreps_alignedPF00999.fasta', 'fasta'):
+    All_ids.append(record.id)
 Reps_dic = {}
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/RED_values_Archaea_clusters_7OKT.tsv', 'r') as Reps_Bac:
-    next(Reps_Bac, None)
-    for line in Reps_Bac:
+Clustered_sequences_list = []
+#takes all clusteroids
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/RED_values_Archaea_clusters_7OKT.tsv', 'r') as Reps_Arc:
+    total_sequences = 0
+    next(Reps_Arc, None)
+    for line in Reps_Arc:
         Rep = (line.split('\t')[0])
-        Clusteroids = (line.split('\t')[-3])
+        Clusteroids = list(line.split('\t')[-3].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","))
+        Clustered_sequences_list.extend(Clusteroids)
         Reps_dic[Rep] = Clusteroids
+Total_seq= 0
+
+
+for entry in All_ids: 
+    if entry not in Clustered_sequences_list:
+        inlist = []
+        inlist.append(entry)
+        Reps_dic[entry] = inlist
+
+print(len(Reps_dic.keys()))
+#print(len(set(Reps_dic.keys())))
+
+
+for key in Reps_dic.keys():
+    Total_seq = Total_seq +len(Reps_dic[key])
+print(Total_seq)
+
+
+
+
+
+
 
 CPA1_dict = {}
 CPA2_dict = {}
@@ -63,7 +98,7 @@ for key in clade_dic.keys():
                 #now we unpack the representatives
                 if key in Reps_dic:
                     
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                         CPA1_dict[entry] = 'CPA1'
                 else:
                     CPA1_dict[key] = 'CPA1'
@@ -73,7 +108,7 @@ for key in clade_dic.keys():
                             #now we unpack the representatives
                 if key in Reps_dic:
                     
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                         Kef_dict[entry] = 'Kef'
                 else:
                     Kef_dict[key] = 'Kef'
@@ -81,7 +116,7 @@ for key in clade_dic.keys():
                                             #now we unpack the representatives
                 if key in Reps_dic:
                     
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                         CPA2_dict[entry] = 'CPA2'
                 else:
                     CPA2_dict[key] = 'CPA2'
@@ -89,7 +124,7 @@ for key in clade_dic.keys():
                                                             #now we unpack the representatives
                 if key in Reps_dic:
                     
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                         NhaA_dict[entry] = 'NhaA'
                 else:
                     NhaA_dict[key] = 'NhaA'
@@ -97,7 +132,7 @@ for key in clade_dic.keys():
                                                             #now we unpack the representatives
                 if key in Reps_dic:
 
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                         Lates_dict[entry] = 'Latescibacteriota_cpa'
                 else:
                     Lates_dict[key] = 'Latescibacteriota_cpa'
@@ -106,7 +141,7 @@ for key in clade_dic.keys():
                                                             #now we unpack the representatives
                 if key in Reps_dic:
 
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                         DxK_pseudo_dict[entry] = 'DxK_Pseudomonadota'
                 else:
                     DxK_pseudo_dict[key] = 'DxK_Pseudomonadota'
@@ -114,7 +149,7 @@ for key in clade_dic.keys():
                                                             #now we unpack the representatives
                 if key in Reps_dic:
 
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                         NxKGamma_dict[entry] = 'NxK_Gammaproteobacteriota'
                 else:
                     NxKGamma_dict[key] = 'NxK_Gammaproteobacteriota'
@@ -122,7 +157,7 @@ for key in clade_dic.keys():
                                                             #now we unpack the representatives
                 if key in Reps_dic:
 
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                         NhaS5_dict[entry] = 'NhS5'
                 else:
                     NhaS5_dict[key] = 'NhaS5'
@@ -130,7 +165,7 @@ for key in clade_dic.keys():
                                                             #now we unpack the representatives
                 if key in Reps_dic:
 
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                         UncArc_dict[entry] = 'UncArc'
                 else:
                     UncArc_dict[key] = 'Uncharcaterized_Archaea'
@@ -138,7 +173,7 @@ for key in clade_dic.keys():
                                                             #now we unpack the representatives
                 if key in Reps_dic:
 
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                         UncProk_dict[entry] = 'Uncharacterized_Prokarya'
                 else:
                     UncProk_dict[key] = 'Uncharcaterized_Prokarya'
@@ -146,19 +181,14 @@ for key in clade_dic.keys():
                                                             #now we unpack the representatives
                 if key in Reps_dic:
                     
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
+                    for entry in Reps_dic[key]:
                        Uncharacterized[entry] = 'Unc'
                 else:
                     Uncharacterized[key] = 'Unc'
             
-print(len(set(CPA1_dict.keys())))
-print(len(set(CPA2_dict.keys())))  
-print(len(set(Kef_dict.keys())))        
-print(len(set(NhaA_dict.keys())))
-print(len(set(Uncharacterized.keys())))
-    
-#make sure this some is similar to grep -c '>' Archaea input filei
+print(len(set(CPA1_dict.keys())) + (len(set(CPA2_dict.keys()))) + (len(set(Kef_dict.keys()))) + (len(set(NhaA_dict.keys()))) + (len(set(Uncharacterized.keys()))) + (len(set(NxKGamma_dict.keys()))) + (len(set(NhaS5_dict.keys()))) + (len(set(UncArc_dict.keys()))) + (len(set(UncProk_dict.keys())))+ (len(set(DxK_pseudo_dict.keys()))))
 
+#make sure this some is similar to grep -c '>' Archaea input filei
 CPA1_list_tax = []
 CPA1_tax_id = []
 for key in CPA1_dict.keys():
