@@ -14,7 +14,7 @@ HMMdir=/nesi/nobackup/uc04105/results/HMM
 HMMalign=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign
 
 Euk_TSV=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May_protein.tsv
-Euk_DB=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May.fasta
+Euk_DB=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May_protein.fasta
 
 
 module load Python/3.11.6-foss-2023a
