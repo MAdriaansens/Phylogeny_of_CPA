@@ -2,7 +2,7 @@ euk_sequences_passed_thresholds = {}
 
 from Bio import SeqIO
 
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/Eukarya_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_rep_seq_fl.fasta','fasta'):
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/Eukarya_4nov_passed_all_setcpa.fasta','fasta'):
     euk_sequences_passed_thresholds[str(record.id)] = record.seq
 Hmmsearch_Arc = '/nesi/nobackup/uc04105/new_databases_May/comparative_hmmsearch/Eukarya/Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned_vsEuk.tsv'
 
