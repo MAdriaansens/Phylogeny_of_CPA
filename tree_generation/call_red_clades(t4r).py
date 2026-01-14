@@ -131,7 +131,6 @@ def get_subset_inlcuding_terminal(tree,lowerlimit,upperlimit, clade_2_exclude):
 parent_list =[]
 well_supported_clade_list = [] 
 
-
 def get_parent(tree, child_clade):
     node_path = tree.get_path(child_clade)
     return node_path[-2]
@@ -228,7 +227,7 @@ def parse_parents_list(parent_list, bad_parent_list, lowerlimit, upperlimit, to_
                     #if it does then the termini will just be kept seperate since the split occured before the lowerlimit and since they entered
                     #the interval as already seperate termini
                     if get_parent(tree, clade).RED < lowerlimit:
-                        node_dic[str(clade.name)] = 'pbt_' + clade.name
+                        node_dic[str(clade.name)] = 'pbt_below_limit_' + clade.name
                     else:
                  #      print(get_parent(tree, clade), clade, tree.get_path(clade))
                         for split in tree.get_path(clade):
@@ -237,7 +236,7 @@ def parse_parents_list(parent_list, bad_parent_list, lowerlimit, upperlimit, to_
                              #   print(split.name, split.RED)
                                 node_dic[str(clade.name)] = 'beyond_limit_' + split.name
                             elif split.RED < lowerlimit:
-                                node_dic[str(clade.name)] = 'pbt_' + clade.name
+                                node_dic[str(clade.name)] = 'pbt_below_limit_' + clade.name
                             elif split.RED == 1.0:
                                 #meaning it is a poorly supported split happening at 1
                                 node_dic[str(clade.name)] = 'pbt_' + clade.name
@@ -255,6 +254,8 @@ def parse_parents_list(parent_list, bad_parent_list, lowerlimit, upperlimit, to_
             print(len(bad_parent_good_child))
     print(missed, 'missed')
     return(node_dic, bad_parent_good_child)
+
+
 
 #Clade
 parent_list =[]
