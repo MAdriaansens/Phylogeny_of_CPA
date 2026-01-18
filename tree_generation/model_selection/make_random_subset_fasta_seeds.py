@@ -25,6 +25,7 @@ def return_fasta_from_list(HMMaligned, random_list, count, outdir):
                     OUT.write(out_fasta)
                     print('written {}'.format(count))
                 else:
+                    #else I do not write the entry
                     print('nah')
                     pass
 random_list_dict = {}
