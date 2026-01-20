@@ -51,51 +51,33 @@ def get_subset_inlcuding_terminal(tree,lowerlimit,upperlimit, clade_2_exclude):
     bad_parent_list = []
     skipped_list = []
     for clade in tree.find_clades():
+
+        #root is not of use here
         if clade != tree.root:
             if str(clade.name) != str(clade_2_exclude):
                 #perform actions for terminal nodes
                 if clade.is_terminal() == True:
                     pass
-                   #in this case the clade is terminal
-
-                    #if the parent_list or list is empty there is no need to check it
-                #    if len(parent_list) == 0:
-                  #      parent_list.append(clade)
-                
-                 #   else:
-                  #      path_list = tree.get_path(clade)
-                                            #this flag allows me to see if I the clade/termini is already part of a well supported clade. 
-                #        path_already_done = False
-                            
-                  #      for x in parent_list:
-                    #       if x in path_list:
-                  #             path_already_done = True
-                   #     if path_already_done == True:
-                      #      pass
-                     #   else:
-                      #      parent_list.append(clade)
-    
-    
-                else:
-                    if clade.is_preterminal() == True:
-                        if len(clade.get_terminals()) == 2:
-                            length_leaves = 0
-                            for leaves in clade.get_terminals():
-                                length_leaves += leaves.branch_length
-                            if length_leaves == 0:
-                                continue
-                
-                    if clade.RED > lowerlimit:
-                        if clade.RED < upperlimit:
-                                # we keep running into an issue were clade Bac226_18731726 keeps being labbeled as a non terminal node, and it has a branch_length of 0.38 while having a RED value of 1.
-                                #something which
+                else:     
+                    #all clades are currently non-terminal so they are split/bifurcations
+                    #we check if the clades fall within RED window
+                    if clade.RED < lowerlimit:
+                        pass
+                    else:
+                        if clade.RED > upperlimit:
+                            pass
+                        else:
+                        # we keep running into an issue were clade Bac226_18731726 keeps being labbeled as a non terminal node, and it has a branch_length of 0.38 while having a RED value of 1.
                                 if type(clade.confidence) != float:
                                     continue
+                                else:
+                                    pass
+                                #now it is time to check for anything equal or greater than 95
                                 if clade.confidence > 0.94:
                                     if clade.name not in parent_list:
                                         if len(parent_list) == 0:
                                             parent_list.append(clade)
-                
+                                            path_already_done = False
                                         else:
                                             path_list = tree.get_path(clade)
                                             #this flag allows me to see if I am not redoing trees which already contain certain clades. 
@@ -109,21 +91,18 @@ def get_subset_inlcuding_terminal(tree,lowerlimit,upperlimit, clade_2_exclude):
                                             else:
                                                 parent_list.append(clade)
                                 else:
-                                    if len(bad_parent_list) == 0:
-                                        bad_parent_list.append(clade)
-                
-                                    else:
-                                        path_list = tree.get_path(clade)
+                                    #if they fall within the red winow and have <95 bootstrap we exclude them, we also check if they are already part of a good clade
+                                    path_list = tree.get_path(clade)
                                             #this flag allows me to see if I am not redoing trees which already contain certain clades. 
-                                        path_already_done = False
+                                    path_already_done = False
                             
-                                        for x in parent_list:
-                                            if x in path_list:
-                                                path_already_done = True
-                                        if path_already_done == True:
-                                            pass
-                                        else:
-                                            bad_parent_list.append(clade)
+                                    for x in parent_list:
+                                        if x in path_list:
+                                            path_already_done = True
+                                    if path_already_done == True:
+                                        pass
+                                    else:
+                                        bad_parent_list.append(clade)
                             
 
 
@@ -131,12 +110,22 @@ def get_subset_inlcuding_terminal(tree,lowerlimit,upperlimit, clade_2_exclude):
 parent_list =[]
 well_supported_clade_list = [] 
 
+
 def get_parent(tree, child_clade):
     node_path = tree.get_path(child_clade)
     return node_path[-2]
-    
+
+def is_semipreterminal(clade):
+    #"""True if any direct descendent is terminal."""
+    for child in clade:
+        if child.is_terminal():
+            return True
+    return False
+
+
 #this bit of code checks if a bad parent results in a good bifurcations down the road
-def parse_parents_list(parent_list, bad_parent_list, lowerlimit, upperlimit, to_exclude):
+def parse_parents_list(tree, parent_list, bad_parent_list, lowerlimit, upperlimit, to_exclude):
+    missing_parent_list = []
     bad_parent_good_child = []
     node_dic = {}
     missed = 0
@@ -144,6 +133,7 @@ def parse_parents_list(parent_list, bad_parent_list, lowerlimit, upperlimit, to_
     #all children and the parents themself of the parent list are of limits, since they are good
     off_limit = []
 
+    #we take all the clades and children of the good parent to make sure they will not be included
     for clade in tree.find_clades():
         if clade.name == to_exclude:
             pass
@@ -151,7 +141,7 @@ def parse_parents_list(parent_list, bad_parent_list, lowerlimit, upperlimit, to_
             off_limit.append(clade)
             for child in clade.find_clades():
                 off_limit.append(child)
-
+    print(len(off_limit))
     #now i run over the list and check if any of the parents contain any extant clades which are present in 'good' parent list
     #if they have good extant taxa they are placed into bad_parent_good_child list (meaning that a split results in a well supported clade and one poorly supported one)
     #if they only have bad extant taxa within the border set they only contain poorly supported taxa and are classified as poorly supported and kept in bad_parent_list
@@ -161,9 +151,10 @@ def parse_parents_list(parent_list, bad_parent_list, lowerlimit, upperlimit, to_
     for clade in tree.find_clades():
         if clade.name == to_exclude:
             pass
-        if clade in parent_list:
+        if clade in bad_parent_list:
             for parent in (tree.get_path(clade)):
-                if parent in bad_parent_list:
+                #here we check if some of the children from a bad clade are well supported within the red interval
+                if parent in parent_list:
                     bad_parent_list.remove(parent)
                     #these nodes result in well supported children
                     bad_parent_good_child.append(parent)
@@ -190,29 +181,38 @@ def parse_parents_list(parent_list, bad_parent_list, lowerlimit, upperlimit, to_
     bad_parent_bad_children =  bad_parent_list
     #I want to idenitfy the termini which will become RR in the future
     missed_out_list = []
-    for entry in parent_list:
-        if clade.name == to_exclude:
+
+        #this identifies things within the red interval with poor bootstrap support bifurcations
+    for entry in bad_parent_bad_children:
+        if entry.name == to_exclude:
             pass
+        if isinstance(entry, int) == True:
+
+            pass
+        if entry in off_limit:
+            pass
+        else:
+            if entry.is_terminal() == False:
+                if is_semipreterminal(entry) == True:
+                    pass
+                else:
+                    termini_list = entry.get_terminals()
+                    #I want to seperate out which clades are well supported
+                    for terminus in termini_list:
+            
+                        node_dic[str(terminus)] = 'pb_' +  entry.name 
+
+
+    for entry in parent_list:
+        if entry.name == to_exclude:
+            pass
+        
         if entry.is_terminal() == False:
             termini_list = entry.get_terminals()
             #I want to seperate out which clades are well supported
             for terminus in termini_list:
     
                 node_dic[str(terminus)] = entry.name
-    for entry in bad_parent_bad_children:
-        if clade.name == to_exclude:
-            pass
-        if isinstance(entry, int) == True:
-            print(entry)
-            print(type(entry))
-            pass
-        if entry.is_terminal() == False:
-            termini_list = entry.get_terminals()
-            #I want to seperate out which clades are well supported
-            for terminus in termini_list:
-    
-                node_dic[str(terminus)] = 'pb_' +  entry.name 
-    
     #shows me which termini are left out
     for clade in tree.find_clades():
         if clade.name == to_exclude:
@@ -220,30 +220,42 @@ def parse_parents_list(parent_list, bad_parent_list, lowerlimit, upperlimit, to_
         #seed sequences have issues with their naming and might freak out the system so those are skipped
         if clade != tree.root:
             if clade.is_terminal():
+                #this is to check the representative sequences
                 if clade.name[3] == '_':
                     pass
-                elif clade.name not in node_dic.keys():
-                    #now we check if the reason why we miss a termini is because its split is before the lowerlimit of the RED interval
-                    #if it does then the termini will just be kept seperate since the split occured before the lowerlimit and since they entered
-                    #the interval as already seperate termini
-                    if get_parent(tree, clade).RED < lowerlimit:
-                        node_dic[str(clade.name)] = 'pbt_below_limit_' + clade.name
-                    else:
-                 #      print(get_parent(tree, clade), clade, tree.get_path(clade))
-                        for split in tree.get_path(clade):
-                            #if the bifurcation is bigger than RED upperlimit
-                            if split.RED > upperlimit:
-                             #   print(split.name, split.RED)
-                                node_dic[str(clade.name)] = 'beyond_limit_' + split.name
-                            elif split.RED < lowerlimit:
-                                node_dic[str(clade.name)] = 'pbt_below_limit_' + clade.name
-                            elif split.RED == 1.0:
-                                #meaning it is a poorly supported split happening at 1
+                else:
+                    if clade.name not in node_dic.keys():
+                        #now we check if the reason why we miss a termini is because its split is before the lowerlimit of the RED interval
+                        #if it does then the termini will just be kept seperate since the split occured before the lowerlimit and since they entered
+                        #the interval as already seperate termini
+    
+    
+                        #rework, get red of parent directly after the split happend (why did I forget to add this??)
+                        if get_parent(tree, clade).RED < lowerlimit:
+                            node_dic[str(clade.name)] = 'tbl_' + clade.name
+                        elif get_parent(tree, clade).RED > upperlimit:
+                            #now if the split occurs after red upperlimit we see if the the clade is terminal or
+                            #if the split contains multiple
+                            if len(get_parent(tree, clade).get_terminals()) > 1:
+                                if is_semipreterminal(get_parent(tree, clade)) == True:
+                                    node_dic[str(clade.name)] = 'tal_' + clade.name
+                                else:
+                                    node_dic[str(clade.name)] = 'nal_' + get_parent(tree, clade).name
+                            else:
+                                node_dic[str(clade.name)] = 'tal_' + clade.name 
+                                missing_parent_list.append(get_parent(tree, clade).name)
+                        else:
+                            #it falls in between both
+
+                            if clade.is_terminal() == True:
+                                #poor bootstrap terminal
                                 node_dic[str(clade.name)] = 'pbt_' + clade.name
                             else:
-                                print(clade.name)
+                                node_dic[str(clade.name)] = 'in between'
+                    else:
+                        pass
 
-                    
+
                         
     #checks
     if len(node_dic) != 66978:
@@ -253,35 +265,34 @@ def parse_parents_list(parent_list, bad_parent_list, lowerlimit, upperlimit, to_
             print('soo bad parents and good children')
             print(len(bad_parent_good_child))
     print(missed, 'missed')
+    Counter(missing_parent_list)
     return(node_dic, bad_parent_good_child)
 
-
-
+#generate dictionary for each protein group
 #Clade
 parent_list =[]
 parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.001, 0.14, 'None')
-node_dic1, bad_parent_good_child = parse_parents_list(parent_list, bad_parent_list, 0.001, 0.14, 'None')
+node_dic1, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.001, 0.14, 'None')
 
 #Subfamily
 parent_list =[]
 parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.001, 0.31, 27958)
-node_dic2, bad_parent_good_child= parse_parents_list(parent_list, bad_parent_list, 0.001, 0.31, 27958)
+node_dic2, bad_parent_good_child= parse_parents_list(tree, parent_list, bad_parent_list, 0.001, 0.31, 27958)
 
 #Subclade
 parent_list =[]
 parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.14, 0.478, 'None')
-node_dic3, bad_parent_good_child = parse_parents_list(parent_list, bad_parent_list, 0.14, 0.478, 'None')
+node_dic3, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.14, 0.478, 'None')
 
 #Group
 parent_list =[]
 parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.479, 0.729, 'None')
-node_dic4, bad_parent_good_child = parse_parents_list(parent_list, bad_parent_list, 0.479, 0.729,'None')
+node_dic4, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.479, 0.729,'None')
 
 #Subgroup
 parent_list =[]
 parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.73, 1,'None')
-node_dic5, bad_parent_good_child = parse_parents_list(parent_list, bad_parent_list, 0.73, 1,'None')
-
+node_dic5, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.73, 1,'None')
 
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_clade_20_lg_cat_gamma_RED_interval_15Jan.tsv', 'w') as Big:
     header = 'Protein_id' + '\t' + 'Subfamily' + '\t' + 'Clade' + '\t' + 'Subclade' + '\t' + 'Group' + '\t' + 'Subgroup' + '\n'
@@ -305,9 +316,9 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_
                 else:
                     Clade = 'RR'
                 if str(clade.temp) in node_dic2.keys():
-                    Sub_family = node_dic2[str(clade.temp)]
+                    Subfamily = node_dic2[str(clade.temp)]
                 else:
-                    Sub_family = 'RR'
+                    Subfamily = 'RR'
                 if str(clade.temp) in node_dic3.keys():
                     Subclade = node_dic3[str(clade.temp)]
                 else:
