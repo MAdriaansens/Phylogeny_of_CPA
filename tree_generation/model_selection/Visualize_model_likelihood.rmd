@@ -1,5 +1,5 @@
 ---
-title: "Vis_model_selection"
+title: "Lake_grassmere"
 author: "Mick Adriaansens"
 date: "`r Sys.Date()`"
 output: html_document
@@ -11,33 +11,96 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r ,load_packages}
+
+```{r}
 library(ggplot2)
-library(tidyr)
-library(dplyr)
 ```
 
-```{r ,load_models}
-Models <- read.delim('/nesi/nobackup/uc04105/All_models_likelihood.tsv', sep='\t', stringsAsFactors = TRUE)
+
+```{r read_bac_likelihood}
+
+
+Bac_likelihood <-read.delim("/nesi/nobackup/uc04105/Likelihood_CPA/Bacteria/Bac_likelihood_CPA_random100.tsv", header = TRUE, sep = "\t")
+
+Bac_likelihood$normalized_AICscore <- Bac_likelihood$AIC_score/Bac_likelihood$df_A
+Bac_likelihood$normalized_BICscore <- Bac_likelihood$BIC_score/Bac_likelihood$df_B
+
+Bac_likelihood$AIC_model <- as_factor(Bac_likelihood$AIC_model)
+Bac_likelihood$BIC_model <- as_factor(Bac_likelihood$BIC_model)
+
+BAICplot <- ggplot(Bac_likelihood, aes(y=normalized_AICscore, x=AIC_model, fill=AIC_model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.6) + ggtitle('Best models and their score from Bac') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 90, hjust = .5, vjust = .5, face = "bold"), axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold"))
+
+
+
+BBICplot <- ggplot(Bac_likelihood, aes(y=normalized_BICscore, x=BIC_model, fill=BIC_model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.6) + ggtitle('Best models and their score from Bac') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 90, hjust = .5, vjust = .5, face = "bold"), axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold"))
+
 ```
 
-```{r , generate_plots}
-Splot <- ggplot(Models[Models$set=='Seed',], aes(y=likelihood, x=model, fill=model)) + geom_boxplot(outlier.alpha = 0) + geom_jitter(alpha=0.3) + ggtitle('Best models and their score from Seed') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold"),
-                                                                                                                                                                axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold")) + ylim(-72500, -50000)
+```{r read_arc_likelihood}
 
 
-Eplot <- ggplot(Models[Models$set=='Euk',], aes(y=likelihood, x=model, fill=model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.3) + ggtitle('Best models and their score from Euk') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold"),
-                                                                                                                                                                axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold")) + ylim(-72500, -50000)
+Arc_likelihood <-read.delim("/nesi/nobackup/uc04105/Likelihood_CPA/Archaea/Arc_likelihood_CPA_random100.tsv", header = TRUE, sep = "\t")
 
-Aplot <- ggplot(Models[Models$set=='Arc',], aes(y=likelihood, x=model, fill=model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.3) + ggtitle('Best models and their score from Arc') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold"),
-                                                                                                                                                                axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold")) + ylim(-72500, -50000)
+Arc_likelihood$normalized_AICscore <- Arc_likelihood$AIC_score/Arc_likelihood$df_A
+Arc_likelihood$normalized_BICscore <- Arc_likelihood$BIC_score/Arc_likelihood$df_B
 
-Bplot <- ggplot(Models[Models$set=='Bac',], aes(y=likelihood, x=model, fill=model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.3) + ggtitle('Best models and their score from Bac') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold"),
-                                                                                                                                                                axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold")) + ylim(-72500, -50000)
+Arc_likelihood$AIC_model <- as_factor(Arc_likelihood$AIC_model)
+Arc_likelihood$BIC_model <- as_factor(Arc_likelihood$BIC_model)
+
+AAICplot <- ggplot(Arc_likelihood, aes(y=normalized_AICscore, x=AIC_model, fill=AIC_model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.6) + ggtitle('Best models and their score from Arc') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 90, hjust = .5, vjust = .5, face = "bold"), axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold"))
+
+
+
+ABICplot <- ggplot(Arc_likelihood, aes(y=normalized_BICscore, x=BIC_model, fill=BIC_model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.6) + ggtitle('Best models and their score from Arc') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 90, hjust = .5, vjust = .5, face = "bold"), axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold"))
+
 ```
 
-```{r ,visualise}
+
+
+
+
+```{r read_euk_likelihood}
+
+
+Euk_likelihood <-read.delim("/nesi/nobackup/uc04105/Likelihood_CPA/Eukarya/Euk_likelihood_CPA_random100.tsv", header = TRUE, sep = "\t")
+
+Euk_likelihood$normalized_AICscore <- Euk_likelihood$AIC_score/Euk_likelihood$df_A
+Euk_likelihood$normalized_BICscore <- Euk_likelihood$BIC_score/Euk_likelihood$df_B
+
+Euk_likelihood$AIC_model <- as_factor(Euk_likelihood$AIC_model)
+Euk_likelihood$BIC_model <- as_factor(Euk_likelihood$BIC_model)
+
+EAICplot <- ggplot(Euk_likelihood, aes(y=normalized_AICscore, x=AIC_model, fill=AIC_model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.6) + ggtitle('Best models and their score from Euk') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 90, hjust = .5, vjust = .5, face = "bold"), axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold"))
+
+
+
+EBICplot <- ggplot(Euk_likelihood, aes(y=normalized_BICscore, x=BIC_model, fill=BIC_model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.6) + ggtitle('Best models and their score from Euk') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 90, hjust = .5, vjust = .5, face = "bold"), axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold"))
+
+```
+
+
+
+```{r read_Seed_likelihood}
+
+
+Seed_likelihood <-read.delim("/nesi/nobackup/uc04105/Likelihood_CPA/Seeds/Seed_likelihood_CPA_random100.tsv", header = TRUE, sep = "\t")
+
+Seed_likelihood$normalized_AICscore <- Seed_likelihood$AIC_score/Seed_likelihood$df_A
+Seed_likelihood$normalized_BICscore <- Seed_likelihood$BIC_score/Seed_likelihood$df_B
+
+Seed_likelihood$AIC_model <- as_factor(Seed_likelihood$AIC_model)
+Seed_likelihood$BIC_model <- as_factor(Seed_likelihood$BIC_model)
+
+SAICplot <- ggplot(Seed_likelihood, aes(y=normalized_AICscore, x=AIC_model, fill=AIC_model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.6) + ggtitle('Best models and their score from Seed') + theme(axis.title.y = element_text(color = "black", size = 15, angle =90, hjust = .5, vjust = .5, face = "bold"), axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold"))
+
+SBICplot <- ggplot(Euk_likelihood, aes(y=normalized_BICscore, x=BIC_model, fill=BIC_model)) + geom_boxplot(outlier.alpha = 0)+ geom_jitter(alpha=0.6) + ggtitle('Best models and their score from Seed') + theme(axis.title.y = element_text(color = "black", size = 15, angle = 90, hjust = .5, vjust = .5, face = "bold"), axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = .5, face = "bold")) +  theme(plot.title = element_text(size = 10, face = "bold"))
+```
+
+
+```{r}
+
 library(gridExtra)
-BF<-grid.arrange(Splot, Eplot, Aplot, Bplot, nrow = 1)
+BF<-grid.arrange(BBICplot, ABICplot, EBICplot, SBICplot,BAICplot, AAICplot, EAICplot, SAICplot, nrow = 2)
 BF
 ```
+
