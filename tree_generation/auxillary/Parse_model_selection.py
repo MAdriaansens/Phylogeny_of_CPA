@@ -5,6 +5,7 @@ Bac_dir = '/nesi/nobackup/uc04105/Likelihood_CPA/Bacteria'
 Euk_dir = '/nesi/nobackup/uc04105/Likelihood_CPA/Eukarya'
 Seed_dir = '/nesi/nobackup/uc04105/Likelihood_CPA/Seeds'
 
+
 AIK_Arc = '{}/AIK_Arc.txt'.format(Arc_dir)
 BIC_Arc = '{}/BIC_Arc.txt'.format(Arc_dir)
 
@@ -29,7 +30,7 @@ with open(BIC_Arc, 'r') as BIC:
 count = 0
 
 with open('/nesi/nobackup/uc04105/Likelihood_CPA/Archaea/Arc_likelihood_CPA_random100.tsv', 'w') as random100:
-    header = 'random_set_number' + '\t'  + 'AIC_model' + '\t' + 'AIC_score' + '\t' + 'df_A' + '\t' +  + 'BIC_model' + '\t' + 'BIC_score' + '\t' + 'df_B' + '\n'
+    header = 'random_set_number' + '\t'  + 'AIC_model' + '\t' + 'AIC_score' + '\t' + 'df_A' + '\t'   + 'BIC_model' + '\t' + 'BIC_score' + '\t' + 'df_B' + '\n'
     random100.write(header)
     for file in os.listdir(Arc_dir):
         if file.split('.')[-1] == 'log':
@@ -73,6 +74,7 @@ with open('/nesi/nobackup/uc04105/Likelihood_CPA/Archaea/Arc_likelihood_CPA_rand
                             df_B = list_row[3]
                             BIC_score = list_row[-1].split('\n')[0]
             count = count + 1
-            outline = number_of_file + '\t' +  AIC_best_model + '\t' +  AIC_score + '\t' +  df_A + '\t' +  BIC_best_model + '\t' +  BIC_score + '\t' +  df_B + '\n'
-            Random100.write(outline)
+            outline = str(number_of_file) + '\t' +  AIC_best_model + '\t' +  str(AIC_score) + '\t' +  str(df_A) + '\t' +  BIC_best_model + '\t' +  str(BIC_score) + '\t' +  str(df_B) + '\n'
+            random100.write(outline)
                         #modelfinder has now started
+
