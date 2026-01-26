@@ -26,12 +26,38 @@ When you click the **Knit** button a document will be generated that includes bo
 library(dplyr)
 ```
 
-
-```{r, Load Eukarya data and wrangel it a bit}
+```{r}
 #these are the files containing all the antiporters, in our architecture it is called:
 IT_Eukarya <- read.delim('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_4nov.tsv', sep='\t', stringsAsFactors = TRUE)
+sum(IT_Eukarya$CPA_count)
+TypesE<- read.delim('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Types_CPA_in_Eukarya_GTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
+
+
+TypesE$species_name <- gsub("Agaricus_bisporus_", "Agaricus_bisporus_ var. bisporus H97", TypesE$species_name)
+TypesE$species_name <- gsub("Allomyces_macrogynus_ATCC", "Allomyces_macrogynus_ATCC 38327", TypesE$species_name)
+
+TypesE$species_name <- gsub("Pecoramyces", "Pecoramyces ruminantium", TypesE$species_name)
+
 #IT_Eukarya <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_inhouseEukarya.tsv', sep='\t', stringsAsFactors = TRUE)
 
+Fc<-data_frame(species_name = c('Fonticula_alba','Monocercomonoides_exilis', 'Nosema_bombycis_CQ1','Phytomonas_sp._isolate_Hart1','Reticulomyxa_filosa', 'Trichomonas_vaginalis_G3'),
+              CPA1 = c(0, 0, 0, 0, 0,0), Kef =  c(0, 0, 0, 0, 0,0), NhaA =  c(0, 0, 0, 0, 0,0), NhaS5 =  c(0, 0, 0, 0, 0,0), CPA2 = c(0, 0, 0, 0, 0,0), Uncharacterized_Archaea = c(0, 0, 0, 0, 0,0), Uncharacterized_prokarya = c(0, 0, 0, 0, 0,0), Latescibacteriota = c(0, 0, 0, 0, 0,0), DxK_Pseudomonadota = c(0, 0, 0, 0, 0,0), NxK_Gammaproteobacteriota =c(0, 0, 0, 0, 0,0), Uncharcterized = c(0, 0, 0, 0, 0,0))
+
+TypesE <- rbind(TypesE, Fc)
+
+
+sum(TypesE$Kef) + sum(TypesE$CPA1) + sum(TypesE$NhaA) +sum(TypesE$Uncharcterized) + sum(TypesE$NhaS5) + sum(TypesE$Uncharacterized_Archaea) + sum(TypesE$Uncharacterized_prokarya) + sum(TypesE$CPA2) + sum(TypesE$Latescibacteriota) + sum(TypesE$DxK_Pseudomonadota) + sum(TypesE$NxK_Gammaproteobacteriota)
+
+median(TypesE$CPA1)
+median(TypesE$CPA2)
+median(TypesE$Kef)
+
+
+IT_Eukarya <- merge(IT_Eukarya, TypesE, by='species_name')
+```
+
+
+```{r, Load Eukarya data and wrangel it a bit}
 
 
 #this feels super round about, but as 'choanoflagellata is not a predefined character this is what needs to be done
@@ -45,6 +71,8 @@ IT_Eukarya$Major_tax <- as.factor(IT_Eukarya$Major_tax)
 IT_Eukarya$IT_count <- IT_Eukarya$NhaB_count + IT_Eukarya$NhaC_count + IT_Eukarya$NhaD_count
 IT_Eukarya$Antiporter_count <- IT_Eukarya$CPA_count + IT_Eukarya$IT_count
 
+
+
 IT_Eukarya$IT_binary[IT_Eukarya$IT_count == 0] <- 0
 IT_Eukarya$IT_binary[IT_Eukarya$IT_count > 0] <- 1
 #miss spelling
@@ -54,7 +82,7 @@ IT_Eukarya$Major_tax[IT_Eukarya$Major_tax == 'Hapophyta'] <- 'Haptophyta'
 IT_Eukarya$Antiporter_binary[IT_Eukarya$Antiporter_count == 0] <- 0
 IT_Eukarya$Antiporter_binary[IT_Eukarya$Antiporter_count >0] <- 1
 
-#write.table(IT_Eukarya, file='Eukarya_7okt_edited.tsv', quote=FALSE, sep='\t')
+write.table(IT_Eukarya, file='Antiporter_across_all_245Eukarya.csv', quote=FALSE, sep='\t')
 
 ```
 
@@ -354,10 +382,8 @@ library(tidyr)
 IT_Archaea <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_7OKTSEPT.tsv', sep='\t', stringsAsFactors = TRUE)
 #IT_Archaea <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_ArchaeaGTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
 
-
-
-
 sum(IT_Archaea$CPA_count)
+
 IT_Archaea %>% separate(GTDB_tax, c('Domain_Phyla', 'Lower_class'), ';c__') -> IT_Archaea
 #split archaea taxonomy into different taxonomic groups
 IT_Archaea %>% separate(Domain_Phyla, c('Domain', 'Phyla'), ';p__') ->IT_Archaea
@@ -380,16 +406,28 @@ IT_Archaea$CPA_presence[IT_Archaea$CPA_binary ==1] <- 'Present'
 IT_Archaea$IT_binary[IT_Archaea$IT_count == 0] <- 0
 IT_Archaea$IT_binary[IT_Archaea$IT_count > 0] <- 1
 
+
+```
+
+```{r}
 TypesA <- read.delim('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Types_CPA_in_ArchaeaGTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
+
+
+
+
+#absent in all these
+sum(TypesA$Latescibacteriota) + sum(TypesA$DxK_Pseudomonadota) + sum(TypesA$NxK_Gammaproteobacteriota)
+
 
 IT_Archaea <- merge(IT_Archaea, TypesA, by ='GTDB_id', all =TRUE)
 IT_Archaea[is.na(IT_Archaea)] <- 0
 #generate which CPA types are present in which CPAs
 
 rm(TypesA)
-write.table(IT_Archaea, file='Antiporter_across_all_GTDB226_Archaea_30July_representatives.csv', quote=FALSE, sep=',')
+write.table(IT_Archaea, file='Antiporter_across_all_GTDB226_Archaea.csv', quote=FALSE, sep=',')
 
 ```
+
 
 ```{r Taxonomic_/Protein_data_wrangling_Arc}
 #generate a Archaea set of only high quality genomes
@@ -402,7 +440,33 @@ IT_Archaea <- merge(IT_Archaea, GTDB_Arc, by = 'GTDB_id')
 rm(GTDB_Arc)
 
 IT_Archaea <- IT_Archaea[IT_Archaea$Completeness> 90 & IT_Archaea$Contamination < 5 & IT_Archaea$trna_aa_count > 17,]
-IT_Archaea <- IT_Archaea[IT_Archaea$Phyla != 'Undinarchaeota',]
+
+IT_Archaea_nonna  <- IT_Archaea[IT_Archaea$Antiporter_binary == 1,]
+
+IT_Archaea_nonna$antiporter_per_megabases <- (IT_Archaea_nonna$Antiporter_count/IT_Archaea_nonna$coding_bases)*1000000
+
+#IT_Archaea_finite<- IT_Archaea[is.finite(IT_Archaea$mega_coding_bases_per_antiporter),]
+median(IT_Archaea_nonna$antiporter_per_megabases)
+#hist(IT_Archaea_nonna$antiporter_per_megabases,  breaks = 100) + abline(v = 2.101579, col = "blue", lwd = 2, lty = 2)
+ 
+#summary(IT_Archaea_finite$mega_bases_per_antiporter)
+#break
+
+Archaea_mb <- aggregate(IT_Archaea_nonna$coding_bases/1000000, by=list(Category=IT_Archaea_nonna$Phyla), FUN=sum)
+
+Archaea_mb<- Archaea_mb %>% rename(
+    Phyla = Category,
+    total_mb=x)
+
+
+Archaea_antiporters <- aggregate(IT_Archaea_nonna$Antiporter_count, by=list(Category=IT_Archaea_nonna$Phyla), FUN=sum)
+
+Archaea_antiporters<- Archaea_antiporters %>% rename(
+    Phyla = Category,
+    total_CPA=x)
+Archaea_average_ap_mb <-merge(Archaea_antiporters, Archaea_mb, by = 'Phyla')
+
+Archaea_average_ap_mb$averages <- Archaea_average_ap_mb$total_CPA/Archaea_average_ap_mb$total_mb
 ```
 
 
@@ -421,6 +485,9 @@ PhylaA_observations <- PhylaA_observations %>% rename('Species_total' = n)
 PhylaA_CPAobservations <- IT_Archaea[IT_Archaea$CPA_binary == 1,] %>%count(Phyla)
 PhylaA_CPAobservations<- merge(PhylaA_observations, PhylaA_CPAobservations, phyla = 'Phyla')
 PhylaA_CPAobservations$percentage <-  (PhylaA_CPAobservations$n/PhylaA_CPAobservations$Species_total)*100
+
+
+
 
 #shows no NhaB in Archaea
 PhylaA_NhaBobservations <- IT_Archaea[IT_Archaea$NhaB_binary == 1,] %>%count(Phyla)
@@ -744,12 +811,22 @@ IT_Bacteria %>% separate(Lower_order, c('Order', 'Lower_family'), ';f__') -> IT_
 IT_Bacteria %>% separate(Lower_family, c('Family', 'Lower_genera'), ';g__') -> IT_Bacteria
 IT_Bacteria %>% separate(Lower_genera, c('Genera', 'Species'), ';s__') -> IT_Bacteria
 
+TypesB <- read.delim('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Types_CPA_in_BacteriaGTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
+
+sum(IT_Bacteria$CPA_count)
+
+sum(TypesB$Kef) +sum(TypesB$CPA1) + sum(TypesB$NhaA) +sum(TypesB$CPA2) + sum(TypesB$Uncharcterized) + sum(TypesB$NhaS5) + sum(TypesB$Uncharacterized_Archaea) +sum(TypesB$Uncharacterized_prokarya) + sum(TypesB$Latescibacteriota) + sum(TypesB$DxK_Pseudomonadota) + sum(TypesB$NxK_Gammaproteobacteriota)
+
+IT_Bacteria<- merge(IT_Bacteria, TypesB, by ='GTDB_id', all =TRUE)
 
 
+```
+
+```{r}
 GTDB_Bac <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
 GTDB_Bac$GTDB_id <- GTDB_Bac$accession
 
-IT_Bacteria <- merge(IT_Bacteria, GTDB_Bac, by = 'GTDB_id')
+IT_Bacteria <-  merge(IT_Bacteria, GTDB_Bac, by = 'GTDB_id')
 #Antiporters_Bacteria$selected_cols_sum <- rowSums(Antiporters_Bacteria[, c("Kef", "CPA1", "CPA2","Uncharcterized", "NhaA")]) - Antiporters_Bacteria$CPA_count
 
 IT_Bacteria <- IT_Bacteria[IT_Bacteria$Completeness> 90 & IT_Bacteria$Contamination < 5 & IT_Bacteria$trna_aa_count > 17,]
@@ -758,7 +835,28 @@ IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Bacteroidota_A'] <- 'Bacteroidota'
 IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Desulfobacterota_B'] <- 'Desulfobacterota'
 IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Desulfobacterota_I'] <- 'Desulfobacterota'
 rm(GTDB_Bac)
+
 ```
+
+
+
+```{r}
+
+
+Subset <- c('GTDB_id', 'Species', 'CPA_count')
+IT_BacteriaSub <- IT_Bacteria[Subset]
+IT_Bacteria[is.na(IT_Bacteria)] <- 0
+
+
+
+#generate which CPA types are present in which CPAs
+
+rm(TypesB)
+write.table(IT_Bacteria, file='Antiporter_across_all_GTDB226_Bacteria.csv', quote=FALSE, sep=',')
+
+IT_Bac_subset <- IT_Bacteria[c()]
+```
+
 
 ```{r}
 #the factorization of the binary CPA is donflip graphe to make it more intuitive for the figure
@@ -778,26 +876,25 @@ IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count == 0] <- 0
 IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count >0] <- 1
 
 
-
 ```
 
 
 
 
 
-```{r Protein_data_wrangling_Bac}
-IT_Bacteria$IT_count <- IT_Bacteria$NhaB_count + IT_Bacteria$NhaC_count + IT_Bacteria$NhaD_count
-IT_Bacteria$Antiporter_count <- IT_Bacteria$CPA_count + IT_Bacteria$IT_count
 
-IT_Bacteria$IT_binary[IT_Bacteria$IT_count == 0] <- 0
-IT_Bacteria$IT_binary[IT_Bacteria$IT_count > 0] <- 1
+```{r}
+IT_Bacteria_nonna  <- IT_Bacteria[IT_Bacteria$Antiporter_binary == 1,]
+IT_Bacteria_nonna$antiporter_per_megabases <- (IT_Bacteria_nonna$Antiporter_count/IT_Bacteria_nonna$coding_bases)/1000000
 
-IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count == 0] <- 0
-IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count >0] <- 1
-
-
+#IT_Bacteria_finite<- IT_Bacteria[is.finite(IT_Bacteria$mega_coding_bases_per_antiporter),]
+median(IT_Bacteria_nonna$antiporter_per_megabases)
+#hist(IT_Bacteria_nonna$antiporter_per_megabases,  breaks = 100) + abline(v = 1.37, col = "blue", lwd = 2, lty = 2)
 ```
 
+```{r}
+IT_B_allAntiporters <- IT_Bacteria[IT_Bacteria$Antiporter_count > 0,]
+```
 
 
 
@@ -814,7 +911,7 @@ IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Desulfobacterota_I'] <- 'Desulfobacterot
 
 ```{r, subset a selection of phyla}
 PhylaB_observations <- IT_Bacteria %>% count(Phyla)
-top_Bac_phyla <- c('Acidobacteriota', 'Actinomycetota', 'Armatimonadota', 'Bacteroidota', 'Bacillota', 'Campylobacterota', 'Chloroflexota', 'Cyanobacteriota', 'Deinococcota', 'Desulfobacterota','Fusobacteriota', 'Gemmatimonadota' , 'Patescibacteriota', 'Planctomycetota', 'Pseudomonadota', 'Spirochaetota', 'Synergistota', 'Thermotogota','Verrucomicrobiota', 'Vulcanimicrobiota') 
+top_Bac_phyla <- c('Acidobacteriota', 'Actinomycetota', 'Armatimonadota', 'Bacteroidota', 'Bacillota', 'Campylobacterota', 'Chloroflexota', 'Cyanobacteriota', 'Deinococcota', 'Desulfobacterota','Fusobacteriota', 'Gemmatimonadota' , 'Patescibacteriota', 'Planctomycetota', Pseudomonadota', 'Spirochaetota', 'Synergistota', 'Thermotogota','Verrucomicrobiota', 'Vulcanimicrobiota') 
 PhylaB_observations <- IT_Bacteria %>% count(Phyla)
 PhylaB_observations <- PhylaB_observations[PhylaB_observations$Phyla %in% top_Bac_phyla,]
 
@@ -826,6 +923,25 @@ PhylaB_observations <- IT_Bacteria %>%count(Phyla)
 ```
 
 
+```{r}
+Bacteria_antiporters <- aggregate(IT_Bacteria_nonna$Antiporter_count, by=list(Category=IT_Bacteria_nonna$Phyla), FUN=sum)
+
+Bacteria_antiporters<- Bacteria_antiporters %>% rename(
+    Phyla = Category,
+    total_CPA=x)
+
+Bacteria_mb <- aggregate(IT_Bacteria_nonna$coding_bases/1000000, by=list(Category=IT_Bacteria_nonna$Phyla), FUN=sum)
+
+Bacteria_mb<- Bacteria_mb %>% rename(
+    Phyla = Category,
+    total_mb=x)
+
+Bacteria_average_ap_mb <-merge(Bacteria_antiporters, Bacteria_mb, by = 'Phyla')
+
+Bacteria_average_ap_mb$averages <- Bacteria_average_ap_mb$total_CPA/Bacteria_average_ap_mb$total_mb
+
+Bacteria_average_ap_mb <- Bacteria_average_ap_mb[Bacteria_average_ap_mb$Phyla %in% top_Bac_phyla,]
+```
 
 ```{r, count number of species per phyla}
 PhylaB_observations <- PhylaB_observations %>% rename('Species_total' = n)
@@ -1183,36 +1299,3 @@ PERB<- ggplot(pivot_Bac, aes(fill=status, y=Count, x=Phyla)) + geom_bar(position
 ggsave("Bacteria_count.pdf") 
 ```
 
-
-```{r, supplementary figure of distribution of number of species}
-dev.off()
-par(mfrow=c(7,2))
-#a bit differently generated but this allows me to compare the distirbution of gene count per species.
-#i.e how many species have 1 CPA, vs how many species have 2 CPA etc etc etc
-Psuedomona_edit <- IT_Bacteria[IT_Bacteria$Phyla %in% Pseudomonadati,]
-Thermotogota_edit <- IT_Bacteria[IT_Bacteria$Phyla %in% Thermotogati,]
-Bacilati_edit <- IT_Bacteria[IT_Bacteria$Phyla %in% Bacilati,]
-Patesci_edit <- IT_Bacteria[IT_Bacteria$Phyla == 'Patescibacteriota',]
-
-hist(Psuedomona_edit$Antiporter_count[Psuedomona_edit$Antiporter_count > 0], breaks='Scott', col ='pink', main = 'Pseudo distribution antiporter genes')
-hist(Psuedomona_edit$CPA_count[Psuedomona_edit$CPA_count > 0], breaks='Scott', col='deepskyblue', main = 'Pseudo distribution CPA genes')
-
-hist(Thermotogota_edit$Antiporter_count[Thermotogota_edit$Antiporter_count > 0], breaks='Scott', col ='coral1', main = 'Thermotogota distribution antiporter genes')
-hist(Thermotogota_edit$CPA_count[Thermotogota_edit$CPA_count > 0], breaks='Scott', col='aquamarine', main = 'Thermotogota distribution CPA genes')
-
-hist(Bacilati_edit$Antiporter_count[Bacilati_edit$Antiporter_count > 0], breaks='Scott', col ='brown', main = 'Bacilati distribution antiporter genes')
-hist(Bacilati_edit$CPA_count[Bacilati_edit$CPA_count > 0], breaks='Scott', col='cadetblue', main = 'Bacilati distribution CPA genes')
-
-hist(Patesci_edit$Antiporter_count[Patesci_edit$Antiporter_count > 0], breaks='Scott', col ='chocolate', main = 'Patesci distribution antiporter genes')
-hist(Patesci_edit$CPA_count[Patesci_edit$CPA_count > 0], breaks='Scott', col='darkslategray', main = 'Patesci distribution CPA genes')
-
-#Archaea
-hist(Halo$Antiporter_count[Halo$Antiporter_count > 0], breaks='Scott', col ='orange', main = 'Halo distribution antiporter genes')
-hist(Halo$CPA_count[Halo$CPA_count > 0], breaks='Scott', col='blue', main = 'Halo distribution CPA genes')
-
-hist(TACK$Antiporter_count[TACK$Antiporter_count > 0], breaks='Scott', col='red', main = 'TACK distribution antiporter genes')
-hist(TACK$CPA_count[TACK$CPA_count > 0], breaks='Scott', col='cyan', main = 'TACK distribution CPA genes')
-
-hist(Nano$Antiporter_count[Nano$Antiporter_count > 0], breaks='Scott', col='brown1', main = 'Nano distribution antiporter genes')
-hist(Nano$CPA_count[Nano$CPA_count > 0], breaks='Scott', col ='azure', main = 'Nano distribution CPA genes')
-```
