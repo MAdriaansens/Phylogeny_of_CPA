@@ -18,6 +18,11 @@ GTDB data was downloaded using -wget from GTDB-Downloads (https://gtdb.ecogenomi
 Eukarya data was downloaded by Euk_proteomes_download.py using NCBI ftp links, available in Database_creation/Eukarya/Eukararya_db.tsv.xlsx
 
 We generated, for each taxonomic domain, a fasta file with all the sequences and a .tsv file containing the original protein id, the species id and species name was made.
+
 (done using Database_creation/Eukarya/Create_EukDB.py, Create_TSV_proteinDB_fromGTDB_data.py)
+
 For Archaea and Bacteria the proteome files were seperated using Database_creation/Subset_Fasta_DB.py. 
 For Bacteria this was subsetted into 61 files (*.faa and *.tsv) while Archaea was subsetted into 12 *.faa files, to allow for parallel processing
+
+Pfam HMMs were downloaded manually and sequences of each pfam were downloaded using a perl script as provided by Pfam.
+Code is available on Database_creation/Pfam
