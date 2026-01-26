@@ -10,3 +10,13 @@ On 5th May 2025 we started downloading this data, this included:
 After succesfull download all data will be compiled into a proteome database and tsv for both Archaea and Bacteria
 After which this homology searches will be performed
 
+Explaining each directory:
+Database_creation: 
+
+
+GTDB data was downloaded using -wget from GTDB-Downloads (https://gtdb.ecogenomic.org/downloads)
+Eukarya data was downloaded by Euk_proteomes_download.py using NCBI ftp links, available in Database_creation/Eukarya/Eukararya_db.tsv.xlsx
+
+We generated, for each taxonomic domain, a fasta file with all the sequences and a .tsv file containing the original protein id, the species id and species name was made.
+(done using Database_creation/Eukarya/Create_EukDB.py, Create_TSV_proteinDB_fromGTDB_data.py)
+For Archaea and Bacteria the proteome files were seperated using Database_creation/Subset_Fasta_DB.py. For Bacteria this was into 61 files 
