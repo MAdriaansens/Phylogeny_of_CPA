@@ -83,18 +83,4 @@ for clade in tree.find_clades(order='postorder'):
     if clade.combi == 'empty':
         print(clade.name)
 
-Red_dict = {}
-#this file contains all distances within a tree file
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/clades_CPA_phylogeny_FTtree_15sept.tsv', 'r') as clade_inf:
-    next(clade_inf, None)
-    for inf in clade_inf:
-        RED =(inf.split('\t')[5])
-        clade_id = inf.split('\t')[0]
-        Red_dict[clade_id] = RED
-print(len(Red_dict.keys()))
-#overfamily
-
-#match red values per tree
-for clade in tree.find_clades():
-    entry = str(clade.name)
-    clade.RED = float(Red_dict[entry])
+#you can now check if certain clades or domains are sisterclades of eachother or nested in eachother 
