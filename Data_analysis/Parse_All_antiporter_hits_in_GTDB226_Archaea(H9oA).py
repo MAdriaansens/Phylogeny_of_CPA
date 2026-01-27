@@ -90,10 +90,12 @@ for key in scan_dict.keys():
         hit_list.append(key)
 
 passed_list = []
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/Archaea_merged_PF03553_unique_aligned_PF03553.fasta.fasta', 'fasta'):
-    if record.id in hit_list:
-        passed_list.append(record.id.split('tax:')[1])
-
+with open ('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_NhaC_passed_filters.faa', 'w') as C_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/Archaea_merged_PF03553_unique_aligned_PF03553_refilter.fasta', 'fasta'):
+        if record.id in hit_list:
+            passed_list.append(record.id.split('tax:')[1])
+            outline = '>' + record.id + '\n' + str(record.seq) + '\n'
+            C_out.write(outline)
 NhaC_list = passed_list
 print(len(NhaC_list))
 
@@ -110,9 +112,12 @@ for key in scan_dict.keys():
         hit_list.append(key)
 
 passed_list = []
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/Archaea_merged_PF03600_unique_aligned_PF03600.fasta.fasta', 'fasta'):
-    if record.id in hit_list:
-        passed_list.append(record.id.split('tax:')[1])
+with open ('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_NhaD_passed_filters.faa', 'w') as D_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/Archaea_merged_PF03600_unique_aligned_PF03600_refilter.fasta', 'fasta'):
+        if record.id in hit_list:
+            passed_list.append(record.id.split('tax:')[1])
+            outline = '>' + record.id + '\n' + str(record.seq) + '\n'
+            D_out.write(outline)
 NhaD_list = passed_list
 print(len(NhaD_list))
 
@@ -162,7 +167,7 @@ print(len(set(CPA_list_forIT)))
 
                           
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', 'r') as Meta:
-    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_7OKTSEPT.tsv', 'w') as Out:
+    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_Jan28_rerun.tsv', 'w') as Out:
         header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'Sample' + '\t'+ 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         representatives_list = []
