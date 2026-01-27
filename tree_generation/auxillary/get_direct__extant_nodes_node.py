@@ -4,7 +4,7 @@ from Bio.Phylo.Consensus import *
 import json
 
 #part 3
-tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_phylogeny_midroot_TREE_ALIGNEDRED_12sept_ft.nw', 'newick')
+tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_phylogeny_midroot_TREE_ALIGNEDRED_7Nov_ft_lg_cat_gamma.nw', 'newick')
 count = 0
 #only give clade a number/name if it is not terminal
 # otherwise let it keep the same name, this prevents future back paddeling and renaming. 
