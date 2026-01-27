@@ -146,7 +146,7 @@ res.ftest <- var.test(`Completeness(%)` ~ CPA_binary, data = IT_Archaea)
 res.ftest
 #shows no equal variance
 
-res <- t.test(`Completeness(%)` ~ CPA_binary, data = IT_Archaea, var.equal = TRUE)
+res <- t.test(`Completeness(%)` ~ CPA_binary, data = IT_Archaea, var.equal = FALSE)
 res
 #shows a non-zero difference in mean
 
@@ -261,7 +261,7 @@ res.ftest
 #no equal variance can be assumed
 
 #any adjusted R-squared below 0.05 will not be mentioned
-res <- t.test(`Completeness(%)` ~ CPA_binary, data = IT_Bacteria, var.equal = TRUE)
+res <- t.test(`Completeness(%)` ~ CPA_binary, data = IT_Bacteria, var.equal = FALSE)
 res
 #a non-zero, significant difference in completeness between species with and without CPA
 
