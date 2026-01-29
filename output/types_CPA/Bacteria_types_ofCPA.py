@@ -8,12 +8,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_
         protein_id = line.split('\t')[0]
         domain = line.split('\t')[1]
         clade_dic[protein_id] = domain
-domain_list = []
-for key in clade_dic.keys():
-    domain_list.append(clade_dic[key])
 
-from collections import Counter
-print(Counter(domain_list))
 
 
 Tax_dic = {}
