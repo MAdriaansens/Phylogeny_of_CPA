@@ -1,3 +1,51 @@
+import json
+
+clade_dic = {}
+
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_clade_20_lg_cat_gamma_RED_interval_15Jan.tsv', 'r') as LG_Cat_Gamma_clade:
+    next(LG_Cat_Gamma_clade, None)
+    for line in LG_Cat_Gamma_clade:
+        protein_id = line.split('\t')[0]
+        domain = line.split('\t')[1]
+        clade_dic[protein_id] = domain
+
+
+
+Tax_dic = {}
+Tax_list = []
+
+
+import os
+
+for json_entry in os.listdir('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/'):
+    if 'All_Bac_CPAseq_GTDB226_ids_tax_' in json_entry:
+        with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/{}'.format(json_entry))as json_file:
+            d = json.load(json_file)
+            for key in d.keys():
+                    Protein_id =  key
+
+                    Taxonomy  = d[key].split('__GTDB_tax:')[0].split('_id')[1]
+                    Tax_dic[Protein_id] = Taxonomy
+                    Tax_list.append(Taxonomy)
+Tax_list = set(Tax_list)
+print(len(Tax_list))
+print(len(Tax_dic.keys()))
+
+
+Reps_dic = {}
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/RED_values_Bacteria_clusters_22sep.tsv', 'r') as Reps_Bac:
+    next(Reps_Bac, None)
+    for line in Reps_Bac:
+        Rep = (line.split('\t')[1].replace('"', ''))
+        Clusteroids = (line.split('\t')[-6])
+        Reps_dic[Rep] = Clusteroids
+
+from Bio import SeqIO
+
+seq_dic = {}
+for record in SeqIO.parse("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/Bacteria_passed_all_filters_OKT3_GTDBreps_alignedPF00999.fasta", "fasta"):
+    seq_dic[record.id] = str(record.seq)
+print(len(seq_dic.keys()))
 
 CPA1_dict = {}
 CPA2_dict = {}
