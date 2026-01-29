@@ -2,7 +2,9 @@
 title: "Statistics_All_Antiporters"
 author: "Mick Adriaansens"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -22,11 +24,11 @@ When you click the **Knit** button a document will be generated that includes bo
 
 
 ```{r, Load Eukarya data and wrangel it a bit}
-#these are the files containing all the antiporters, in our architecture it is called:
+library(tidyverse)
 IT_Eukarya <- read.delim('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/IT_Eukarya_4nov.tsv', sep='\t', stringsAsFactors = TRUE)
-#IT_Eukarya <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_inhouseEukarya.tsv', sep='\t', stringsAsFactors = TRUE)
 
 
+sum(IT_Eukarya$CPA_count)
 
 #this feels super round about, but as 'choanoflagellata is not a predefined character this is what needs to be done
 IT_Eukarya$Major_tax <- as.character(IT_Eukarya$Major_tax)
@@ -74,11 +76,7 @@ summary(LM4)
 ```
 
 ```{r load_Archaea}
-#these are the files containing all the antiporters, in our architecture it is called:
-IT_Archaea <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_7OKTSEPT.tsv', sep='\t', stringsAsFactors = TRUE)
-
-#IT_Archaea <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_ArchaeaGTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
-
+IT_Archaea <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Archaea_7OKTSEPT_rerun.tsv', sep='\t', stringsAsFactors = TRUE)
 IT_Archaea <- IT_Archaea %>% rename(
     "Completeness(%)" = Completeness)
 sum(IT_Archaea$CPA_count)
@@ -113,19 +111,10 @@ Phyla_observations <- PhylaA_observations[PhylaA_observations$n >1,] #this exclu
 PhylaA_observations <- PhylaA_observations %>% rename('Species_total' = n)
 ```
 
-```{r}
-library(ggplot2)
-merged_df<- data.frame(Phyla_arc = c('Average','Average_Thermoproteati',  'Asgardarchaeota','Thermoproteaota','Average_Nanobdellati',  'Nanobdellati', 'Micrarchaeota','Average_Methanobacteriati', 'Thermoplasmatota', 'Halobacteriota', 'Methanobacteriota_B', 'Methanobacteriota'), Percentages = c(79.4, 75.2, 52.2, 78.7, 82.14, 81.2, 83.91, 80.8, 64.9, 95.2, 99.2, 70.8))
-barplot(height=merged_df$Percentages, names=merged_df$Phyla_arc,xlabs = NULL, col=c('black', 'red', 'brown1', 'pink', 'blue', 'cyan', 'lightblue3', 'green', 'springgreen3', 'palegreen', 'limegreen', 'olivedrab2')) + text(x = seq_along(x_labs), y = 9, labels = x_labs, 
-     srt = 45,    # rotate
-     adj = 1,    # justify
-     xpd = TRUE)
-```
 
 
 
-
-```{r}
+```{r Compare_nonCPA_CPA_species_Completeness}
 library(dplyr)
 
 #from this inspection we see that the medians are different
@@ -154,35 +143,12 @@ rest <- wilcox.test(IT_Archaea$`Completeness(%)` ~ IT_Archaea$CPA_binary)
 rest
 #shows a non-zero difference in distribution of values
 
-#any adjusted R-squared below 0.05 will not be mentioned
-
-LM1<- lm(CPA_binary  ~ IT_binary, data=IT_Archaea)
-summary(LM1)
-#no significant correlation between IT presence and CPA presence
-
-LM2<- lm(CPA_binary  ~ `Completeness(%)`, data=IT_Archaea)
-summary(LM2)
-#significant correlation between CPA presence and Genome completeness
-
-LM3<- lm(CPA_binary  ~ Phyla, data=IT_Archaea)
-summary(LM3)
-#significant correlation between CPA presence and phyla
-
-LM4<- lm(CPA_count  ~ IT_count, data=IT_Archaea)
-summary(LM4)
-#significant correlation between CPA count and IT count, but with low Adjusted R squared 0.08532
-
-LM5<- lm(CPA_count  ~ Phyla, data=IT_Archaea)
-summary(LM5)
-#significant correlation between CPA count and PHYLA, with Adjusted R squared value of 0.1347
 ```
 
 
 
 ```{r load_Bacteria}
-#these are the files containing all the antiporters, in our architecture it is called:
 IT_Bacteria <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Bacteria_7OKT.tsv', sep='\t', stringsAsFactors = TRUE)
-#IT_Bacteria <- read.delim('MAdriaansens/Phylogeny_of_CPA/output/Antiporters_across_BacteriaGTDB226.tsv', sep='\t', stringsAsFactors = TRUE)
 
 IT_Bacteria %>% separate(GTDB_tax, c('Domain_Phyla', 'Lower_class'), ';c__') -> IT_Bacteria
 IT_Bacteria %>% separate(Domain_Phyla, c('Domain', 'Phyla'), ';p__') ->IT_Bacteria
@@ -226,7 +192,93 @@ ITA<- ggplot(IT_Archaea, aes(y=`Completeness(%)`, x=CPA_presence, fill=CPA_prese
   theme(plot.title = element_text(size = 50, face='bold' ),
         plot.subtitle = element_text(size = 20)) +theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
 ITA
+
+
+library(gridExtra)
+ITmergedinitial<-grid.arrange(ITA, ITB, nrow = 2)
+ITmergedinitial
 ```
+
+
+```{r Taxonomic_/Protein_data_wrangling_Arc}
+#generate a Archaea set of only high quality genomes
+
+GTDB_Arc <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
+GTDB_Arc$GTDB_id <- GTDB_Arc$accession
+
+
+IT_Archaea <- merge(IT_Archaea, GTDB_Arc, by = 'GTDB_id')
+rm(GTDB_Arc)
+
+IT_Archaea_clean <- IT_Archaea[IT_Archaea$Completeness> 90 & IT_Archaea$Contamination < 5 & IT_Archaea$trna_aa_count > 17,]
+
+IT_Archaea_nonna  <- IT_Archaea_clean[IT_Archaea_clean$Antiporter_binary == 1,]
+
+IT_Archaea_nonna$antiporter_per_megabases <- (IT_Archaea_nonna$Antiporter_count/IT_Archaea_nonna$coding_bases)*1000000
+
+#IT_Archaea_finite<- IT_Archaea[is.finite(IT_Archaea$mega_coding_bases_per_antiporter),]
+median(IT_Archaea_nonna$antiporter_per_megabases)
+#hist(IT_Archaea_nonna$antiporter_per_megabases,  breaks = 100) + abline(v = 2.101579, col = "blue", lwd = 2, lty = 2)
+ 
+#summary(IT_Archaea_finite$mega_bases_per_antiporter)
+#break
+
+Archaea_mb <- aggregate(IT_Archaea_nonna$coding_bases/1000000, by=list(Category=IT_Archaea_nonna$Phyla), FUN=sum)
+
+Archaea_mb<- Archaea_mb %>% rename(
+    Phyla = Category,
+    total_mb=x)
+
+
+Archaea_antiporters <- aggregate(IT_Archaea_nonna$Antiporter_count, by=list(Category=IT_Archaea_nonna$Phyla), FUN=sum)
+
+Archaea_antiporters<- Archaea_antiporters %>% rename(
+    Phyla = Category,
+    total_CPA=x)
+Archaea_average_ap_mb <-merge(Archaea_antiporters, Archaea_mb, by = 'Phyla')
+
+Archaea_average_ap_mb$averages <- Archaea_average_ap_mb$total_CPA/Archaea_average_ap_mb$total_mb
+```
+
+
+```{r Generate boxplot using cleaned Archaea set}
+ITAclean<- ggplot(IT_Archaea_clean, aes(y=`Completeness(%)`, x=CPA_presence, fill=CPA_presence)) + geom_boxplot(outlier.alpha = 0.01,lwd=3) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal() + ggtitle('Completeness Archaea')  + 
+  theme(plot.title = element_text(size = 20, face = "bold")) + theme(axis.text.x = element_text(color = "black", size = 50, angle = 0, hjust = .5, vjust = .5, face = "bold"),
+                                                                     axis.text.y = element_text(color = "black", size = 30, angle = 0, hjust = 1, vjust = 0, face = "plain"), 
+                                                                     axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = 0, face = "bold"),
+                                                                     axis.title.y = element_text(color = "black", size = 40, angle = 90, hjust = .5, vjust = .5, face = "bold"))+ ylim(40,100) +theme(plot.title = element_text(size = 50, face = "bold",hjust = 0.5)) +
+  theme(plot.title = element_text(size = 50, face='bold' ),
+        plot.subtitle = element_text(size = 20)) +theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
+ITAclean
+```
+
+```{r}
+group_by(IT_Archaea_clean, CPA_binary)  %>%   summarise(
+    count = n(),
+    median = median(`Completeness(%)`, na.rm = TRUE),
+    mean = mean(`Completeness(%)`, na.rm = TRUE),
+    IQR = IQR(`Completeness(%)`, na.rm = TRUE)
+  )
+
+#cannot run Shapiro -wilk since data > 5000
+
+hist(IT_Archaea_clean[IT_Archaea_clean$CPA_binary==1,]$`Completeness(%)`, main = "Distribution of Completeness, with CPA", col= 'green')
+hist(IT_Archaea_clean[IT_Archaea_clean$CPA_binary==0,]$`Completeness(%)`, main = "Distribution of Completeness, without CPA", col= 'red')
+#shows a skewed towards 100
+
+res.ftest <- var.test(`Completeness(%)` ~ CPA_binary, data = IT_Archaea_clean)
+res.ftest
+#shows no equal variance
+
+res <- t.test(`Completeness(%)` ~ CPA_binary, data = IT_Archaea_clean, var.equal = FALSE)
+res
+#shows a non-zero difference in mean
+
+rest <- wilcox.test(IT_Archaea_clean$`Completeness(%)` ~ IT_Archaea_clean$CPA_binary)
+rest
+#shows a non-zero difference in distribution of values
+```
+
 
 ```{r Protein_data_wrangling_Bac}
 IT_Bacteria$IT_count <- IT_Bacteria$NhaB_count + IT_Bacteria$NhaC_count + IT_Bacteria$NhaD_count
@@ -238,6 +290,60 @@ IT_Bacteria$IT_binary[IT_Bacteria$IT_count > 0] <- 1
 IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count == 0] <- 0
 IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count >0] <- 1
 
+IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count == 0] <- 0
+IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count > 0] <-1
+```
+
+```{r Load_meta_data_bac}
+GTDB_Bac <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
+GTDB_Bac$GTDB_id <- GTDB_Bac$accession
+
+IT_Bacteria <-  merge(IT_Bacteria, GTDB_Bac, by = 'GTDB_id')
+#Antiporters_Bacteria$selected_cols_sum <- rowSums(Antiporters_Bacteria[, c("Kef", "CPA1", "CPA2","Uncharcterized", "NhaA")]) - Antiporters_Bacteria$CPA_count
+
+IT_Bacteria_clean <- IT_Bacteria[IT_Bacteria$Completeness> 90 & IT_Bacteria$Contamination < 5 & IT_Bacteria$trna_aa_count > 17,]
+
+IT_Bacteria_clean$Phyla[IT_Bacteria_clean$Phyla == 'Bacteroidota_A'] <- 'Bacteroidota'
+IT_Bacteria_clean$Phyla[IT_Bacteria_clean$Phyla == 'Desulfobacterota_B'] <- 'Desulfobacterota'
+IT_Bacteria_clean$Phyla[IT_Bacteria_clean$Phyla == 'Desulfobacterota_I'] <- 'Desulfobacterota'
+rm(GTDB_Bac)
+
+```
+
+```{r}
+IT_Bacteria_nonna  <- IT_Bacteria[IT_Bacteria$Antiporter_binary == 1,]
+IT_Bacteria_nonna$antiporter_per_megabases <- (IT_Bacteria_nonna$Antiporter_count/IT_Bacteria_nonna$coding_bases)/1000000
+
+#IT_Bacteria_finite<- IT_Bacteria[is.finite(IT_Bacteria$mega_coding_bases_per_antiporter),]
+median(IT_Bacteria_nonna$antiporter_per_megabases)
+#hist(IT_Bacteria_nonna$antiporter_per_megabases,  breaks = 100) + abline(v = 1.37, col = "blue", lwd = 2, lty = 2)
+```
+
+```{r}
+group_by(IT_Bacteria_clean, CPA_binary)  %>%   summarise(
+    count = n(),
+    median = median(`Completeness(%)`, na.rm = TRUE),
+    mean = mean(`Completeness(%)`, na.rm = TRUE),
+    IQR = IQR(`Completeness(%)`, na.rm = TRUE)
+  )
+
+#cannot run Shapiro -wilk since data > 5000
+
+hist(IT_Bacteria_clean[IT_Bacteria_clean$CPA_binary==1,]$`Completeness(%)`, main = "Distribution of Completeness, with CPA", col= 'green')
+hist(IT_Bacteria_clean[IT_Bacteria_clean$CPA_binary==0,]$`Completeness(%)`, main = "Distribution of Completeness, without CPA", col= 'red')
+#shows a skewed towards 100
+
+res.ftest <- var.test(`Completeness(%)` ~ CPA_binary, data = IT_Bacteria_clean)
+res.ftest
+#shows no equal variance
+
+res <- t.test(`Completeness(%)` ~ CPA_binary, data = IT_Bacteria_clean, var.equal = FALSE)
+res
+#shows a non-zero difference in mean
+
+rest <- wilcox.test(IT_Bacteria_clean$`Completeness(%)` ~ IT_Bacteria_clean$CPA_binary)
+rest
+#shows a non-zero difference in distribution of values
 ```
 
 ```{r}
@@ -261,12 +367,45 @@ res.ftest
 #no equal variance can be assumed
 
 #any adjusted R-squared below 0.05 will not be mentioned
-res <- t.test(`Completeness(%)` ~ CPA_binary, data = IT_Bacteria, var.equal = FALSE)
+res <- t.test(`Completeness(%)` ~ CPA_binary, data = IT_Bacteria, var.equal =FALSE)
 res
 #a non-zero, significant difference in completeness between species with and without CPA
 
 res <- wilcox.test(IT_Bacteria$`Completeness(%)` ~ IT_Bacteria$CPA_binary)
 res
+
+```
+```{r Generate boxplot using cleaned Bacteria set}
+ITBclean<- ggplot(IT_Bacteria_clean, aes(y=`Completeness(%)`, x=CPA_presence, fill=CPA_presence)) + geom_boxplot(outlier.alpha = 0.01,lwd=3) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal() + ggtitle('Completeness Bacteria')  + 
+  theme(plot.title = element_text(size = 20, face = "bold")) + theme(axis.text.x = element_text(color = "black", size = 50, angle = 0, hjust = .5, vjust = .5, face = "bold"),
+                                                                     axis.text.y = element_text(color = "black", size = 30, angle = 0, hjust = 1, vjust = 0, face = "plain"), 
+                                                                     axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = 0, face = "bold"),
+                                                                     axis.title.y = element_text(color = "black", size = 40, angle = 90, hjust = .5, vjust = .5, face = "bold"))+ ylim(40,100) +theme(plot.title = element_text(size = 50, face = "bold",hjust = 0.5)) +
+  theme(plot.title = element_text(size = 50, face='bold' ),
+        plot.subtitle = element_text(size = 20)) +theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
+ITBclean
+
+library(gridExtra)
+ITmergedclean <-grid.arrange(ITAclean, ITBclean, nrow = 2)
+ITmergedclean
+```
+
+```{r}
+for2 <- lm(formula = Antiporter_count ~ coding_bases, data = IT_Bacteria_clean)
+summary(for2)
+
+for1 <- lm(formula = Antiporter_count ~ coding_bases, data = IT_Archaea_clean)
+summary(for1)
+
+for3 <- lm(formula = antiporter_per_megabases ~ coding_bases, data = IT_Archaea_nonna)
+summary(for3)
+
+
+for4 <- lm(formula = antiporter_per_megabases ~ coding_bases, data = IT_Bacteria_nonna)
+summary(for4)
+```
+
+```{r}
 #a true shift in distribution of the completeness can be found between species with and without CPA
 
 LM1xB<- lm(CPA_binary  ~ IT_binary, data=IT_Bacteria)
@@ -277,7 +416,28 @@ LM2xB<- lm(CPA_binary  ~ `Completeness(%)`, data=IT_Bacteria)
 summary(LM2xB)
 #completeness and CPA presence are significantly correlated
 
-LM3xB<- lm(CPA_binary  ~ Phyla, data=IT_Bacteria)
+#LM3xB<- lm(CPA_binary  ~ Phyla, data=IT_Bacteria)
+#summary(LM3xB)
+#CPA presence and phyla are significantly correlated with a adjusted R squared of 0.1545
+
+LM4xB<- lm(CPA_count  ~ IT_count, data=IT_Bacteria)
+summary(LM4xB)
+#CPA count and IT count are significantly correlated
+```
+
+
+```{r}
+#a true shift in distribution of the completeness can be found between species with and without CPA
+
+LM1xB<- lm(CPA_binary  ~ IT_binary, data=IT_Bacteria)
+summary(LM1xB)
+#CPA presence and IT presence are significantly correlated
+
+LM2xB<- lm(CPA_binary  ~ `Completeness(%)`, data=IT_Bacteria)
+summary(LM2xB)
+#completeness and CPA presence are significantly correlated
+
+#LM3xB<- lm(CPA_binary  ~ Phyla, data=IT_Bacteria)
 #summary(LM3xB)
 #CPA presence and phyla are significantly correlated with a adjusted R squared of 0.1545
 
@@ -285,6 +445,7 @@ LM4xB<- lm(CPA_count  ~ IT_count, data=IT_Bacteria)
 summary(LM4xB)
 #CPA count and IT count are significantly correlated
 
-LM5xB<- lm(CPA_count  ~ Phyla, data=IT_Bacteria)
+#LM5xB<- lm(CPA_count  ~ Phyla, data=IT_Bacteria)
 #summary(LM5xB)
 ```
+
