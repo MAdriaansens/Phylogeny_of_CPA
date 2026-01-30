@@ -9,8 +9,9 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/fl
         sub_tax_dic = json.load(F)
         for key in sub_tax_dic.keys():
             seq_dic[key.split('_GTDB_id')[0]] = sub_tax_dic[key][2]
+            Tax_dic[key.split('_GTDB_id')[0]] = sub_tax_dic[key][1].split('tax:')[-1]
 
-            Tax_dic[key.split('_GTDB_id')[0]] = key.split('tax:')[-1]
+            
 Tax_list=[]
 for key in Tax_dic.keys():
     Tax_list.append(Tax_dic[key])
@@ -49,7 +50,7 @@ for i in items:
 print(len(multiple_list))
 print(len(singleton_list))
 replist = []
-Reps_dic = {}astDNA™ SPIN Kit for Soil (MP Biomedicals)
+Reps_dic = {}
 
 with open(MMseq, 'r') as clustermap:
     count = 0
@@ -258,14 +259,14 @@ for key in clade_dic.keys():
 
                     for entry in Reps_dic[key]:
                         UncArc_dict[entry] = 'UncArc'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/ArcUncARC_sequences.faa", "a") as UncARCout:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Arc_UncARC_sequences.faa", "a") as UncARCout:
                             sequence  = seq_dic[entry]
                             line = '>{}_{}_UncARC'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             UncARCout.write(line)
                         UncARCout.close()
                 else:
                     UncArc_dict[key] = 'UncArc'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/UncARC_sequences.faa", "a") as UncARCout:
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Arc_UncARC_sequences.faa", "a") as UncARCout:
                         sequence  = seq_dic[key]
                         line = '>{}_UncARC'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         UncARCout.write(line)
@@ -276,14 +277,14 @@ for key in clade_dic.keys():
 
                     for entry in Reps_dic[key]:
                         UncProk_dict[entry] = 'Uncharacterized_Prokarya'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/UncPROK_sequences.faa", "a") as UncPROKout:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Arc_UncPROK_sequences.faa", "a") as UncPROKout:
                             sequence  = seq_dic[entry]
                             line = '>{}_{}_UncPROK'.format(key, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             UncPROKout.write(line)
                         UncPROKout.close()
                 else:
                     UncProk_dict[key] = 'Uncharcaterized_Prokarya'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/UncPROK_sequences.faa", "a") as UncPROKout:
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Arc_UncPROK_sequences.faa", "a") as UncPROKout:
                         sequence  = seq_dic[key]
                         line = '>{}_{}_UncPROK'.format(key,Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         UncPROKout.write(line)
@@ -294,14 +295,14 @@ for key in clade_dic.keys():
                     
                     for entry in Reps_dic[key]:
                         Uncharacterized[entry] = 'Unc'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Unc_sequences.faa", "a") as Uncout:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Arc_Unc_sequences.faa", "a") as Uncout:
                             sequence  = seq_dic[entry]
                             line = '>{}_{}_Unc'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             Uncout.write(line)
                         Uncout.close()
                 else:
                     Uncharacterized[key] = 'Unc'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Unc_sequences.faa", "a") as Uncout:
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Arc_Unc_sequences.faa", "a") as Uncout:
                         sequence  = seq_dic[key]
                         line = '>{}_{}_Unc'.format(key,Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         Uncout.write(line)
