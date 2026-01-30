@@ -8,7 +8,7 @@ seq_dic = {}
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/fl_taxa/Archaea/Archaea_cpa_fl_taxa.json', 'r') as F:
         sub_tax_dic = json.load(F)
         for key in sub_tax_dic.keys():
-            seq_dic[key.split('_GTDB_id')[0]] = sub_tax_dic[key]
+            seq_dic[key.split('_GTDB_id')[0]] = sub_tax_dic[key][2]
 
             Tax_dic[key.split('_GTDB_id')[0]] = key.split('tax:')[-1]
 Tax_list=[]
