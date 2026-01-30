@@ -14,7 +14,9 @@ for diction in os.listdir('/nesi/nobackup/uc04105/new_databases_May/final_tree_s
 
                     Tax_dic[key.split('_GTDB_id')[0]] = key.split('tax:')[-1]
 #load all representatives
-
+Tax_list=[]
+for key in Tax_dic.keys():
+    Tax_list.append(Tax_dic[key])
 MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/MMseq/Bacteria_all_hmmscanned_aligned_treeinput_clusterd_at_0.7.faa_cluster.tsv'
 rep_list = []
 
