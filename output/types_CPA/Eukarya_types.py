@@ -254,6 +254,7 @@ for key in clade_dic.keys():
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/Unc_Euksequences.faa", "a") as Unc:
                         sequence  = seq_dic[key]
                         line = '>{}_{}_Unc'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        Unc.write(line)
 
 
 
