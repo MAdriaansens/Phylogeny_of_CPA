@@ -23,7 +23,7 @@ _
 We also downloaded the meta data for ar53 and bac120, this contains taxonomic data, completeness etc and will be used to generate the proteomic databases.
 
 A .faa database was created first after which a .tsv file was created matching the protein id with the original id, sequence, gtdb_id, and gtdb taxonomy.
-For Archaea and Bacteria the proteome files were seperated using Database_creation/Subset_Fasta_DB.py. 
+For Archaea and Bacteria the proteome files were seperated using Database_creation/Subset_Fasta_DB.py and Chunk_Bacteria.py. 
 For Bacteria the database was subsetted into 61 files (*.faa and *.tsv) while Archaea was subsetted into 12 *.faa files, to allow for parallel processing.
 
 Eukarya data was downloaded by Euk_proteomes_download.py using NCBI ftp links, available in Database_creation/Eukarya/Eukararya_db.tsv.xlsx
