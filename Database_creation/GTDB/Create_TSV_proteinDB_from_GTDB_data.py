@@ -20,7 +20,7 @@ with open('{}'.format(tsv_file)) as dataset:
             dictionary[(i.split('\t')[17])] = (i.split('\t')[19]).replace(' ', '_')
 
 
-header = 'GTDB_id' + '\t' + 'GTDB_taxonomy' + '\t' + 'Protein_id_GTDB' + '\t' + 'Sequence' + '\t' + 'Protein_id_annotation' + '\n'
+header = 'Protein_id_annotation' + '\t' + 'Protein_id_GTDB' + '\t' + 'taxonomy' + '\t' + 'GTDB_ID' + '\t' + 'Sequence' + '\n'
 
 with open(outfile, 'a') as f:
    f.write(header)
