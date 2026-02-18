@@ -12,9 +12,9 @@ After which this homology searches will be performed
 
 Explaining each directory:
 
-**Database_creation: **
-
-**GTDB**
+**Database creation
+**
+**GTDB.**
 GTDB proteomic data of representatives was downloaded using -wget from GTDB-Downloads (https://gtdb.ecogenomic.org/downloads).
 wget https://data.gtdb.ecogenomic.org/releases/release220/220.0/genomic_files_reps/gtdb_proteins_aa_reps_r220.tar.gz 
 
@@ -22,7 +22,7 @@ _(we recommend doing the downloading and unzipping in a bash script).
 _
 We also downloaded the meta data for ar53 and bac120, this contains taxonomic data, completeness etc and will be used to generate the proteomic databases.
 
-A .faa database was created first after which a .tsv file was created matching the protein id with the original id, gtdb_id and gtdb taxonomy.
+A .faa database was created first after which a .tsv file was created matching the protein id with the original id, sequence, gtdb_id, and gtdb taxonomy.
 For Archaea and Bacteria the proteome files were seperated using Database_creation/Subset_Fasta_DB.py. 
 For Bacteria the database was subsetted into 61 files (*.faa and *.tsv) while Archaea was subsetted into 12 *.faa files, to allow for parallel processing.
 
@@ -31,7 +31,7 @@ We generated, for each taxonomic domain, a fasta file with all the sequences and
 (done using Database_creation/Eukarya/Create_EukDB.py, Create_TSV_proteinDB_fromGTDB_data.py)
 
 
-**Pfam**
+**Pfam.**
 Pfam HMMs were downloaded manually and sequences of each pfam were downloaded using a perl script as provided by Pfam.
 Code is available on Database_creation/Pfam. After creation of inhouse HMMs these HMMs were concatenated to the PFAM HMMdb and HMMpressed so it can be used for HMMscan in the future.
 
