@@ -14,7 +14,9 @@ Explaining each directory:
 Database_creation: 
 
 
-GTDB data was downloaded using -wget from GTDB-Downloads (https://gtdb.ecogenomic.org/downloads)
+GTDB data was downloaded using -wget from GTDB-Downloads (https://gtdb.ecogenomic.org/downloads).
+wget https://data.gtdb.ecogenomic.org/releases/release220/220.0/genomic_files_reps/gtdb_proteins_aa_reps_r220.tar.gz
+
 Eukarya data was downloaded by Euk_proteomes_download.py using NCBI ftp links, available in Database_creation/Eukarya/Eukararya_db.tsv.xlsx
 
 We generated, for each taxonomic domain, a fasta file with all the sequences and a .tsv file containing the original protein id, the species id and species name was made.
