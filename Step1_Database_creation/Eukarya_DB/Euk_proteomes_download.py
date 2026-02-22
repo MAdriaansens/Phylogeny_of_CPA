@@ -14,5 +14,5 @@ with open(Euk_db, 'r') as E:
             print('direct downloading: {}'.format(line.split('\t')[1]))
             download_link = line.split('\t')[-1].split('\n')[0]
             subprocess.run(['wget', '{}'.format(download_link)])
-
+print(JGI_list)
 #Proteomonas_sulcata and Mastigamoeba_balamuthi need some small edits or help
