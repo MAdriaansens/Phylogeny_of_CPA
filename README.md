@@ -1,13 +1,29 @@
-All starting data is publically available data. 
-Resources used include HMMs and sequences from Pfam and proteomes/metadata from GTDB. 
-NCBI proteomes/genomes was used to generate most of the Eukaryotic database.
+Kia ora, 
+This is the github of the Phylogeny of CPA manuscript.
 
+All starting data is publicly available data. 
+Resources used include HMMs and sequences from Pfam and proteomes/metadata from GTDB. 
+The Eukaryotic database was generated using NCBI proteomes/genomes.
+
+The process has 5 major steps. 
+
+1) Database generation
+2) In house HMM generation
+3) Homology searches
+4) Data processing into figures
+5) Peparing sequences for and performing Tree inference
+6) RED tree inference
+   
 On 16th of April 2025 GTDB released its latest version GTDB 226.
 On 5th May 2025 we started downloading this data, this included:
          - all metadata from Archaea and Bacteria
          - the proteomes from all representatives
+         
+On the 6th of May 2025 the Eukaryotic proteomes were downloaded.
+Mitochondrial, Chloroplast and other non-chromosomal nucleotide sequences were downloaded on 14th of Ocotber 2025.
 
-After succesfull download all data will be compiled into a proteome database and tsv for both Archaea and Bacteria
+After succesfull download all proteomic data will be compiled into a proteome database and tsv for both Archaea and Bacteria.
+
 After which this homology searches will be performed
 
 Explaining each directory:
