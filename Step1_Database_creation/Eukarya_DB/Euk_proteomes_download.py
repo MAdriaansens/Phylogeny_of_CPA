@@ -1,5 +1,8 @@
 #code for downloading all Euk proteomes expect for the ones from Joint Genome Institute or University of Ghent
 
+#input Eukarya_metadata.tsv
+#output below 245 proteomes downloaded, some need manual downloads, this is noted in the .tsv file itself. 
+
 Euk_db = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_metadata.tsv'
 import subprocess
 JGI_list = []
