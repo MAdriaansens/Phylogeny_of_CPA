@@ -32,4 +32,5 @@ It also generates two files:
 245 proteomes.
 
 A database of eukaryotic proteomes with sequence ids agnostic of species origin.
+
 A .tsv file containing the new protein id, taxonomy, and sequence (among other information)
