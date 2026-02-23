@@ -11,10 +11,10 @@ out_tsv = '/nesi/nobackup/uc04105/database/Euk_db_7April/Euk_db_7April_protein.t
 out_db = '/nesi/nobackup/uc04105/database/Euk_db_7April/Euk_db_7April.fasta'
 len(File_list)
 
-with open(out_tsv, 'a') as O:
+with open(out_tsv, 'w') as O:
     header = 'Protein_id' + '\t' + 'Species_name' + '\t' +  'original_prot_id' + '\t' + 'Larger_grouping' + '\t' + 'NCBI_taxonomy' + '\t' + 'Sequence' + '\n'
     O.write(header)
-    with open(out_db, 'a') as F:
+    with open(out_db, 'w') as F:
         prot_count = 0
         #internal count of proteins
         with open(TSV_db, 'r') as T:
@@ -22,7 +22,9 @@ with open(out_tsv, 'a') as O:
             next(T, None)
             for i in T:
                 Download_link = i.split('\t')[-2]
+                #this is done to watch for any .gz which got left over
                 if '.gz' not in Download_link:
+                    #some proteome names are a bit different, this accounts for it
                     if 'protein.faa' in Download_link:
                         matching_file = Download_link.split('/')[-2] +'_protein.faa'
                     elif 'El_Paco' in Download_link:
@@ -47,7 +49,8 @@ with open(out_tsv, 'a') as O:
                     prot_count = prot_count + 1
                     FLine = '>' + Protein_id + '\n' + sequence + '\n' 
                     F.write(FLine)
-
+                    
+#this is here to check to make sure stuff makes sense. 
                 #print(Name, matching_file)
                 #if matching_file in File_list:
                     #count = count + 1
