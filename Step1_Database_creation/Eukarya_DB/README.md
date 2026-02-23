@@ -10,7 +10,7 @@ As well as Carlos Santana-Molina (https://www.nature.com/articles/s41559-025-026
 For some species NCBI does not contain proteomic data but JGI or other data sources might (i.e. the JGI download list). Thus do not expect the downloading to be completely automated.
     We strongly suggested using wc -l to assess presence of all 245 species.
 
-    ls -lh */* | wc -lh
+    ls -lh */* | wc -l
 
 After you have made sure you have downloaded all 245 files (be aware some might be zip files and or in subdirectories) we start step 2.
 
