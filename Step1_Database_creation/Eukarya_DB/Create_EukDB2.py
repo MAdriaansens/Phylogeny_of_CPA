@@ -1,8 +1,10 @@
 import os
 from Bio import SeqIO
 
+#input the Eukarya_metadata.tsv
+#output a tsv file and fasta file containing data and sequences of the 245 eukaryotic sequences. 
 
-TSV_db = '/home/mad149/Eukarya_db.tsv'
+TSV_db = '/home/mad149/Eukarya_metadata.tsv'
 Prot_dir = '/home/mad149/new_euk'
 File_list = os.listdir(Prot_dir)
 out_tsv = '/nesi/nobackup/uc04105/database/Euk_db_7April/Euk_db_7April_protein.tsv'
