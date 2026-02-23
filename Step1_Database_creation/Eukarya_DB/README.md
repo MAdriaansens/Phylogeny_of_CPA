@@ -27,7 +27,7 @@ It also generates two files:
   1. A protein database of all eukaryotic sequences (with sequence ids agnostic of species (Euk))
   2. A tsv file containing taxonomic data, species id, protein id and sequence (feel free to edit the name of the protein how ever you want)
 
-After running both scripts and doing some testing you should have:
+**After running both scripts and doing some testing you should have:**
 
 245 proteomes.
 A database of eukaryotic proteomes with sequence ids agnostic of species origin
