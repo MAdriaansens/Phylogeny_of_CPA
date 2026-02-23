@@ -17,13 +17,13 @@ After you have made sure you have downloaded all 245 files (be aware some might 
 **Step 2**
 
 Actually creating and naming the proteomic files. 
-This is done using Create_EukDB2.py, which takes the downloaded proteomes, and using data in the Eukarya_metadata.tsv renames the proteome.
+This is done using Create_EukDB2.py, which takes the downloaded proteomes.
 It also generates two files: 
   1. A protein database of all eukaryotic sequences (with sequence ids agnostic of species (Euk))
   2. A tsv file containing taxonomic data, species id, protein id and sequence (feel free to edit the name of the protein how ever you want)
 
 After running both scripts and doing some testing you should have:
 
-245 proteomes labeled for the species they were from.
+245 proteomes.
 A database of eukaryotic proteomes with sequence ids agnostic of species origin
 A .tsv file containing the new protein id, taxonomy, and sequence (among other information)
