@@ -10,6 +10,6 @@ Run the perl script in bash.
 
 It is also possible to generate a python script, however sometimes Pfam generates a faulty script. 
 
-All Pfam sequences were downloaded and outputted in the .out of the bash script.
-Using
-    mv Output
+All Pfam sequences were downloaded and outputted in the .out of the bash script. Use bash commands to move it into the correct format
+
+          mv slurm_output/perl03600_output%A.out > PF03600_sequences.fasta
