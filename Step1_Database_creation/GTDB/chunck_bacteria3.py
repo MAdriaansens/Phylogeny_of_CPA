@@ -1,6 +1,7 @@
 import pandas as pd
 import os
-
+#input is the singular .csv file
+#output are multiple .csv files
 def split_csv(file_path, chunk_size=1000):
     """Splits a CSV file into smaller chunks.
 
@@ -14,6 +15,7 @@ def split_csv(file_path, chunk_size=1000):
     
     chunk_number = 1
     for chunk in reader:
+        #name can be changed we went with chunks
         chunk.to_csv(f"{file_name}_chunk_{chunk_number}{file_extension}", index=False)
         chunk_number += 1
         
