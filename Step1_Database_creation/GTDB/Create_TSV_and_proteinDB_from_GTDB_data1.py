@@ -2,8 +2,8 @@ import os
 from Bio import SeqIO
 import sys
 
-#this requires that you got the metadata as well as the whole GTDB proteome
-#the tsv can then be run to generate the db in a fasta format
+#input required: all proteomes from Bacteria or Archaea downloaded, the metadata file
+#ouput a .tsv file containing species information, gtdb ID etc. 
 
 tsv_file = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv'
 dir_files = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/protein_faa_reps/bacteria'
