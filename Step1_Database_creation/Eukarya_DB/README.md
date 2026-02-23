@@ -30,5 +30,6 @@ It also generates two files:
 **After running both scripts and doing some testing you should have:**
 
 245 proteomes.
-A database of eukaryotic proteomes with sequence ids agnostic of species origin
+
+A database of eukaryotic proteomes with sequence ids agnostic of species origin.
 A .tsv file containing the new protein id, taxonomy, and sequence (among other information)
