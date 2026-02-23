@@ -37,6 +37,7 @@ _You can determine the number of subsets and the name of the subsets yourself._
 
 **Step3.**
 Run chunk_bacteria3.py
+
 Takes as input the .tsv database and spits out subsets
 
 _You can determine the number of subsets and the name of the subsets yourself._
