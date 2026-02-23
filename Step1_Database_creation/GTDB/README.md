@@ -21,8 +21,7 @@ _In theory you could stop here but with the size of Bacteria and Archaea databas
 
 !! both scripts we use ask for a ceratin size of the chunks make sure they are the same in step2 and step3 !!
 
-**Step2.**
-
+**Step2.** 
 Run Subset_Fasta_DB2.py
 
 Takes as input the *.fasat proteomic database and spits out subsets.
