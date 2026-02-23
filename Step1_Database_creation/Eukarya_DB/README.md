@@ -7,8 +7,10 @@ As well as Carlos Santana-Molina (https://www.nature.com/articles/s41559-025-026
   The Euk_proteomes_download1.py script basically reads the Eukarya_db.tsv.xlsx.
     It takes the ftp link and runs 'wget' to download sequences. It also spits out a list of species who need JGI downloads. 
     
-    For some species NCBI does not contain proteomic data but JGI or other data sources might (i.e. the JGI download list). Thus do not expect the downloading to be completely automated.
+For some species NCBI does not contain proteomic data but JGI or other data sources might (i.e. the JGI download list). Thus do not expect the downloading to be completely automated.
     We strongly suggested using wc -l to assess presence of all 245 species.
+
+    ls -lh */* | wc -lh
 
 After you have made sure you have downloaded all 245 files (be aware some might be zip files and or in subdirectories) we start step 2.
 
