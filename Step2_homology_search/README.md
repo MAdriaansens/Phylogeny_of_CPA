@@ -14,6 +14,8 @@ The search methods differ between CPA and IT.
   3) Wether the .tsv file is MMseq or HMMsearch
   4) the name of your output
 
+#due to eukarya database tsv and bacteria/archaea database tsv being formatted differntly a different getting_fasta_from_hit.py is needed when running against Eukarya or Prokarya.
+
     python getting_fasta_from_hit.py PF03600_MMseqs_e03_vsEukarya_initialsearch.tsv MMSEQ Euk_db_7April_protein.tsv PF03600_MMseqs_e03_vsEukarya_initialsearch.fasta
   **Step 2.**  Concatenate the Bacterial, Eukaryotic and Archaeal sequences into one, using: 
 
