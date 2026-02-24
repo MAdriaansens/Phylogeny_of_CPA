@@ -19,14 +19,16 @@ The search methods differ between CPA and IT.
     python getting_fasta_from_hit.py PF03600_MMseqs_e03_vsEukarya_initialsearch.tsv MMSEQ Euk_db_7April_protein.tsv PF03600_MMseqs_e03_vsEukarya_initialsearch.fasta
   **Step 2.**  Concatenate the Bacterial, Eukaryotic and Archaeal sequences into one, using: 
 
-        cat */*/PF03600*fasta > PF03600_vs_all_mergedHMM_mergedMMseq.fasta
-  **Step 3** Run another MMseq search using the merged file as query and each database as subject. Retrieve these sequences per database. 
+    cat */*/PF03600*fasta > PF03600_vs_all_mergedHMM_mergedMMseq.fasta
+  **Step 3** Run another MMseq search using the merged file as query and each database as subject. Retrieve these sequences per database.
+  _(this can be done by adding getting_fasta_from_hit.py)_
+  
 
   Step 4. Per database run the retrieved against the database again (iterative MMseqs2 search). Retrieve these sequences.
 
   Step 5. Run a quality control by aligning the sequences against their respective HMM, so for PF03600:
           
-          hmmalign PF03600_Euksequences_vsPF03600.sthk PF03600 PF03600_Euksequences_iterativeMMseqs_Eukarya.faa
+    hmmalign PF03600_Euksequences_vsPF03600.sthk PF03600 PF03600_Euksequences_iterativeMMseqs_Eukarya.faa
           
   #then we use a script to retrieve the aligned sequence called parse_stockholm.py. The script only retrieves the part of the sequences which has aligned with the HMM (this will be used for HMMscan later on).
   It requires three inputs.
@@ -34,7 +36,7 @@ The search methods differ between CPA and IT.
   2) the name you want to give to the output
   3) the 70% cut off, so if a sequence does not align for more than 70% it gets passed. For PF03600 the HMM is 336 aa so the threshold is 236.
      
-          python parse_stockholm.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
+    python parse_stockholm.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
   Step 6. Run HMMscan using the aligned part of the sequences instead of the full length protein. 
 
   Step 7. Assess if the HMMscan returns the Pfam HMM as best hit _(in this case PF03600)._
