@@ -1,7 +1,7 @@
 **Homology search for CPA and IT homologs**
 
 The search methods differ between CPA and IT. 
-**IT is x steps:**  
+**IT is 7 steps:**  
 
   **Step 0.** Download Pfam HMM and Pfam sequences (as detailed in Pfam). 
 
