@@ -4,7 +4,7 @@ This directory contains 2 subdirectories (for Pfam and Inhouse HMM), as well as 
 Step2 is a bash command, Step3 and Step4 are repeats of Step1s MMseqs2 search. 
 The search methods differ between CPA and IT. 
 **IT is 7 steps:**  
-**CPA is identical but in Step 1 aside from the HMMsearch using Pfam and the MMseq search using Pfam, we also run a HMMsearches using three CPA specific HMMs. Step1***
+**CPA is identical but in Step 1 aside from the HMMsearch using Pfam and the MMseq search using Pfam, we also run a HMMsearches using three CPA specific HMMs. THis the Step1* commandline script**
 
 _Generation of the inhouse HMM is outlined in Step2* HMM generation_
  
