@@ -24,9 +24,9 @@ The search methods differ between CPA and IT.
   _(this can be done by adding getting_fasta_from_hit.py)_
   
 
-  Step 4. Per database run the retrieved against the database again (iterative MMseqs2 search). Retrieve these sequences.
+  **Step 4.** Per database run the retrieved against the database again (iterative MMseqs2 search). Retrieve these sequences.
 
-  Step 5. Run a quality control by aligning the sequences against their respective HMM, so for PF03600:
+ **Step 5.** Run a quality control by aligning the sequences against their respective HMM, so for PF03600:
           
     hmmalign PF03600_Euksequences_vsPF03600.sthk PF03600 PF03600_Euksequences_iterativeMMseqs_Eukarya.faa
           
@@ -37,7 +37,7 @@ The search methods differ between CPA and IT.
   3) the 70% cut off, so if a sequence does not align for more than 70% it gets passed. For PF03600 the HMM is 336 aa so the threshold is 236.
      
     python parse_stockholm.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
-  Step 6. Run HMMscan using the aligned part of the sequences instead of the full length protein. 
+  **Step 6.** Run HMMscan using the aligned part of the sequences instead of the full length protein. 
 
-  Step 7. Assess if the HMMscan returns the Pfam HMM as best hit _(in this case PF03600)._
+  **Step 7.** Assess if the HMMscan returns the Pfam HMM as best hit _(in this case PF03600)._
       Using a python script ......... (TOD0)
