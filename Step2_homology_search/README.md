@@ -7,6 +7,8 @@ The search methods differ between CPA and IT.
 **CPA is identical but in Step 1 aside from the HMMsearch using Pfam and the MMseq search using Pfam, we also run a HMMsearches using three CPA specific HMMs.**
 
 _Generation of the inhouse HMM is outlined in Step2* HMM generation_
+ 
+  
   **Step 0.** Download Pfam HMM and Pfam sequences (as detailed in Pfam). 
 
   **Step 1.** Run MMseqs and HMMsearch with the Pfam HMM and HMM sequences as query against all three databases.Retrieve the sequences hit using getting_fasta_from_hit.py
