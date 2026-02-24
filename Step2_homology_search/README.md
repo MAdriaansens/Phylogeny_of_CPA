@@ -1,5 +1,7 @@
 **Homology search for CPA and IT homologs**
 
+This directory contains 2 subdirectories (for Pfam and Inhouse HMM), as well as scripts for Step1, Step5, Step6 and Step7. 
+Step2 is a bash command, Step3 and Step4 are repeats of Step1s MMseqs2 search. 
 The search methods differ between CPA and IT. 
 **IT is 7 steps:**  
 
