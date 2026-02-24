@@ -21,7 +21,7 @@ Seq=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/sequences
 #---------------------------------------------------------NhaC------------------------------------------------------------------------------------------------
 module load MMseqs2/15-6f452-gompi-2023a
 
-mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}/PF03553_NhaC_sequences.fasta  ${Arc_db} ${MMseqs}/PF03553_NhaCvsArchaea_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv tmp
+mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}/PF03553_NhaC_sequences.fasta  ${Arc_db} ${MMseqs}/PF03553_NhaCvsArchaea_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv ${array[$SLURM_ARRAY_TASK_ID]}_Arc_tmp
 
 module load Python/3.11.3-gimkl-2022a
 
@@ -40,7 +40,7 @@ python getting_fasta_from_hit_extra_Arc.py ${HMMsearch}/PF03553_NhaChmmvs_vsArch
 #---------------------------------------------------------NhaB-----------------------------------------------------------------------------------------------
 module load MMseqs2/15-6f452-gompi-2023a
 
-mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}/PF06450_NhaB_sequences.fasta  ${Arc_db} ${MMseqs}/PF06450_NhaBvsArchaea_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv tmp
+mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}/PF06450_NhaB_sequences.fasta  ${Arc_db} ${MMseqs}/PF06450_NhaBvsArchaea_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv ${array[$SLURM_ARRAY_TASK_ID]}_Arc_tmp
 
 module load Python/3.11.3-gimkl-2022a
 
@@ -60,7 +60,7 @@ python getting_fasta_from_hit_extra_Arc.py ${HMMsearch}/PF06450_NhaBhmmvs_vsArch
 #---------------------------------------------------------NhaD------------------------------------------------------------------------------------------------
 module load MMseqs2/15-6f452-gompi-2023a
 
-mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}/PF03600_NhaD_sequences.fasta  ${Arc_db} ${MMseqs}/PF03600_NhaDvsArchaea_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv tmp
+mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}/PF03600_NhaD_sequences.fasta  ${Arc_db} ${MMseqs}/PF03600_NhaDvsArchaea_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv ${array[$SLURM_ARRAY_TASK_ID]}_Arc_tmp
 
 module load Python/3.11.3-gimkl-2022a
 
