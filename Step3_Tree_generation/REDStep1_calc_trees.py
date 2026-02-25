@@ -28,6 +28,8 @@ for clade in tree.find_clades():
         clade.name = str(count)
         count = count + 1
 
+#this is the point where normalization starts
+#for a more detailed explanation on how RED is calculated check out the github of GTDB or the Parks et al.2016paper
 def get_parent(tree, child_clade):
     node_path = tree.get_path(child_clade)
 
@@ -70,6 +72,9 @@ print('red done')
 
 
 import json
+
+#here i basically loop over the entire red tree and take values like: number of extant taxa, red value, branch length, red branch length and bootstrap into one tsv file.
+#this file is essential for downstream processing. 
 
 #important file when generating and calling clades later on
 with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/info_RED_clades_CPA_phylogeny_FTtree_3Nov.tsv', 'w') as C:
