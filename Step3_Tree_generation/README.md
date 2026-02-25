@@ -39,15 +39,15 @@ This is one of the more complicated scripts but here is the tldr:
    
 2. Then we start calculating the values needed for RED normalization (number of extant taxa, branch length, mean distance of extant branches). These values are then used as input in a formula for the Relative Evolutionary Distance (RED) from the root of a given node.  Github of GTDB does a better explainer
    
-3. This results in each clade getting a red value. From this the RED branch lengths are determined since if you know the RED of the parent node and the RED of the extant node the difference is the RED normalized branch length. (this is normalized since the termini always ends in 1 and the root always is 0).
+3. This results in each clade getting a red value. From this the RED branch lengths are determined since if you know the RED of the parent node and the RED of the extant node the difference is the RED normalized branch length. (this is normalized since the termini always ends in 1 and the root always is 0). Output RED tree is: **CPA_phylogeny_midrootTREE_ALIGEDRED_7Nov_ft_lg_cat_gamma.nw**
    
-4. We take all the tree based values and then put them into a .tsv file called info_RED_clades_CPA_phylogeny_FTtree_{date}.tsv
+4. We take all the tree based values and then put them into a .tsv file called **info_RED_clades_CPA_phylogeny_FTtree_{date}.tsv**
 
 **REDStep2. Calling RED caldes.**
 **Input **includes the RED tree and the .tsv file generated in REDStep2. 
 **Output **is an annotation file where the CPA termini is assigned to a given taxonomic group per taxonomic rank (we have 6 termini (each protein themselves), Subgroup, Group, Subclade, Subfamily, and Clade). This can be used as an annotation file alongside the original annotation file.  
-Output = Red_informed_clade_20_lg_cat_gamma_RED_interval_{date}.tsv
 
+**Output = Red_informed_clade_20_lg_cat_gamma_RED_interval_{date}.tsv**
 **Explainer**
 What the script does is that it looks to find a well-supported clade within the RED-interval (taxonomic rank) (via function: get_subset_inlcuding_terminal()).
 If it is not a node to be excluded and is not part of a preceeding node it will assign each termini the node contains that nodes id for that taxonomic rank
