@@ -60,8 +60,8 @@ _Generation of the inhouse HMM is outlined in Step2* HMM generation_
 
  This script requires the HMMscan and HMMalign of CPA, NhaB, NhaC, and NhaD from step 5 and 6. As well as the metadata.tsv file of all three taxonomic domains.
  Output is a .tsv file where eache entry per metadata file (if they are a representative) has an entry and how many CPA/NhaB/NhaC and NhaD they got. 
- This is done using the unique taxonomy id attached to the protein id and present per entry in the metadata fike. 
- This script then outputs the PF00999 HMMaligned sequences of all sequences who are high confidence CPA, this will be used later down the line in tree inference.
+ This is done using the unique taxonomy id attached to the protein id and present per entry in the metadata file. 
+ This script then outputs the .fasta file of CPA but only of the PF00999 HMMaligned sequences, this will be used later down the line in tree inference.
   
   FL sequences of CPA and everything else:
   While I did it differently I added a bit of code so you can retrieve the fl directly from this script. Using this and the HMMscan output I just ran a quick and easy jupyter note book script which retrieved all the fl for eukarya and archaea. The full length CPA sequences will be used for secondary domain detection. 
