@@ -19,4 +19,5 @@ HMMdir=/nesi/nobackup/uc04105/results/HMM
 #this is just eukarya, but can be (and has been) made iterative for Archaea and Bacteria
 hmmalign --amino --trim -o ${HMMalign}/Pfam06450_seq_Step4_vsEuk_alignedPF06450.sthk ${HMMdir}/PF06450.hmm  ${MMseqs}/PF06450_seq_Step4_e03vsEuk.faa
 
-python parse_stockholm_filter.py ${HMMalign}/Pfam06450_seq_Step4_vsEuk_alignedPF06450.sthk ${HMMalign}/Pfam06450_seq_Step4_vsEuk_alignedPF06450_Step5 235
+python parse_stockholm_filter.py ${HMMalign}/Pfam06450_seq_Step4_vsEuk_alignedPF06450.sthk ${HMMalign}/Pfam06450_seq_Step4_vsEuk_alignedPF06450_Step5_HMMscan 235
+python parse_stockholm_HMMscan.py ${HMMalign}/Pfam06450_seq_Step4_vsEuk_alignedPF06450.sthk ${HMMalign}/Pfam06450_seq_Step4_vsEuk_alignedPF06450_Step5 235
