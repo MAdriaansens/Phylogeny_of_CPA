@@ -1,3 +1,5 @@
+#run this script for Archaea/Bacteria and Eukarya for downstream application
+
 Dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226'
 Archaea = 'Archaea_GTDB226_protein_May92025.tsv'
 
