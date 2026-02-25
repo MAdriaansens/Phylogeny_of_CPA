@@ -15,9 +15,8 @@ The process has 5 major steps.
 
 1) Database generation
 2) Homology searches, 2*) In house HMM generation
-3) Data processing into figures
-4) Peparing sequences for and performing Tree inference
-5) RED tree inference
+3) (RED) tree inference
+4) Data processing and output
    
 On 16th of April 2025 GTDB released its latest version GTDB 226.
 On 5th May 2025 we started downloading this data, this included:
