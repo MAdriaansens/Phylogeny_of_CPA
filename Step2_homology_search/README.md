@@ -45,8 +45,12 @@ _Generation of the inhouse HMM is outlined in Step2* HMM generation_
   1) the stockholm file you want to parse
   2) the name you want to give to the output
   3) the 70% cut off, so if a sequence does not align for more than 70% it gets passed. For PF03600 the HMM is 336 aa so the threshold is 236.
+
+     It is important to run both parse_stockholm.py, the parse_stockholm_forHMMscan.py retrieves the ungapped version (used downstream in HMMscan)
+     while the parse_stockholm.py retrieves the gapped version used for downstream tree inference. 
      
     python parse_stockholm.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
+    python parse_stockholm_forHMMscan.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
 
     
   **Step 6.** Run HMMscan using the aligned part of the sequences instead of the full length protein. 
@@ -68,7 +72,7 @@ _Generation of the inhouse HMM is outlined in Step2* HMM generation_
  This script then outputs the .fasta file of CPA but only of the PF00999 HMMaligned sequences, this will be used later down the line in tree inference.
   
 **FL sequences of CPA and everything else:**  
-In this directory a set of scripts is available for full length of the HMMalign and any set of .....
 [Fl of NhaB/NhaC/NhaD have no downstream application and are just made available as a resource.]
   
 _For how I retrieved full length of CPAs check: output/write_fl_cpa_seq_  
+This was also used for secondary domain HMMalign and HMMscan. 
