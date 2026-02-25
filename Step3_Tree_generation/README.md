@@ -21,3 +21,6 @@ Pf00999_aligned seed = Step3_Tree_generation/SG_seed_update_jan142024_135seq_ali
     sbatch Step3_Run_FastTree.sh
 
   
+Now we perform two aspects not really part of tree inference but crucial to our analysis.
+1) Generation of annotation file
+2) Relative Evolutionary Distance normalization of the tree and inference of clades.
