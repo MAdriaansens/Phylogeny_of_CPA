@@ -46,13 +46,17 @@ _Generation of the inhouse HMM is outlined in Step2* HMM generation_
   2) the name you want to give to the output
   3) the 70% cut off, so if a sequence does not align for more than 70% it gets passed. For PF03600 the HMM is 336 aa so the threshold is 236.
 
-     It is important to run both parse_stockholm_filter.py, the parse_stockholm_forHMMscan.py retrieves the ungapped version (used downstream in HMMscan)
+     It is important to run both parse_stockholm_filter.py and the parse_stockholm_forHMMscan.py for PF009999.
+     parse_stockholm_forHMMscan.py retrieves the ungapped version (used downstream in HMMscan).
      while the parse_stockholm_filter.py retrieves the gapped version used for downstream tree inference. 
-     
-    python parse_stockholm_filter.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
-    python parse_stockholm_forHMMscan.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
 
-    
+    #for IT
+    python parse_stockholm_forHMMscan.py F03600_Euksequences_vsPF03600.sthk PF03600_Euksequences_vsPF03600aligned.fasta 236
+
+    #for CPA
+    python parse_stockholm_filter.py F00999_Euksequences_vsPF00999_step5.sthk PF00999_Euksequences_vsPF00999aligned.fasta 263
+    python parse_stockholm_forHMMscan.py F00999_Euksequences_vsPF00999_step5.sthk PF00999_Euksequences_vsPF00999aligned_forHMMscan.fasta 263
+
   **Step 6.** Run HMMscan using the aligned part of the sequences instead of the full length protein. 
 
   **Step 7.** The sequences whom pass both the HMMscan and HMMalign are the high confidence homologs. 
