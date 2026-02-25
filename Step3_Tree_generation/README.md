@@ -24,3 +24,44 @@ Pf00999_aligned seed = Step3_Tree_generation/SG_seed_update_jan142024_135seq_ali
 Now we perform two aspects not really part of tree inference but crucial to our analysis.
 1) Generation of annotation file
 2) Relative Evolutionary Distance normalization of the tree and inference of clades.
+
+
+**RED normalization**
+_Input for this is just the tree file itself._
+
+**REDStep1. RED normalization is done using REDStep1_calctrees.py**
+**input is the fasttree file generated in Step3.**
+**Output is a RED normalized tree and a tsv file contaning all associated data, used for calling clades based on RED vlaues**
+
+This is one of the more complicated scripts but here is the tldr:
+
+1. Since we are agnostic of the first CPA we just midroot the tree (this is tree dependent)
+   
+2. Then we start calculating the values needed for RED normalization (number of extant taxa, branch length, mean distance of extant branches). These values are then used as input in a formula for the Relative Evolutionary Distance (RED) from the root of a given node.  Github of GTDB does a better explainer
+   
+3. This results in each clade getting a red value. From this the RED branch lengths are determined since if you know the RED of the parent node and the RED of the extant node the difference is the RED normalized branch length. (this is normalized since the termini always ends in 1 and the root always is 0).
+   
+4. We take all the tree based values and then put them into a .tsv file called info_RED_clades_CPA_phylogeny_FTtree_3Nov.tsv
+
+**REDStep2. Calling RED caldes.**
+**Input **includes the RED tree and the .tsv file generated in REDStep2. 
+**Output **is an annotation file where the CPA termini is assigned to a given taxonomic group per taxonomic rank (we have 6 termini (each protein themselves), Subgroup, Group, Subclade, Subfamily, and Clade). This can be used as an annotation file alongside the original annotation file. 
+
+**Explainer**
+What the script does is that it looks to find a well-supported clade within the RED-interval (taxonomic rank) (via function: get_subset_inlcuding_terminal()).
+If it is not a node to be excluded and is not part of a preceeding node it will assign each termini the node contains that nodes id for that taxonomic rank
+It is possible to exclude certain nodes (you can inspect the labels in the info_RED_clades_CPA_phylogeny_FTtree_3Nov.tsv file from REDStep1)
+
+Each taxonomic rank is basically a window of RED values (or a RED-interval). If a well supported (bootstrap => 95) clade is present in this interval and it is not part of another group in that rank it will be assigned a group name. If no well-supported node is present for a given clade and it is not part of another one then it is given one of 5 labels.
+
+tbl = termini below (RED) limit, meaning that it is a termini before the red interval/limit.
+
+tal = termini after (RED) limit, meaning that it does not have a node within the red limit and only has one a node after the red interval/limit.
+
+pb = poor bootstrap,  a clade within the RED interval, but with poor bootstrap.
+
+pbt = poor bootstrap termini, meaning that this termini split of at a node in the interval but it is poorly supported.
+
+nal = node after limit, this means that it forms a node after the RED limit/interval but not in the current interval but later on.
+
+If no labels are present then it is a well supported clade within the interaval. 
