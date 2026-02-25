@@ -45,7 +45,8 @@ This is one of the more complicated scripts but here is the tldr:
 
 **REDStep2. Calling RED caldes.**
 **Input **includes the RED tree and the .tsv file generated in REDStep2. 
-**Output **is an annotation file where the CPA termini is assigned to a given taxonomic group per taxonomic rank (we have 6 termini (each protein themselves), Subgroup, Group, Subclade, Subfamily, and Clade). This can be used as an annotation file alongside the original annotation file. 
+**Output **is an annotation file where the CPA termini is assigned to a given taxonomic group per taxonomic rank (we have 6 termini (each protein themselves), Subgroup, Group, Subclade, Subfamily, and Clade). This can be used as an annotation file alongside the original annotation file.  
+Output = Red_informed_clade_20_lg_cat_gamma_RED_interval_{date}.tsv
 
 **Explainer**
 What the script does is that it looks to find a well-supported clade within the RED-interval (taxonomic rank) (via function: get_subset_inlcuding_terminal()).
