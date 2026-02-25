@@ -40,16 +40,16 @@ _Generation of the inhouse HMM is outlined in Step2* HMM generation_
           
     hmmalign PF03600_Euksequences_vsPF03600.sthk PF03600 PF03600_Euksequences_iterativeMMseqs_Eukarya.faa
           
-  #then we use a script to retrieve the aligned sequence called parse_stockholm.py. The script only retrieves the part of the sequences which has aligned with the HMM (this will be used for HMMscan later on).
+  #then we use a script to retrieve the aligned sequence called parse_stockholm_filter.py. The script only retrieves the part of the sequences which has aligned with the HMM (this will be used for HMMscan later on).
   It requires three inputs.
   1) the stockholm file you want to parse
   2) the name you want to give to the output
   3) the 70% cut off, so if a sequence does not align for more than 70% it gets passed. For PF03600 the HMM is 336 aa so the threshold is 236.
 
-     It is important to run both parse_stockholm.py, the parse_stockholm_forHMMscan.py retrieves the ungapped version (used downstream in HMMscan)
-     while the parse_stockholm.py retrieves the gapped version used for downstream tree inference. 
+     It is important to run both parse_stockholm_filter.py, the parse_stockholm_forHMMscan.py retrieves the ungapped version (used downstream in HMMscan)
+     while the parse_stockholm_filter.py retrieves the gapped version used for downstream tree inference. 
      
-    python parse_stockholm.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
+    python parse_stockholm_filter.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
     python parse_stockholm_forHMMscan.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
 
     
