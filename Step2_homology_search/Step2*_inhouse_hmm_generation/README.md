@@ -1,9 +1,7 @@
-In this directory are the CPA specific HMM per Taxonomic domain.
-They were chosen based on the number of sequences used in their alignment (for best representation)
-As well as the number of sequences passed the HMMalign when a HMMsearch was performed with these HMMs.
 
+HMMs can be found in Step2_homology_search/Inhouse_HMM
 !!The Eukarya HMM is 'Manual_seq_cov30_e050_seqid0.7_genafpair_aligned.hmm!!
-**
+
 **The premise of generating an inhouse HMM is that for CPA the diversity is still largely unmapped.**
 
 _Meaning that any HMM generated using characterized sequences will be biased._
