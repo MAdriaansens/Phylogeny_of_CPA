@@ -25,6 +25,9 @@ Now we perform two aspects not really part of tree inference but crucial to our 
 1) Generation of annotation file
 2) Relative Evolutionary Distance normalization of the tree and inference of clades.
 
+**Annotation file.**
+An annotation file is generated using hmmalign of several secondary domains associated with CPA.
+The HMMalign output is then filtered and all data is compiled by the Annotation_of_tree.py script. 
 
 **RED normalization**
 _Input for this is just the tree file itself._
