@@ -1,5 +1,9 @@
 Kia ora, 
 This is the github of the Phylogeny of CPA manuscript.
+I first want to state that this research is a collaboration and that I stand on top of the shoulders of my peers and mentors.
+In code there are many approaches to reach the same output,there are other ways of coding this github is how I did it .
+
+
 
 All starting data is publicly available data. 
 Resources used include HMMs and sequences from Pfam and proteomes/metadata from GTDB. 
