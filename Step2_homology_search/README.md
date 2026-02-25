@@ -47,6 +47,8 @@ _Generation of the inhouse HMM is outlined in Step2* HMM generation_
   3) the 70% cut off, so if a sequence does not align for more than 70% it gets passed. For PF03600 the HMM is 336 aa so the threshold is 236.
      
     python parse_stockholm.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
+
+    
   **Step 6.** Run HMMscan using the aligned part of the sequences instead of the full length protein. 
 
   **Step 7.** The sequences whom pass both the HMMscan and HMMalign are the high confidence homologs. 
@@ -58,16 +60,15 @@ _Generation of the inhouse HMM is outlined in Step2* HMM generation_
    
   We now parse both the HMMscan and HMMalign and retrieve only the sequence ids who pass both, this is done using Parse_All_antiporter_hits....py.
 
- This script requires the HMMscan and HMMalign of CPA, NhaB, NhaC, and NhaD from step 5 and 6. As well as the metadata.tsv file of all three taxonomic domains.
- Output is a .tsv file where eache entry per metadata file (if they are a representative) has an entry and how many CPA/NhaB/NhaC and NhaD they got. 
+**This script requires the HMMscan and HMMalign of CPA, NhaB, NhaC, and NhaD from step 5 and 6. As well as the metadata.tsv file of all three taxonomic domains.** 
+
+**Output is a .tsv file where each entry per metadata file (if they are a representative) has an entry and how many CPA/NhaB/NhaC and NhaD they got.** 
+
  This is done using the unique taxonomy id attached to the protein id and present per entry in the metadata file. 
  This script then outputs the .fasta file of CPA but only of the PF00999 HMMaligned sequences, this will be used later down the line in tree inference.
   
-  FL sequences of CPA and everything else:
-  While I did it differently I added a bit of code so you can retrieve the fl directly from this script. Using this and the HMMscan output I just ran a quick and easy jupyter note book script which retrieved all the fl for eukarya and archaea. The full length CPA sequences will be used for secondary domain detection. 
+**FL sequences of CPA and everything else:**  
+In this directory a set of scripts is available for full length of the HMMalign and any set of .....
+[Fl of NhaB/NhaC/NhaD have no downstream application and are just made available as a resource.]
   
-  [In a later iteration I also did the same thing for the fl of the NhaB/NhaC/NhaD, however these are not used in any downstream application]
-
-  It is also possible to run a script called Parse_stockholm_fl_filter.py which does what the original does but retrieves the full length sequences. 
-  If you know python and now how to parse a .json, fasta or .tsv file I assume you fill manage to retrieve the fl regardless. 
-  
+_For how I retrieved full length of CPAs check: output/write_fl_cpa_seq_  
