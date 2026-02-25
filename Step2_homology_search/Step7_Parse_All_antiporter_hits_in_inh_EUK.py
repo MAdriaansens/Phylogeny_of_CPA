@@ -63,6 +63,7 @@ for hmmscan in os.listdir(scandir):
         print(HMMscan)
 tax_list = []
 Pfam_hitlist = []
+#hmm allowed include the inhouse hmms
 CPA_HMM_list = ('Manual_seq_cov30_e05_seqid0.7_genafpair_aligned', 'Na_H_antiporter','Nha1_C','Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned', 'Na_H_Exchanger', 'Manual_vsBacteria_merged_e5_cov30_seqid0.6.faa_rep_seq_autoaligned','Na_H_antiport_1', 'CHX17_2nd', 'CHX17_C')
 scanned_dict = {}
 for key in scan_dict.keys():
@@ -203,6 +204,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_met
         header=  'species_name'  + '\t' + 'Major_tax' +  '\t' + 'Tax' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' +'\t' + 'NhaC_binary' +'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         for line in Meta:
+            #the names can be a bit tricky sometimes in Eukarya due to subspecies and varities.
             species_name = (line.split('\t')[1])
             if species_name == 'Agaricus_bisporus_ var. bisporus H97':
                 species_name = 'Agaricus_bisporus_'
