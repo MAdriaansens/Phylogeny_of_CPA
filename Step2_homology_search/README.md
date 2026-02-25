@@ -49,5 +49,5 @@ _Generation of the inhouse HMM is outlined in Step2* HMM generation_
     python parse_stockholm.py F03600_Euksequences_vsPF03600.sthk F03600_Euksequences_vsPF03600aligned.fasta 236
   **Step 6.** Run HMMscan using the aligned part of the sequences instead of the full length protein. 
 
-  **Step 7.** Assess if the HMMscan returns the Pfam HMM as best hit _(in this case PF03600)._
-      Using a python script ......... (TOD0)
+  **Step 7.** The sequences whom pass both the HMMscan and HMMalign are the high confidence homologs. 
+  Using a python script Step2_homology_search/Parse_All_antiporter_hits_GTDB226Bacteria(H9oB).py
