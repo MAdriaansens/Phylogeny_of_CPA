@@ -24,6 +24,7 @@ On 5th May 2025 we started downloading this data, this included:
          
 On the 6th of May 2025 the Eukaryotic proteomes were downloaded.
 Mitochondrial, Chloroplast and other non-chromosomal nucleotide sequences were downloaded on 14th of Ocotber 2025.
+These were used for a tblastn search using the seed sequences as query. (e-value 0.001)
 
 After succesfull download all proteomic data will be compiled into a proteome database and tsv for both Archaea and Bacteria.
 
