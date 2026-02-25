@@ -41,7 +41,7 @@ This is one of the more complicated scripts but here is the tldr:
    
 3. This results in each clade getting a red value. From this the RED branch lengths are determined since if you know the RED of the parent node and the RED of the extant node the difference is the RED normalized branch length. (this is normalized since the termini always ends in 1 and the root always is 0).
    
-4. We take all the tree based values and then put them into a .tsv file called info_RED_clades_CPA_phylogeny_FTtree_3Nov.tsv
+4. We take all the tree based values and then put them into a .tsv file called info_RED_clades_CPA_phylogeny_FTtree_{date}.tsv
 
 **REDStep2. Calling RED caldes.**
 **Input **includes the RED tree and the .tsv file generated in REDStep2. 
