@@ -55,7 +55,7 @@ scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan'
 from Bio import SeqIO
 
 #NhaB, no NhaB passed threshold in Archaea
-NhaB_list = []
+#NhaB_list = []
 #HMMscan = '{}/Archaea_06450_fullhmmscanned.tsv'.format(scandir)
 #scan_dict = {}
 
@@ -78,7 +78,9 @@ NhaB_list = []
 
 
 #NhaC
-HMMscan = '{}/PF03553_Archaea_merged_alignedPF03553_refilter_HMMscanned.tsv'.format(scandir)
+#NhaC
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
+HMMscan = '{}//PF03553_aligned_Archaea_PF03553_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -90,17 +92,28 @@ for key in scan_dict.keys():
         hit_list.append(key)
 
 passed_list = []
-with open ('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_NhaC_passed_filters.faa', 'w') as C_out:
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/Archaea_merged_PF03553_unique_aligned_PF03553_refilter.fasta', 'fasta'):
+fulllength_NhaC_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/Archaea_merged_PF03553_unique_aligned_PF03553_full_length.fa'
+seq_dict = {}
+for record in SeqIO.parse(fulllength_NhaC_file, 'fasta'):
+    seq_dict[record.id] = record.seq
+    
+with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Archaea_NhaC_fl.fasta', 'w') as C_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF03553_aligned_Archaea_PF03553_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
         if record.id in hit_list:
-            passed_list.append(record.id.split('tax:')[1])
+            passed_list.append(str(record.id.split('tax:')[1]))
             outline = '>' + record.id + '\n' + str(record.seq) + '\n'
             C_out.write(outline)
 NhaC_list = passed_list
 print(len(NhaC_list))
 
+fulllength_NhaD_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/Archaea_merged_PF03600_unique_aligned_PF03600_full_length.fa'
+seq_dict = {}
+for record in SeqIO.parse(fulllength_NhaD_file, 'fasta'):
+    seq_dict[record.id] = record.seq
+    
 #NhaD
-HMMscan = '{}/PF03600_Archaea_merged_alignedPF03600_refilter_HMMscanned.tsv'.format(scandir)
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
+HMMscan = '{}/PF03600_aligned_Archaea_PF03600_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -112,10 +125,11 @@ for key in scan_dict.keys():
         hit_list.append(key)
 
 passed_list = []
-with open ('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_NhaD_passed_filters.faa', 'w') as D_out:
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea/Archaea_merged_PF03600_unique_aligned_PF03600_refilter.fasta', 'fasta'):
+with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Archaea_NhaD_fl.fasta', 'w') as C_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF03600_aligned_Archaea_PF03600_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
         if record.id in hit_list:
-            passed_list.append(record.id.split('tax:')[1])
+            
+            passed_list.append(str(record.id.split('tax:')[1]))
             outline = '>' + record.id + '\n' + str(record.seq) + '\n'
             D_out.write(outline)
 NhaD_list = passed_list
