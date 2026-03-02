@@ -30,7 +30,11 @@ def best_hit_dict(HMMscan, scan_dict):
                         e_list.append(i)
                 j = e_list[0]
                 if 'e' in j:
-                    evalue = pow(10,int(j.split('e')[1]))*float(j.split('e')[0])
+                    if j[0].isalpha() == True:
+                        pass
+                    else:
+                        evalue = pow(10,int(j.split('e')[1]))*float(j.split('e')[0])
+
                 
                 else:
                     if any(x.isalpha() for x in j) == True:
