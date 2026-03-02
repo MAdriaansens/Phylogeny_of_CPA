@@ -91,82 +91,7 @@ HMMalign = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/B
             passed_list.append(record.id.split('tax:')[1])
             
 print(len(set(list(Passed_all_list.keys()))))
-#NhaB
-
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Bacteria'
-
-
-scan_dict = {}
-
-scan_dict = best_hit_dict(HMMscan, scan_dict)
-
-for hmmscan in os.listdir(scandir):
-    if hmmscan.split('.')[-1] == 'tsv':
-        HMMscan = '{}/PF06450/{}'.format(scandir,hmmscan)
-        scan_dict = best_hit_dict(HMMscan, scan_dict)
-        print(HMMscan)
-
-passed_list = []
-records_in ={}
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF06450/MERGED/PF06450_Bacteria_all_merged_aligned.fasta','fasta'):
-    if record.id.split('|')[1] in list(set(hit_list)):
-        if record.id.split('|')[1] in records_in:
-            pass
-        else:
-            records_in[record.id.split('|')[1]] = 'in'
-            passed_list.append(record.id.split('tax:')[1])
-
-NhaB_list = passed_list
-print(len(set(NhaB_list)))
-
-#NhaC
-scan_dict = {}
-for hmmscan in os.listdir(scandir):
-    if hmmscan.split('.')[-1] == 'tsv':
-        HMMscan = '{}/PF03553/{}'.format(scandir,hmmscan)
-        scan_dict = best_hit_dict(HMMscan, scan_dict)
-        print(HMMscan)
-        
-hit_list = []
-for key in scan_dict.keys():
-    domain = scan_dict[key][0]
-    if domain == 'Na_H_antiporter':
-        hit_list.append(key)
-
-passed_list = [] 
-records_in = {}
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF03553/MERGED/PF03553_Bacteria_all_merged_aligned.fasta', 'fasta'):
-    if record.id.split('|')[1] in list(set(hit_list)):
-        if record.id.split('|')[1] in records_in:
-            pass
-        else:
-            records_in[record.id.split('|')[1]] = 'in'
-            passed_list.append(record.id.split('tax:')[1])
-
-NhaC_list = passed_list
-print(len(set(NhaC_list)))
-
-
-#NhaD
-scan_dict = {}
-
-for hmmscan in os.listdir(scandir):
-    if hmmscan.split('.')[-1] == 'tsv':
-        HMMscan = '{}/PF03600/subset/{}'.format(scandir,hmmscan)
-        scan_dict = best_hit_dict(HMMscan, scan_dict)
-        print(HMMscan)
-hit_list = []
-for key in scan_dict.keys():
-    domain = scan_dict[key][0]
-    if domain == 'CitMHS':
-        hit_list.append(key)
-
-passed_list = []
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF03600/PF03600_merged_Bac_fl.fasta', 'fasta'):
-    if record.id in hit_list:
-        passed_list.append(record.id.split('tax:')[1])
-NhaD_list = passed_list
-print(len(set(NhaD_list)))
+    
 scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan'
 count = 0
 Tax_dict={}
@@ -175,6 +100,107 @@ representatives_list = []
 CPA_list_forIT = []
 for key in Passed_all_list.keys():
     CPA_list_forIT.append(key.split('tax:')[1])
+
+
+#it is possible to either merge all hmmaligns or run them as arrays into HMMscan, I have done both. But here I will show the merged HMMalign option
+#NhaB
+fulllength_NhaB_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF06450_merged_Bac_fl.fasta'
+seq_dict = {}
+for record in SeqIO.parse(fulllength_NhaB_file, 'fasta'):
+    seq_dict[record.id] = record.seq
+    
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
+HMMscan = '{}/PF06450_aligned_Bacteria_PF06450_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
+scan_dict = {}
+
+scan_dict = best_hit_dict(HMMscan, scan_dict)
+from collections import Counter
+hit_list = []
+for key in scan_dict.keys():
+    domain = scan_dict[key][0]
+    if domain == 'NhaB':
+        hit_list.append(key)
+print(len(hit_list))
+print(len(set(hit_list)))
+
+
+passed_list = []
+with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Bacteria_NhaB_fl.fasta', 'w') as C_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF06450_aligned_Bacteria_PF06450_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
+        if record.id in hit_list:
+            passed_list.append(str(record.id.split('tax:')[1])[:-4])
+            
+            
+            outline = '>' + record.id[:-4] + '\n' + str(seq_dict[record.id[:-4]]) + '\n'
+            C_out.write(outline)
+    NhaC_list = passed_list
+    print(len(NhaC_list))
+    print(len(set(NhaC_list)))
+#NhaC
+fulllength_NhaC_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF03553_merged_Bac_fl.fasta'
+seq_dict = {}
+for record in SeqIO.parse(fulllength_NhaC_file, 'fasta'):
+    seq_dict[record.id] = record.seq
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
+HMMscan = '{}//PF03553_aligned_Bacteria_PF03553_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
+scan_dict = {}
+
+scan_dict = best_hit_dict(HMMscan, scan_dict)
+from collections import Counter
+hit_list = []
+for key in scan_dict.keys():
+    domain = scan_dict[key][0]
+    if domain == 'Na_H_antiporter':
+        hit_list.append(key)
+passed_list = []
+with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Bacteria_NhaC_fl.fasta', 'w') as C_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF03553_aligned_Bacteria_PF03553_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
+        if record.id in hit_list:
+            passed_list.append(str(record.id.split('tax:')[1])[:-4])
+            
+            
+            outline = '>' + record.id[:-4] + '\n' + str(seq_dict[record.id[:-4]]) + '\n'
+            C_out.write(outline)
+    NhaC_list = passed_list
+    print(len(NhaC_list))
+    print(len(set(NhaC_list)))
+    
+#NhaD
+fulllength_NhaD_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF03600_merged_Bac_fl.fasta'
+seq_dict = {}
+for record in SeqIO.parse(fulllength_NhaD_file, 'fasta'):
+    seq_dict[record.id] = record.seq
+    
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
+HMMscan = '{}/PF03600_aligned_Bacteria_PF03600_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
+scan_dict = {}
+
+scan_dict = best_hit_dict(HMMscan, scan_dict)
+from collections import Counter
+hit_list = []
+for key in scan_dict.keys():
+    domain = scan_dict[key][0]
+    if domain == 'CitMHS':
+        hit_list.append(key)
+print(len(hit_list))
+print(len(set(hit_list)))
+
+passed_list = []
+with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Bacteria_NhaD_fl.fasta', 'w') as C_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF03600_aligned_Bacteria_PF03600_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
+        if record.id in hit_list:
+            passed_list.append(str(record.id.split('tax:')[1])[:-4])
+            
+            
+            outline = '>' + record.id[:-4] + '\n' + str(seq_dict[record.id[:-4]]) + '\n'
+            C_out.write(outline)
+    NhaC_list = passed_list
+    print(len(NhaC_list))
+    print(len(set(NhaC_list)))
+
+
+
+
 
 with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv', 'r') as Meta:
     with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/IT_Bacteria_7OKT.tsv', 'w') as Out:
