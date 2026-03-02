@@ -99,97 +99,104 @@ print(len(set(list(Passed_all_list.keys()))))
 
 #NhaB
 #HMMscan was performed on the part of the sequence whom matched with the HMMalign, then it was ran agianst the full pfam 
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/PF06450_Eukarya_merged_alignedPF06450_refilter_HMMscanned.tsv'
-
-
+#NhaB
+fulllength_NhaB_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF06450_Eukarya_merged_alignedPF06450_full_length.faa'
+seq_dict = {}
+for record in SeqIO.parse(fulllength_NhaB_file, 'fasta'):
+    seq_dict[record.id] = record.seq
+    
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
+HMMscan = '{}/PF06450_aligned_Eukarya_PF06450_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
-#note that HMMalign sometimes wants to add an '|' to the front of a protein id
-scan_cleaned = {}
-for key in scan_dict.keys():
-    scan_cleaned[key] = scan_dict[key]
-scan_dict = scan_cleaned
-
+from collections import Counter
 hit_list = []
 for key in scan_dict.keys():
     domain = scan_dict[key][0]
     if domain == 'NhaB':
-        hit_list.append(key)
-
-
-passed_list = []
-records_in ={}
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF06450_Eukarya_merged_alignedPF06450.fasta.fasta','fasta'):
-    if record.id in list(set(hit_list)):
-         passed_list.append(record.id.split('tax:')[1])
-
-NhaB_list = passed_list
-print(len(set(NhaB_list)))
-print('finished NhaB')
-#NhaC
-scan_dict = {}
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/PF03553_Eukarya_merged_alignedPF03553_refilter_HMMscanned.tsv'
-
-scan_dict = best_hit_dict(HMMscan, scan_dict)
-
-scan_cleaned = {}
-for key in scan_dict.keys():
-    scan_cleaned[key.split('|')[1]] = scan_dict[key]
-scan_dict = scan_cleaned
-
-
-
-hit_list = []
-for key in scan_dict.keys():
-    domain = scan_dict[key][0]
-    if domain == 'Na_H_antiporter':
         hit_list.append(key)
 print(len(hit_list))
 print(len(set(hit_list)))
 
 
 passed_list = []
-records_in ={}
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF03553_Eukarya_merged_alignedPF03553.fasta.fasta','fasta'):
-    if record.id.split('|')[1] in list(set(hit_list)):
-         passed_list.append(record.id.split('tax:')[1])
+with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Eukarya_NhaB_fl.fasta', 'w') as C_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF06450_aligned_Eukarya_PF06450_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
+        if record.id in hit_list:
+            passed_list.append(str(record.id.split('tax:')[1]))
+            
+            
+            outline = '>' + record.id + '\n' + str(seq_dict[record.id]) + '\n'
+            C_out.write(outline)
+    NhaB_list = passed_list
+    print(len(NhaC_list))
+    print(len(set(NhaB_list)))
+print(len(set(NhaB_list)))
+print('finished NhaB')
 
-NhaC_list = passed_list
-print(len(set(NhaC_list)))
-print('finished NhaC')
-
-#NhaD
+#NhaC
+fulllength_NhaC_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF03553_Eukarya_merged_alignedPF03553_full_length.faa'
+seq_dict = {}
+for record in SeqIO.parse(fulllength_NhaC_file, 'fasta'):
+    seq_dict[record.id] = record.seq
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
+HMMscan = '{}//PF03553_aligned_Eukarya_PF03553_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
 scan_dict = {}
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/PF03600_Eukarya_merged_alignedPF03600_refilter_HMMscanned.tsv'
-
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
-
-scan_cleaned = {}
+from collections import Counter
+hit_list = []
 for key in scan_dict.keys():
-    scan_cleaned[key.split('|')[1]] = scan_dict[key]
-scan_dict = scan_cleaned
+    domain = scan_dict[key][0]
+    if domain == 'Na_H_antiporter':
+        hit_list.append(key)
+passed_list = []
+with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Eukarya_NhaC_fl.fasta', 'w') as C_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF03553_aligned_Eukarya_PF03553_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
+        if record.id in hit_list:
+            passed_list.append(str(record.id.split('tax:')[1]))
+            
+            
+            outline = '>' + record.id + '\n' + str(seq_dict[record.id]) + '\n'
+            C_out.write(outline)
+    NhaC_list = passed_list
+    print(len(NhaC_list))
+    print(len(set(NhaC_list)))
 
+#NhaD
+
+fulllength_NhaD_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF03600_Eukarya_merged_alignedPF03600_full_length.faa'
+seq_dict = {}
+for record in SeqIO.parse(fulllength_NhaD_file, 'fasta'):
+    seq_dict[record.id] = record.seq
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
+HMMscan = '{}/PF03600_aligned_Eukarya_PF03600_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
+scan_dict = {}
+
+scan_dict = best_hit_dict(HMMscan, scan_dict)
+from collections import Counter
 hit_list = []
 for key in scan_dict.keys():
     domain = scan_dict[key][0]
     if domain == 'CitMHS':
         hit_list.append(key)
 print(len(hit_list))
-print(hit_list[1])
 print(len(set(hit_list)))
 
+
 passed_list = []
-records_in ={}
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF03600_Eukarya_merged_alignedPF03600.fasta.fasta','fasta'):
-
-    if record.id.split('|')[1] in list(set(hit_list)):
-         passed_list.append(record.id.split('tax:')[1])
-
-NhaD_list = passed_list
-print(len(set(NhaD_list)))
-
+with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Eukarya_NhaD_fl.fasta', 'w') as C_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF03600_aligned_Eukarya_PF03600_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
+        if record.id in hit_list:
+            passed_list.append(str(record.id.split('tax:')[1]))
+            
+            
+            outline = '>' + record.id + '\n' + str(seq_dict[record.id]) + '\n'
+            C_out.write(outline)
+    NhaD_list = passed_list
+    print(len(NhaD_list))
+    print(len(set(NhaD_list)))
 
 print('finished NhaD')
 
