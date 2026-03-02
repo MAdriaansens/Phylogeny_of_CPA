@@ -132,14 +132,14 @@ passed_list = []
 with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Bacteria_NhaB_fl.fasta', 'w') as C_out:
     for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF06450_aligned_Bacteria_PF06450_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
         if record.id in hit_list:
-            passed_list.append(str(record.id.split('tax:')[1])[:-4])
+            passed_list.append(str(record.id.split('tax:')[1]))
             
             
-            outline = '>' + record.id[:-4] + '\n' + str(seq_dict[record.id[:-4]]) + '\n'
+            outline = '>' + record.id + '\n' + str(seq_dict[record.id]) + '\n'
             C_out.write(outline)
-    NhaC_list = passed_list
-    print(len(NhaC_list))
-    print(len(set(NhaC_list)))
+    NhaB_list = passed_list
+    print(len(NhaB_list))
+    print(len(set(NhaB_list)))
 #NhaC
 fulllength_NhaC_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF03553_merged_Bac_fl.fasta'
 seq_dict = {}
@@ -160,10 +160,10 @@ passed_list = []
 with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Bacteria_NhaC_fl.fasta', 'w') as C_out:
     for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF03553_aligned_Bacteria_PF03553_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
         if record.id in hit_list:
-            passed_list.append(str(record.id.split('tax:')[1])[:-4])
+            passed_list.append(str(record.id.split('tax:')[1]))
             
             
-            outline = '>' + record.id[:-4] + '\n' + str(seq_dict[record.id[:-4]]) + '\n'
+            outline = '>' + record.id + '\n' + str(seq_dict[record.id]) + '\n'
             C_out.write(outline)
     NhaC_list = passed_list
     print(len(NhaC_list))
@@ -193,14 +193,14 @@ passed_list = []
 with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Bacteria_NhaD_fl.fasta', 'w') as C_out:
     for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF03600_aligned_Bacteria_PF03600_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
         if record.id in hit_list:
-            passed_list.append(str(record.id.split('tax:')[1])[:-4])
+            passed_list.append(str(record.id.split('tax:')[1]))
             
             
-            outline = '>' + record.id[:-4] + '\n' + str(seq_dict[record.id[:-4]]) + '\n'
+            outline = '>' + record.id + '\n' + str(seq_dict[record.id]) + '\n'
             C_out.write(outline)
-    NhaC_list = passed_list
-    print(len(NhaC_list))
-    print(len(set(NhaC_list)))
+    NhaD_list = passed_list
+    print(len(NhaD_list))
+    print(len(set(NhaD_list)))
 
 
 
