@@ -20,9 +20,9 @@ Tax_dic = {}
 
 
 Reps_dic = {}
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_clusters_7OKT.tsv', 'r') as Reps_Bac:
-    next(Reps_Bac, None)
-    for line in Reps_Bac:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_clusters_7OKT.tsv', 'r') as reps_euk:
+    next(reps_euk, None)
+    for line in reps_euk:
         Rep = (line.split('\t')[0])
         Clusteroids = (line.split('\t')[-1].split('\n')[0])
         Reps_dic[Rep] = Clusteroids
