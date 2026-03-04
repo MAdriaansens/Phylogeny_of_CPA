@@ -1,5 +1,5 @@
 #make sure this gets incorperated into the full HMM of all GTDB
-
+from Bio import SeqIO
 def best_hit_dict(HMMscan, scan_dict):
     #open a HMMscan file provided
     with open(HMMscan, 'r') as H:
@@ -34,12 +34,16 @@ def best_hit_dict(HMMscan, scan_dict):
                         pass
                     else:
                         evalue = pow(10,int(j.split('e')[1]))*float(j.split('e')[0])
+               
+
 
 
                 else:
                     if any(x.isalpha() for x in j) == True:
-                        print(j)
-                        break
+                        pass
+                        
+                    elif 'diol' in j:
+                        pass
                     else:
                         evalue = float(j)
 
