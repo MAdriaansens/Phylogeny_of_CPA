@@ -1,12 +1,12 @@
 #make sure this gets incorperated into the full HMM of all GTDB
-
+from Bio import SeqIO
 def best_hit_dict(HMMscan, scan_dict):
     #open a HMMscan file provided
     with open(HMMscan, 'r') as H:
         for line in H:
             if line[0] != '#':
                 #skip lines with # as this contains information not needed
-    
+
                 e_count =0
                 #marker for a 
 
@@ -14,7 +14,7 @@ def best_hit_dict(HMMscan, scan_dict):
                 protein_id = line.split('_tax:')[0].split(' ')[-1]
                 Taxonomy = (line.split('_tax:')[-1].split(' - ')[0])
                 full_id = protein_id + '_tax:' + Taxonomy
-    
+
                 if line.count(' - ') == 2:
                     prelim_evalue = line.split(' - ')[2]
 
@@ -34,26 +34,29 @@ def best_hit_dict(HMMscan, scan_dict):
                         pass
                     else:
                         evalue = pow(10,int(j.split('e')[1]))*float(j.split('e')[0])
+               
 
-                
+
+
                 else:
                     if any(x.isalpha() for x in j) == True:
-                        print(j)
-                        break
+                        pass
+                        
+                    elif 'diol' in j:
+                        pass
                     else:
                         evalue = float(j)
-                    
+
                 if full_id not in scan_dict.keys():
                     entry_list = (best_match_hmm, evalue)
                     scan_dict[full_id] = entry_list
-    
+
                 elif scan_dict[full_id][1] < evalue:
                     pass
                 else:
                     entry_list = (best_match_hmm, evalue)
                     scan_dict[full_id] =entry_list
     return(scan_dict)
-
 
 scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan'
 from Bio import SeqIO
