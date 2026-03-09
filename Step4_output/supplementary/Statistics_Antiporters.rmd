@@ -6,6 +6,8 @@ date: "`r Sys.Date()`"
 output:
   html_document: default
   pdf_document: default
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -19,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r, Load Eukarya data and wrangel to create CPA/IT presence_1}
+```{r, Load Eukarya data and wrangel to create CPA/IT presence_chunk1}
 library(tidyverse)
 library(dplyr)
 
@@ -53,7 +55,7 @@ IT_Eukarya$Antiporter_binary[IT_Eukarya$Antiporter_count >0] <- 1
 ```
 
 
-```{r, linear regression model of factorsEuks_2}
+```{r, linear regression model of factorsEuks}
 library(dplyr)
 LM1<- lm(CPA_binary  ~ IT_binary, data=IT_Eukarya)
 summary(LM1)
@@ -74,7 +76,7 @@ summary(LM4)
 #CPA count and IT count are posively correlated, with R adjusted of 0.674, p-value 2.2*10^-16
 ```
 
-```{r load_Archaea_3}
+```{r load_Archaea4}
 IT_Archaea <- read.delim('Antiporter_Archaea_2march2026.tsv', sep='\t', stringsAsFactors = TRUE)
 
 IT_Archaea %>% separate(GTDB_tax, c('Domain_Phyla', 'Lower_class'), ';c__') -> IT_Archaea
@@ -89,7 +91,7 @@ IT_Archaea %>% separate(Lower_genera, c('Genera', 'Species'), ';s__') -> IT_Arch
 ```
 
 
-```{r Taxonomic_/Protein_data_wrangling_Arc4}
+```{r Taxonomic_/Protein_data_wrangling_Arc5}
 IT_Archaea$IT_count <- IT_Archaea$NhaB_count + IT_Archaea$NhaC_count + IT_Archaea$NhaD_count
 IT_Archaea$Antiporter_count <- IT_Archaea$CPA_count + IT_Archaea$IT_count
 
@@ -116,7 +118,7 @@ PhylaA_observations <- PhylaA_observations %>% rename('Species_total' = n)
 
 
 
-```{r Compare_nonCPA_CPA_species_Completeness_5}
+```{r Compare_nonCPA_CPA_species_Completeness6}
 #inspect data Archaea
 group_by(IT_Archaea, CPA_binary)  %>%   summarise(
     count = n(),
@@ -149,7 +151,7 @@ rest
 ```
 
 
-```{r, linear regression model of factorsArchaea_6}
+```{r, linear regression model of factorsArchaea}
 library(dplyr)
 LM1a<- lm(CPA_binary  ~ IT_binary, data=IT_Archaea)
 summary(LM1a)
@@ -162,7 +164,7 @@ summary(LM4a)
 #IT count shows a positive correlation to CPA count and p-value of 2.2*10-16
 ```
 
-```{r Make_Archaea_boxplot_7}
+```{r Supplementary figure 1}
 IT_Archaea$CPA_presence <- as.factor(IT_Archaea$CPA_presence)
 ITA<- ggplot(IT_Archaea, aes(y=Completeness, x=CPA_presence, fill=CPA_presence)) + geom_boxplot(outlier.alpha = 0.01,lwd=3) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal() + ggtitle('Completeness Archaea')  + 
   theme(plot.title = element_text(size = 20, face = "bold")) + theme(axis.text.x = element_text(color = "black", size = 50, angle = 0, hjust = .5, vjust = .5, face = "bold"),
@@ -174,8 +176,33 @@ ITA<- ggplot(IT_Archaea, aes(y=Completeness, x=CPA_presence, fill=CPA_presence))
 ITA
 ```
 
+```{r Taxonomic_/Protein_data_wrangling_Arc9}
+#generate a Archaea set of only high quality genomes
 
-```{r load_Bacteria_8}
+GTDB_Arc <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
+GTDB_Arc$GTDB_id <- GTDB_Arc$accession
+
+
+IT_Archaea <- merge(IT_Archaea, GTDB_Arc, by = 'GTDB_id')
+rm(GTDB_Arc)
+
+IT_Archaea_clean <- IT_Archaea[IT_Archaea$Completeness> 90 & IT_Archaea$Contamination < 5 & IT_Archaea$trna_aa_count > 17,]
+
+```
+
+```{r Supplementary figure 2}
+ITAclean<- ggplot(IT_Archaea_clean, aes(y=Completeness, x=CPA_presence, fill=CPA_presence)) + geom_boxplot(outlier.alpha = 0.01,lwd=3) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal() + ggtitle('Completeness Archaea clean')  + 
+  theme(plot.title = element_text(size = 20, face = "bold")) + theme(axis.text.x = element_text(color = "black", size = 50, angle = 0, hjust = .5, vjust = .5, face = "bold"),
+                                                                     axis.text.y = element_text(color = "black", size = 30, angle = 0, hjust = 1, vjust = 0, face = "plain"), 
+                                                                     axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = 0, face = "bold"),
+                                                                     axis.title.y = element_text(color = "black", size = 40, angle = 90, hjust = .5, vjust = .5, face = "bold"))+ ylim(40,100) +theme(plot.title = element_text(size = 50, face = "bold",hjust = 0.5)) +
+  theme(plot.title = element_text(size = 50, face='bold' ),
+        plot.subtitle = element_text(size = 20)) +theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
+ITAclean
+```
+
+
+```{r load_Bacteria7}
 IT_Bacteria <- read.delim('Antiporter_Bacteria_2march2026.tsv', sep='\t', stringsAsFactors = TRUE)
 
 IT_Bacteria %>% separate(GTDB_tax, c('Domain_Phyla', 'Lower_class'), ';c__') -> IT_Bacteria
@@ -190,7 +217,7 @@ sum(IT_Bacteria$CPA_count)
 
 
 
-```{r Protein_data_wrangling_Bac_9}
+```{r Protein_data_wrangling_Bac12}
 IT_Bacteria$IT_count <- IT_Bacteria$NhaB_count + IT_Bacteria$NhaC_count + IT_Bacteria$NhaD_count
 IT_Bacteria$Antiporter_count <- IT_Bacteria$CPA_count + IT_Bacteria$IT_count
 
@@ -205,7 +232,20 @@ IT_Bacteria$Antiporter_binary[IT_Bacteria$Antiporter_count > 0] <-1
 ```
 
 
-```{r Compare_nonCPA_CPA_species_Completeness_Bacteria_10}
+```{r, linear regression model of factorsArchaea}
+library(dplyr)
+LM1b<- lm(CPA_binary  ~ IT_binary, data=IT_Bacteria)
+summary(LM1b)
+
+#IT presence shows a significant (positive) correlation with CPA presence in Bacteria.
+
+
+LM4b<- lm(CPA_count  ~ IT_count, data=IT_Bacteria)
+summary(LM4b)
+#IT count shows a positive correlation to CPA count and p-value of 2.2*10-16
+```
+
+```{r Compare_nonCPA_CPA_species_Completeness_Bacteria}
 
 #from this inspection we see that the medians are different
 group_by(IT_Bacteria, CPA_binary)  %>%   summarise(
@@ -235,7 +275,7 @@ rest
 
 ```
 
-```{r boxplot_Bacteria_completeness_11}
+```{r Supplementary figure 3}
 #the factorization of the binary CPA is donflip graphe to make it more intuitive for the figure
 
 IT_Bacteria$CPA_presence[IT_Bacteria$CPA_binary ==0] <- 'Absent'
@@ -249,7 +289,7 @@ ITB<- ggplot(IT_Bacteria, aes(y=Completeness, x=CPA_presence, fill=CPA_presence)
         plot.subtitle = element_text(size = 20)) +theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
 ITB
 
-#merge both plots
+
 
 library(gridExtra)
 ITmergedinitial<-grid.arrange(ITA, ITB, nrow = 2)
@@ -257,33 +297,8 @@ ITmergedinitial
 ```
 #now we want to see what happens when we remove lower quality metagenomes from our analysis.
 
-```{r Taxonomic_/Protein_data_wrangling_Arc_12}
-#generate a Archaea set of only high quality genomes
 
-GTDB_Arc <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
-GTDB_Arc$GTDB_id <- GTDB_Arc$accession
-
-
-IT_Archaea <- merge(IT_Archaea, GTDB_Arc, by = 'GTDB_id')
-rm(GTDB_Arc)
-
-IT_Archaea_clean <- IT_Archaea[IT_Archaea$Completeness> 90 & IT_Archaea$Contamination < 5 & IT_Archaea$trna_aa_count > 17,]
-
-```
-
-```{r Generate boxplot using cleaned Archaea set_13}
-ITAclean<- ggplot(IT_Archaea_clean, aes(y=Completeness, x=CPA_presence, fill=CPA_presence)) + geom_boxplot(outlier.alpha = 0.01,lwd=3) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal() + ggtitle('Completeness Archaea')  + 
-  theme(plot.title = element_text(size = 20, face = "bold")) + theme(axis.text.x = element_text(color = "black", size = 50, angle = 0, hjust = .5, vjust = .5, face = "bold"),
-                                                                     axis.text.y = element_text(color = "black", size = 30, angle = 0, hjust = 1, vjust = 0, face = "plain"), 
-                                                                     axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = 0, face = "bold"),
-                                                                     axis.title.y = element_text(color = "black", size = 40, angle = 90, hjust = .5, vjust = .5, face = "bold"))+ ylim(40,100) +theme(plot.title = element_text(size = 50, face = "bold",hjust = 0.5)) +
-  theme(plot.title = element_text(size = 50, face='bold' ),
-        plot.subtitle = element_text(size = 20)) +theme(legend.text = element_text(size=40), legend.title = element_text(size=50, face='bold'))
-ITAclean
-```
-
-
-```{r completeness_Archaea_14}
+```{r completeness11}
 group_by(IT_Archaea_clean, CPA_binary)  %>%   summarise(
     count = n(),
     median = median(Completeness, na.rm = TRUE),
@@ -312,7 +327,7 @@ rest
 
 
 
-```{r Assess cpa per megabases in Archae_ 15}
+```{r Assess cpa per megabases in Archaea}
 IT_Archaea_nonna  <- IT_Archaea_clean[IT_Archaea_clean$Antiporter_binary == 1,]
 
 IT_Archaea_nonna$antiporter_per_megabases <- (IT_Archaea_nonna$Antiporter_count/IT_Archaea_nonna$coding_bases)*1000000
@@ -338,9 +353,9 @@ Archaea_average_ap_mb <-merge(Archaea_antiporters, Archaea_mb, by = 'Phyla')
 Archaea_average_ap_mb$averages <- Archaea_average_ap_mb$total_CPA/Archaea_average_ap_mb$total_mb
 ```
 
-#now we repeat the same with Bacteria
+#now we repeat the same witBacteria
 
-```{r clean_out_bacteria16}
+```{r supplementary figure 4}
 #generate a Bacteria set of only high quality genomes
 
 GTDB_Bac <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata_r226.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
@@ -348,6 +363,9 @@ GTDB_Bac$GTDB_id <- GTDB_Bac$accession
 
 
 IT_Bacteria <- merge(IT_Bacteria, GTDB_Bac, by = 'GTDB_id')
+IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Bacteroidota_A'] <- 'Bacteroidota'
+IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Desulfobacterota_B'] <- 'Desulfobacterota'
+IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Desulfobacterota_I'] <- 'Desulfobacterota'
 rm(GTDB_Bac)
 
 IT_Bacteria_clean <- IT_Bacteria[IT_Bacteria$Completeness> 90 & IT_Bacteria$Contamination < 5 & IT_Bacteria$trna_aa_count > 17,]
@@ -378,7 +396,7 @@ rest
 #shows a non-zero difference in distribution of values
 
 
-ITBclean<- ggplot(IT_Bacteria_clean, aes(y=Completeness, x=CPA_presence, fill=CPA_presence)) + geom_boxplot(outlier.alpha = 0.01,lwd=3) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal() + ggtitle('Completeness Bacteria')  + 
+ITBclean<- ggplot(IT_Bacteria_clean, aes(y=Completeness, x=CPA_presence, fill=CPA_presence)) + geom_boxplot(outlier.alpha = 0.01,lwd=3) + scale_fill_manual(values=c('cyan', 'pink')) + theme_minimal() + ggtitle('Completeness Bacteria cleaned')  + 
   theme(plot.title = element_text(size = 20, face = "bold")) + theme(axis.text.x = element_text(color = "black", size = 50, angle = 0, hjust = .5, vjust = .5, face = "bold"),
                                                                      axis.text.y = element_text(color = "black", size = 30, angle = 0, hjust = 1, vjust = 0, face = "plain"), 
                                                                      axis.title.x = element_text(color = "black", size = 15, angle = 0, hjust = .5, vjust = 0, face = "bold"),
@@ -393,7 +411,7 @@ ITmergedclean
 ```
 
 
-```{r Taxonomic_/Protein_data_wrangling_Bac17}
+```{r Taxonomic_/Protein_data_wrangling_Bac13}
 
 IT_Bacteria_nonna  <- IT_Bacteria_clean[IT_Bacteria_clean$Antiporter_binary == 1,]
 
@@ -423,7 +441,7 @@ Bacteria_average_ap_mb <-merge(Bacteria_antiporters, Bacteria_mb, by = 'Phyla')
 Bacteria_average_ap_mb$averages <- Bacteria_average_ap_mb$total_CPA/Bacteria_average_ap_mb$total_mb
 ```
 
-```{r linear_modeling_clean18}
+```{r linear_modeling_clean16}
 for2 <- lm(formula = Antiporter_count ~ coding_bases, data = IT_Bacteria_clean)
 summary(for2)
 
@@ -438,7 +456,7 @@ for4 <- lm(formula = antiporter_per_megabases ~ coding_bases, data = IT_Bacteria
 summary(for4)
 ```
 
-```{r modelingdirty19}
+```{r modelingdirty17}
 #a true shift in distribution of the completeness can be found between species with and without CPA
 
 LM1xB<- lm(CPA_binary  ~ IT_binary, data=IT_Bacteria)
