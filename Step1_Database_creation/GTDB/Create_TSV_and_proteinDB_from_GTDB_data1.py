@@ -15,7 +15,7 @@ dictionary = {}
 
 with open('{}'.format(tsv_file)) as dataset:
     for i in dataset:
-
+        #this is the GTDB_id
         if i.split('\t')[17] != 'gtdb_genome_representative':
             dictionary[(i.split('\t')[17])] = (i.split('\t')[19]).replace(' ', '_')
 
