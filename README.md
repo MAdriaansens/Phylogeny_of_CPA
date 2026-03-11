@@ -4,7 +4,7 @@ I first want to state that I stand on top of the shoulders of my peers and mento
 In code there are many approaches to reach the same output,there are other ways of coding this github is how I did it .
 Haig Bishop and Craig Herbold are contributers to this code as well, via feedback, testing, generating the code and discussion of the approach/code
 
-Haig Bishop played a large role in investigating the RED values of GTDB.
+Haig Bishop played a role in investigating the RED values of GTDB.
 https://github.com/HaigBishop/redvals
 
 All starting data is publicly available data. 
