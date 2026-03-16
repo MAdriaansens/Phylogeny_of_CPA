@@ -4,8 +4,8 @@ title: "Statistics_All_Antiporters"
 author: "Mick Adriaansens"
 date: "`r Sys.Date()`"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 editor_options: 
   chunk_output_type: console
 ---
@@ -350,6 +350,7 @@ Archaea_antiporters<- Archaea_antiporters %>% rename(
     total_CPA=x)
 Archaea_average_ap_mb <-merge(Archaea_antiporters, Archaea_mb, by = 'Phyla')
 
+Average_antiporter_per_MbArchaea<- sum(IT_Archaea_clean$Antiporter_count)/(sum(IT_Archaea_clean$genome_size)/1000000)
 Archaea_average_ap_mb$averages <- Archaea_average_ap_mb$total_CPA/Archaea_average_ap_mb$total_mb
 ```
 
@@ -436,6 +437,9 @@ Bacteria_antiporters <- aggregate(IT_Bacteria_nonna$Antiporter_count, by=list(Ca
 Bacteria_antiporters<- Bacteria_antiporters %>% rename(
     Phyla = Category,
     total_CPA=x)
+
+Average_antiporter_per_MbBacteria<- sum(IT_Bacteria_clean$Antiporter_count)/(sum(IT_Bacteria_clean$genome_size)/1000000)
+
 Bacteria_average_ap_mb <-merge(Bacteria_antiporters, Bacteria_mb, by = 'Phyla')
 
 Bacteria_average_ap_mb$averages <- Bacteria_average_ap_mb$total_CPA/Bacteria_average_ap_mb$total_mb
