@@ -22,6 +22,7 @@ When you click the **Knit** button a document will be generated that includes bo
 
 #for each gene per species, if the gene count == 0 (0) or > 0 (1), a binary gene presence/absence is noted. 
 ```{r, make not in function}
+library(ggplot2)
 '%!in%' <- function(x,y)!('%in%'(x,y))
 library(dplyr)
 library(tidyr)
@@ -366,7 +367,7 @@ mergedE_all <- mergedE_all[c('Major_tax', 'average_CPA', 'average_Both', 'averag
 pivot_Euk<- mergedE_all %>% pivot_longer(cols=-Major_tax, names_to = 'status',values_to = 'Count') 
 
 
-MeanEuk <-  mean(IT_Eukarya$Antiporter_count[IT_Eukarya$Antiporter_binary==1 & IT_Eukarya$Major_tax != 'Stramenopiles' & IT_Eukarya$Major_tax != 'Cryptophyta'])
+MeanEuk <-  mean(IT_Eukarya$Antiporter_count[IT_Eukarya$Antiporter_binary==1] )
 
 pivot_Euk$Major_tax <- factor(pivot_Euk$Major_tax, levels=c(List_MJ))
 pivot_Euk$status <- factor(pivot_Euk$status, levels=c('average_CPA', 'average_Both', 'average_IT'))
@@ -499,13 +500,13 @@ rm(GTDB_Arc)
 
 IT_Archaea_clean<- IT_Archaea[IT_Archaea$Completeness> 90 & IT_Archaea$Contamination < 5 & IT_Archaea$trna_aa_count > 17,]
 
-IT_Archaea_nonna  <- IT_Archaea[IT_Archaea$Antiporter_binary == 1,]
+IT_Archaea_nonna  <- IT_Archaea_clean[IT_Archaea_clean$Antiporter_binary == 1,]
 
 IT_Archaea_nonna$antiporter_per_megabases <- (IT_Archaea_nonna$Antiporter_count/IT_Archaea_nonna$coding_bases)*1000000
 
 #IT_Archaea_finite<- IT_Archaea[is.finite(IT_Archaea$mega_coding_bases_per_antiporter),]
 median(IT_Archaea_nonna$antiporter_per_megabases)
-#hist(IT_Archaea_nonna$antiporter_per_megabases,  breaks = 100) + abline(v = 2.101579, col = "blue", lwd = 2, lty = 2)
+#hist(IT_Archaea_nonna$antiporter_per_megabases,  breaks = 100) + abline(v = 1.93, col = "blue", lwd = 2, lty = 2)
  
 #summary(IT_Archaea_finite$mega_bases_per_antiporter)
 #break
@@ -815,7 +816,7 @@ PERA<-ggplot(pivot_Arc, aes(fill=status, y=Count, x=Phyla)) + geom_bar(position 
   theme(axis.text.x = element_text(color = "black", size = 36, angle = 90, hjust = .5, vjust = .5, face = "italic"),
         axis.text.y = element_text(color = "black", size = 20, angle = 0, hjust = 1, vjust = 0.5, face = "bold"),  
         axis.title.x = element_text(color = "black", size = 20, angle = 0, hjust = .5, vjust = 0, face = "bold"),
-        axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) + geom_vline(xintercept = c(1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5)) + geom_hline(yintercept = mean(IT_Archaea$Antiporter_count[IT_Archaea$Antiporter_binary==1]), lty='dashed') +
+        axis.title.y = element_text(color = "black", size = 25, angle = 0, hjust = .5, vjust = .5, face = "bold")) + geom_vline(xintercept = c(1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,13.5,14.5,15.5,16.5,17.5,18.5)) + geom_hline(yintercept = mean(IT_Archaea_nonna$Antiporter_count), lty='dashed') +
   scale_y_continuous(limits = c(0,8), expand = c(0, 0)) +
   labs(title = "Archaea",
        subtitle = "Average antiporter per species per phyla grouped by antiporter presence"
