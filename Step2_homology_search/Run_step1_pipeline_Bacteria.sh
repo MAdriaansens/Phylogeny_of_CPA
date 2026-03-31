@@ -22,7 +22,7 @@ module load MMseqs2/15-6f452-gompi-2023a
 
 mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}/PF06450_NhaB_sequences.fasta  ${Bac_db} ${MMseqs}/PF06450_NhaBvsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv ${array[$SLURM_ARRAY_TASK_ID]}_Bac_tmp
 
-module load Python/3.11.3-gimkl-2022a
+module load Python/3.11.6-foss-2023a
 
 python getting_fasta_from_hit_extra_Arc.py ${MMseqs}/PF06450_NhaBvsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv MMSEQ ${Bac_TSV} ${MMseqs}/PF06450_NhaBvsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq_fl_seq.fasta
 
@@ -32,7 +32,7 @@ module load HMMER/3.4-GCC-12.3.0
 
 #HMMsearch
 hmmsearch --noali --cpu 20 -E 0.001 --tblout ${HMMsearch}/PF06450_NhaBhmmvs_vsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv ${HMMdir}/PF06450_NhaB.hmm ${Bac_db}
-module load Python/3.11.3-gimkl-2022a
+module load Python/3.11.6-foss-2023a
 
 python getting_fasta_from_hit_extra_Arc.py ${HMMsearch}/PF06450_NhaBhmmvs_vsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv HMM ${Bac_TSV} ${HMMsearch}/PF06450_NhaBhmmvs_vsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_fl_sequence.fasta
 
@@ -42,7 +42,7 @@ module load MMseqs2/15-6f452-gompi-2023a
 
 mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}/PF03553_NhaC_sequences.fasta  ${Bac_db} ${MMseqs}/PF03553_NhaCvsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv ${array[$SLURM_ARRAY_TASK_ID]}_Bac_tmp
 
-module load Python/3.11.3-gimkl-2022a
+module load Python/3.11.6-foss-2023a
 
 python getting_fasta_from_hit_extra_Arc.py ${MMseqs}/PF03553_NhaCvsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv MMSEQ ${Bac_TSV} ${MMseqs}/PF03553_NhaCvsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq_fl_seq.fasta
 
@@ -53,7 +53,7 @@ module load HMMER/3.4-GCC-12.3.0
 #HMMsearch
 hmmsearch --noali --cpu 20 -E 0.001 --tblout ${HMMsearch}/PF03553_NhaChmmvs_vsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv ${HMMdir}/PF03553_NhaC.hmm ${Bac_db}
 
-module load Python/3.11.3-gimkl-2022a
+module load Python/3.11.6-foss-2023a
 python getting_fasta_from_hit_extra_Arc.py ${HMMsearch}/PF03553_NhaChmmvs_vsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv HMM ${Bac_TSV} ${HMMsearch}/PF03553_NhaCHmmvs_vsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_fl_sequence.fasta
 
 
@@ -63,7 +63,7 @@ module load MMseqs2/15-6f452-gompi-2023a
 
 mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}/PF03600_NhaD_sequences.fasta  ${Bac_db} ${MMseqs}/PF03600_NhaDvsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv ${array[$SLURM_ARRAY_TASK_ID]}_Bac_tmp
 
-module load Python/3.11.3-gimkl-2022a
+module load Python/3.11.6-foss-2023a
 
 python getting_fasta_from_hit_extra_Arc.py ${MMseqs}/PF03600_NhaDvsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv MMSEQ ${Bac_TSV} ${MMseqs}/PF03600_NhaDvsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq_fl_seq.fasta
 
@@ -74,6 +74,6 @@ module load HMMER/3.4-GCC-12.3.0
 #HMMsearch
 hmmsearch --noali --cpu 20 -E 0.001 --tblout ${HMMsearch}/PF03600_NhaDhmmvs_vsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv ${HMMdir}/PF03600_NhaD.hmm ${Bac_db}
 
-module load Python/3.11.3-gimkl-2022a
+module load Python/3.11.6-foss-2023a
 
 python getting_fasta_from_hit_extra_Arc.py ${HMMsearch}/PF03600_NhaDhmmvs_vsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv HMM ${Bac_TSV} ${HMMsearch}/PF03600_NhaDhmmvs_vsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_fl_sequence.fasta
