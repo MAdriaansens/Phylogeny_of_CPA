@@ -56,3 +56,5 @@ We generated, for each taxonomic domain, a fasta file with all the sequences and
 Pfam HMMs were downloaded manually and sequences of each pfam were downloaded using a perl script as provided by Pfam.
 Code is available on Database_creation/Pfam. After creation of inhouse HMMs these HMMs were concatenated to the PFAM HMMdb and HMMpressed so it can be used for HMMscan in the future.
 
+*edit on 10 april*
+#inspection showed that I accidentaly included 118 identical sequences, since this did not effect our tree wI manually edited out of the .tsv and type file as well as type.fasta fuke
