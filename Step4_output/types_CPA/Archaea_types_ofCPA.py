@@ -279,7 +279,7 @@ for key in clade_dic.keys():
                         UncProk_dict[entry] = 'Uncharacterized_Prokarya'
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Arc_UncPROK_sequences.faa", "a") as UncPROKout:
                             sequence  = seq_dic[entry]
-                            line = '>{}_{}_UncPROK'.format(key, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_UncPROK'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             UncPROKout.write(line)
                         UncPROKout.close()
                 else:
