@@ -110,7 +110,7 @@ for key in clade_dic.keys():
                         
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/CPA1_sequences.faa", "a") as CPA1out:
                             sequence  = seq_dic[entry]
-                            line = '>{}_{}_CPA1'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_Protein:CPA1'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             CPA1out.write(line)
                         CPA1out.close()
                 else:
@@ -118,7 +118,7 @@ for key in clade_dic.keys():
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/CPA1_sequences.faa", "a") as CPA1out:
                         sequence  = seq_dic[key]
     
-                        line = '>{}_{}_CPA1'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_{}_Protein:CPA1'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         CPA1out.write(line)
                     CPA1out.close()
     
@@ -130,14 +130,14 @@ for key in clade_dic.keys():
                         Kef_dict[entry] = 'Kef'
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Kef_sequences.faa", "a") as KEFout:
                             sequence  = seq_dic[entry]
-                            line = '>{}_{}_Kef'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_Protein:Kef'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             KEFout.write(line)
                         KEFout.close()
                 else:
                     Kef_dict[key] = 'Kef'
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Kef_sequences.faa", "a") as KEFout:
                         sequence  = seq_dic[key]
-                        line = '>{}_{}_Kef'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_{}_Protein:Kef'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         KEFout.write(line)
                     KEFout.close()
             elif clade_dic[key] == '4':
@@ -150,7 +150,7 @@ for key in clade_dic.keys():
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/CPA2_sequences.faa", "a") as CPA2out:
                             sequence  = seq_dic[entry]
 
-                            line = '>{}_{}_CPA2'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_Protein:CPA2'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             CPA2out.write(line)
                         CPA2out.close()
                 else:
@@ -158,7 +158,7 @@ for key in clade_dic.keys():
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/CPA2_sequences.faa", "a") as CPA2out:
                         sequence  = seq_dic[key]
 
-                        line = '>{}_{}_CPA2'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_{}_Protein:CPA2'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         CPA2out.write(line)
                     CPA2out.close()
             elif clade_dic[key] == '27962':
@@ -169,14 +169,14 @@ for key in clade_dic.keys():
                         NhaA_dict[entry] = 'NhaA'
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/NhaA_sequences.faa", "a") as NhaAout:
                             sequence  = seq_dic[entry]
-                            line = '>{}_{}_NhaA'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_Protein:NhaA'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             NhaAout.write(line)
                         NhaAout.close()
                 else:
                     NhaA_dict[key] = 'NhaA'
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/NhaA_sequences.faa", "a") as NhaAout:
                         sequence  = seq_dic[key]
-                        line = '>{}_{}_NhaA'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_{}_Protein:NhaA'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         NhaAout.write(line)
                     NhaAout.close()
             elif clade_dic[key] == '58708':
@@ -187,14 +187,14 @@ for key in clade_dic.keys():
                         Lates_dict[entry] = 'Latescibacteriota_cpa'
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Latescibacteriota_cpa_sequences.faa", "a") as Latescibacteriota_out:
                             sequence  = seq_dic[entry]
-                            line = '>{}_{}_Latescibacteriota_cpa'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_Protein:Latescibacteriota_cpa'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             Latescibacteriota_out.write(line)
                         Latescibacteriota_out.close()
                 else:
                     Lates_dict[key] = 'Latescibacteriota_cpa'
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Latescibacteriota_cpa_sequences.faa", "a") as Latescibacteriota_out:
                         sequence  = seq_dic[key]
-                        line = '>{}_{}_Latescibacteriota_cpa'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_{}_Protein:Latescibacteriota_cpa'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         Latescibacteriota_out.write(line)
                     Latescibacteriota_out.close()
 
@@ -206,14 +206,14 @@ for key in clade_dic.keys():
                         DxK_pseudo_dict[entry] = 'DxK_Pseudomonadota'
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/DxK_Pseudomonadota_sequences.faa", "a") as DxK_Pseudomonadota_out:
                             sequence  = seq_dic[entry]
-                            line = '>{}_{}_DxK_Pseudomonadota'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_Protein:DxK_Pseudomonadota'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             DxK_Pseudomonadota_out.write(line)
                         DxK_Pseudomonadota_out.close()
                 else:
                     DxK_pseudo_dict[key] = 'DxK_Pseudomonadota'
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/DxK_Pseudomonadota_sequences.faa", "a") as DxK_Pseudomonadota_out:
                         sequence  = seq_dic[key]
-                        line = '>{}_{}_DxK_Pseudomonadota'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_{}_Protein:DxK_Pseudomonadota'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         DxK_Pseudomonadota_out.write(line)
                     DxK_Pseudomonadota_out.close()
             elif clade_dic[key] == '59314':
@@ -224,14 +224,14 @@ for key in clade_dic.keys():
                         NxKGamma_dict[entry] = 'NxK_Gammaproteobacteriota'
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/NxK_Gammaproteobacteriota_sequences.faa", "a") as NxK_Gammaproteobacteriota_out:
                             sequence  = seq_dic[entry]
-                            line = '>{}_{}_NxK_Gammaproteobacteriota'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_Protein:NxK_Gammaproteobacteriota'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             NxK_Gammaproteobacteriota_out.write(line)
                         NxK_Gammaproteobacteriota_out.close()
                 else:
                     NxKGamma_dict[key] = 'NxK_Gammaproteobacteriota'
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/NxK_Gammaproteobacteriota_sequences.faa", "a") as NxK_Gammaproteobacteriota_out:
                         sequence  = seq_dic[key]
-                        line = '>{}_{}_NxK_Gammaproteobacteriota'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_{}_Protein:NxK_Gammaproteobacteriota'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         NxK_Gammaproteobacteriota_out.write(line)
                     NxK_Gammaproteobacteriota_out.close()
             elif clade_dic[key] == '65825':
@@ -242,14 +242,14 @@ for key in clade_dic.keys():
                         NhaS5_dict[entry] = 'NhS5'
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/NhaS5_sequences.faa", "a") as NhaS5out:
                             sequence  = seq_dic[entry]
-                            line = '>{}_{}_NhaS5'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_Protein:NhaS5'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             NhaS5out.write(line)
                         NhaS5out.close()
                 else:
                     NhaS5_dict[key] = 'NhaS5'
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/NhaS5_sequences.faa", "a") as NhaS5out:
                         sequence  = seq_dic[key]
-                        line = '>{}_{}_NhaS5'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_{}_Protein:NhaS5'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         NhaS5out.write(line)
                     NhaS5out.close()
             elif clade_dic[key] == '65668':
@@ -260,14 +260,14 @@ for key in clade_dic.keys():
                         UncArc_dict[entry] = 'UncArc'
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/UncARC_sequences.faa", "a") as UncARCout:
                             sequence  = seq_dic[entry]
-                            line = '>{}_{}_UncARC'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_Protein:UncARC'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             UncARCout.write(line)
                         UncARCout.close()
                 else:
                     UncArc_dict[key] = 'UncArc'
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/UncARC_sequences.faa", "a") as UncARCout:
                         sequence  = seq_dic[key]
-                        line = '>{}_UncARC'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_Protein:UncARC'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         UncARCout.write(line)
                     UncARCout.close()
             elif clade_dic[key] == '61608':
@@ -278,14 +278,14 @@ for key in clade_dic.keys():
                         UncProk_dict[entry] = 'Uncharacterized_Prokarya'
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/UncPROK_sequences.faa", "a") as UncPROKout:
                             sequence  = seq_dic[entry]
-                            line = '>{}_{}_UncPROK'.format(key, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                            line = '>{}_{}_Protein:UncPROK'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
                             UncPROKout.write(line)
                         UncPROKout.close()
                 else:
                     UncProk_dict[key] = 'Uncharcaterized_Prokarya'
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/UncPROK_sequences.faa", "a") as UncPROKout:
                         sequence  = seq_dic[key]
-                        line = '>{}_{}_UncPROK'.format(key,Tax_dic[key]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_{}_Protein:UncPROK'.format(key,Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         UncPROKout.write(line)
                     UncPROKout.close()
             else:
