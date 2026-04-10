@@ -126,7 +126,7 @@ for key in clade_dic.keys():
                     NhaA_dict[key] = 'NhaA'
                     with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/NhaA_Euksequences.faa", "a") as Nhaout:
                         sequence  = seq_dic[key]
-                        line = '>{}_{}_NhaA'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+                        line = '>{}_{}_NhaA'.format(entry, Tax_dic[key]) + '\n' + str(sequence) + '\n'
                         Nhaout.write(line)
                     Nhaout.close()
             elif clade_dic[key] == '58708':
