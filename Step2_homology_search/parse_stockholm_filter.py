@@ -1,13 +1,10 @@
 import re
 import sys
 
-#Craig herbold has been instrumental in generating the 're' part, I do not like running re
-
 hit_file = sys.argv[1] # '/nesi/nobackup/uc04105/results/hmmalign/pipeline/CPA/Archaea_nhaA_TRKACpfam_align_CPAfold.sthk'  #sys.argv[1]  
 outfile = sys.argv[2]
-length = int(sys.argv[3])
-
 # define alignment
+length = int(sys.argv[3])
 alignment={}
 
 
@@ -20,7 +17,7 @@ with open(hit_file) as hmmalignment:
             splitLine=line.split()
 
             if(len(splitLine)==2):
-                stringFilter = lambda text: re.sub('[.*]', '', splitLine[1])
+                stringFilter = lambda text: re.sub('[a-z.*]', '', splitLine[1])
                 filteredString=stringFilter(splitLine[1])
 
                 if(splitLine[0] in alignment.keys()):
@@ -32,19 +29,27 @@ with open(hit_file) as hmmalignment:
 
 # check for identical length
 
+lengthDict={}
+
+for header in alignment.keys():
+    lengthDict[len(alignment[header])]=1
 
 
-#make a file containing all sequences above a certain length
-#one file contains all sequences gapped and one replaces the gaps with X's
-with open('{}'.format(outfile), 'w') as file1:
-    for key in alignment.keys():
-        fasta = alignment[key]
-        if sum(1 for c in fasta if c.isupper()) < length:
-            pass
-        else:   
-            sequence = '>' + key + '\n' + fasta.upper() + '\n'
-            
-            file1.write(sequence)
-        
-    
-    file1.close()
+
+if len(lengthDict) > 1:
+    sys.exit("ERROR! Aligned sequences differ by length")
+
+
+file = open("{}.fa".format(outfile), "a") #gapped file
+x_file = open('{}_x.faa'.format(outfile), 'a')
+for header in alignment.keys():
+    if (len(alignment[header].replace('-', ''))) > length:
+
+    #    file = open("{}.fa".format(outfile), "a")
+      #use the '.fa' file, also called gapped later on
+        sequence = ">" + header + '\n' + alignment[header] + '\n'
+        x_sequence = '>' + header + '\n' + str(alignment[header]).replace('-', 'X') + '\n'
+        file.write(sequence)
+        x_file.write(x_sequence)
+x_file.close()
+file.close()
