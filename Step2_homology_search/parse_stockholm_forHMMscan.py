@@ -1,4 +1,5 @@
 import re
+
 import sys
 
 #Craig herbold has been instrumental in generating the 're' part, I do not like running re
@@ -36,15 +37,24 @@ with open(hit_file) as hmmalignment:
 
 #make a file containing all sequences above a certain length
 #one file contains all sequences gapped and one replaces the gaps with X's
+
+
+
+#make a file containing all sequences above a certain length
+#one file contains all sequences gapped and one replaces the gaps with X's
+import re 
+#make a file containing all sequences above a certain length
+#one file contains all sequences gapped and one replaces the gaps with X's
 with open('{}.fasta'.format(outfile), 'w') as file1:
     for key in alignment.keys():
         fasta = alignment[key]
         if sum(1 for c in fasta if c.isupper()) < length:
             pass
         else:   
-            sequence = '>' + key + '\n' + fasta.upper().replace('-','') + '\n'
-            
-            file1.write(sequence)
-        
-    
-    file1.close()
+            sequence_test = alignment[key]
+            p1 =re.sub("^[a-z]*", '', sequence_test)
+            sequence=re.sub("[a-z]*$", '', p1).replace('-', '').upper()
+            sequence_and_header = '>' + key + '\n' + str(sequence) + '\n'
+            file1.write(sequence_and_header)
+file1.close()
+
