@@ -31,14 +31,14 @@ _Generation of the inhouse HMM is outlined in Step2* HMM generation_
 
     cat */*/PF03600*fasta > PF03600_vs_all_mergedHMM_mergedMMseq.fasta
 
-  #an additional step recommended is removing duplicates, especially for CPA, this can be done using a simple python script 'remove_duplicates.py' or 'MMseqs -c 1 -seqid 1'.
+  #an additional step recommended is removing duplicates, especially for CPA, this can be done using a simple python script 'remove_duplicates.py' or 'MMseqs -c 0.0 -seqid 1'.
 
   **Step 3** Run another MMseq search using the merged file as query and each database as subject. Retrieve these sequences per database.
   _(this can be done by adding getting_fasta_from_hit.py)_
   
 
   **Step 4.** Per database run the retrieved against the database again (iterative MMseqs2 search). Retrieve these sequences.
-    #I recommended is removing duplicates, especially for CPA, this can be done using  'MMseqs -c 1 -seqid 1' for Bacteria.
+    #I recommended is removing duplicates, especially for CPA, this can be done using  'MMseqs -c 0.0 -seqid 1' for Bacteria.
 
  **Step 5.** Run a quality control by aligning the sequences against their respective HMM, so for PF03600:
           
