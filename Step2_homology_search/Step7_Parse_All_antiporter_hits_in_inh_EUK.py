@@ -57,7 +57,9 @@ def best_hit_dict(HMMscan, scan_dict):
                     entry_list = (best_match_hmm, evalue)
                     scan_dict[full_id] =entry_list
     return(scan_dict)
-scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan/subset'
+
+
+scandir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMscan'
 from Bio import SeqIO
 
 scan_dict = {}
@@ -69,6 +71,7 @@ for hmmscan in os.listdir(scandir):
         HMMscan = '{}/{}'.format(scandir,hmmscan)
         scan_dict = best_hit_dict(HMMscan, scan_dict)
         print(HMMscan)
+
 tax_list = []
 Pfam_hitlist = []
 #hmm allowed include the inhouse hmms
@@ -87,30 +90,42 @@ for key in scanned_dict.keys():
     CPA_list.append(key)
 print(len(set(CPA_list)))
 print(CPA_list[-1])
+tax_list = []
+for entry in CPA_list:
+   tax_list.append(entry.split('_tax:')[1])
+print(len(set(tax_list)))
+print(set(tax_list))
 
+
+    
 #returns all protein ids whom match with CPA PFAM
-Passed_all_list = {}
-HMMalign = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/cross_domain/Eukarya_merged_PF00999hmmaligned.fasta'
-
-for record in SeqIO.parse(HMMalign, 'fasta'):
-    if record.id in scanned_dict:
-        Passed_all_list[record.id] = record.seq
-GTDB_ids_passed = {}
-            
-print(len(set(list(Passed_all_list.keys()))))
+CPA_Passed_all_list = {}
+HMMalign_dir = '/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF00999/'
 
 
+with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Eukarya_CPA_fl.fasta', 'w') as C_out:
+    for FL_aligned in os.listdir('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF00999'):
+        if 'FL' in FL_aligned:
+            print(FL_aligned)
+            for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF00999/{}'.format(FL_aligned), 'fasta'):
+                if record.id in scanned_dict:
+                    #FL hmmalign and HMMalign for HMMscan use same threshold. 
+                    CPA_Passed_all_list[record.id] = record.seq
+                    C_out.write('>' + record.id + '\n' + str(record.seq) + '\n')
+print(len(set(list(CPA_Passed_all_list.keys()))))
 
-#NhaB
-#HMMscan was performed on the part of the sequence whom matched with the HMMalign, then it was ran agianst the full pfam 
-#NhaB
+
+print('finished CPA')
+
+from Bio import SeqIO
+
+#No NhaB in Archaea
 fulllength_NhaB_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF06450_Eukarya_merged_alignedPF06450_full_length.faa'
 seq_dict = {}
 for record in SeqIO.parse(fulllength_NhaB_file, 'fasta'):
     seq_dict[record.id] = record.seq
     
-scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
-HMMscan = '{}/PF06450_aligned_Eukarya_PF06450_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
+HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan/PF06450_aligned_Eukarya_PF06450_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'.format(scandir)
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -122,30 +137,30 @@ for key in scan_dict.keys():
         hit_list.append(key)
 print(len(hit_list))
 print(len(set(hit_list)))
-
+#NhaC
+print(hit_list)
 
 passed_list = []
-with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Eukarya_NhaB_fl.fasta', 'w') as C_out:
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF06450_aligned_Eukarya_PF06450_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
+with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Eukarya_NhaB_fl.fasta', 'w') as B_out:
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF06450_Eukarya_merged_alignedPF06450_full_length.faa', 'fasta'):
         if record.id in hit_list:
             passed_list.append(str(record.id.split('tax:')[1]))
             
             
             outline = '>' + record.id + '\n' + str(seq_dict[record.id]) + '\n'
-            C_out.write(outline)
+            B_out.write(outline)
     NhaB_list = passed_list
-    print(len(NhaC_list))
-    print(len(set(NhaB_list)))
-print(len(set(NhaB_list)))
-print('finished NhaB')
 
+#NhaC
 #NhaC
 fulllength_NhaC_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF03553_Eukarya_merged_alignedPF03553_full_length.faa'
 seq_dict = {}
 for record in SeqIO.parse(fulllength_NhaC_file, 'fasta'):
     seq_dict[record.id] = record.seq
-scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
-HMMscan = '{}//PF03553_aligned_Eukarya_PF03553_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
+
+
+HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan/PF03553_aligned_Eukarya_PF03553_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
+
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -157,7 +172,7 @@ for key in scan_dict.keys():
         hit_list.append(key)
 passed_list = []
 with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Eukarya_NhaC_fl.fasta', 'w') as C_out:
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF03553_aligned_Eukarya_PF03553_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF03553_Eukarya_merged_alignedPF03553_full_length.faa', 'fasta'):
         if record.id in hit_list:
             passed_list.append(str(record.id.split('tax:')[1]))
             
@@ -174,8 +189,7 @@ fulllength_NhaD_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/ori
 seq_dict = {}
 for record in SeqIO.parse(fulllength_NhaD_file, 'fasta'):
     seq_dict[record.id] = record.seq
-scandir = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan'
-HMMscan = '{}/PF03600_aligned_Eukarya_PF03600_retrieved_preQC_full_length_hmmaligned_ungapped.fasta_aligned_hmmscanned.tsv'.format(scandir)
+HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan/PF03600_aligned_Eukarya_PF03600_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'.format(scandir)
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -191,7 +205,7 @@ print(len(set(hit_list)))
 
 passed_list = []
 with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Eukarya_NhaD_fl.fasta', 'w') as C_out:
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/hmmalign/PF03600_aligned_Eukarya_PF03600_retrieved_preQC_full_length_hmmaligned_gapped.fasta', 'fasta'):
+    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/PF03600_Eukarya_merged_alignedPF03600_full_length.faa', 'fasta'):
         if record.id in hit_list:
             passed_list.append(str(record.id.split('tax:')[1]))
             
@@ -210,12 +224,12 @@ Tax_dict={}
 representatives_list = []
 #add sample site
 CPA_list_forIT = []
-for key in Passed_all_list.keys():
+for key in CPA_Passed_all_list.keys():
     CPA_list_forIT.append(key.split('tax:')[1])
     
 with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Eukarya_metadata.tsv', 'r') as Meta:
     next(Meta, None)
-    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Antiporter_Eukarya_2march2026.tsv', 'w') as Out:
+    with open('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Antiporter_Eukarya_21April2026.tsv', 'w') as Out:
         header=  'species_name'  + '\t' + 'Major_tax' +  '\t' + 'Tax' + '\t' + 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' +'\t' + 'NhaC_binary' +'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         for line in Meta:
@@ -257,13 +271,3 @@ tax = []
 import json
 
 
-
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_4nov_passed_all_setcpa.fsta', 'w') as Passed:
-    for key in Passed_all_list.keys():
-        header = key.split('_tax')[0]
-        tax.append(key.split('tax:')[1])
-        sequence = Passed_all_list[key]
-        line = '>' + header + '\n' + str(sequence) + '\n'
-        Passed.write(line)
-
-print(len(set(tax)))
