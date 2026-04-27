@@ -43,13 +43,15 @@ if len(lengthDict) > 1:
 file = open("{}.fa".format(outfile), "a") #gapped file
 x_file = open('{}_x.faa'.format(outfile), 'a')
 for header in alignment.keys():
-    if (len(alignment[header].replace('-', ''))) > length:
+    if sum(1 for c in fasta if c.isupper()) < length:
+            pass
+    else:   
 
     #    file = open("{}.fa".format(outfile), "a")
       #use the '.fa' file, also called gapped later on
-        sequence = ">" + header + '\n' + alignment[header] + '\n'
-        x_sequence = '>' + header + '\n' + str(alignment[header]).replace('-', 'X') + '\n'
-        file.write(sequence)
-        x_file.write(x_sequence)
+            sequence = ">" + header + '\n' + alignment[header] + '\n'
+            x_sequence = '>' + header + '\n' + str(alignment[header]).replace('-', 'X') + '\n'
+            file.write(sequence)
+            x_file.write(x_sequence)
 x_file.close()
 file.close()
