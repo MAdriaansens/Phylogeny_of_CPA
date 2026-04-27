@@ -42,16 +42,12 @@ if len(lengthDict) > 1:
     sys.exit("ERROR! Aligned sequences differ by length")
 
 
-file = open("{}.fa".format(outfile), "a") #gapped file
-x_file = open('{}_x.faa'.format(outfile), 'a')
+file = open("{}.fa".format(outfile), "a") #gapped file for tree
 for header in alignment.keys():
     if (len(alignment[header].replace('-', ''))) > length:
 
     #    file = open("{}.fa".format(outfile), "a")
       #use the '.fa' file, also called gapped later on
         sequence = ">" + header + '\n' + alignment[header] + '\n'
-        x_sequence = '>' + header + '\n' + str(alignment[header]).replace('-', 'X') + '\n'
         file.write(sequence)
-        x_file.write(x_sequence)
-x_file.close()
 file.close()
