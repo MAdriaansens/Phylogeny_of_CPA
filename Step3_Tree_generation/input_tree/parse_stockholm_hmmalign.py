@@ -5,8 +5,6 @@ hit_file = sys.argv[1] # '/nesi/nobackup/uc04105/results/hmmalign/pipeline/CPA/A
 outfile = sys.argv[2]
 # define alignment
 
-#since this has already been filtered for HMMscan we do not put a filter in there this time
-length = 0 #int(sys.argv[3])
 alignment={}
 
 
@@ -44,10 +42,9 @@ if len(lengthDict) > 1:
 
 file = open("{}.fa".format(outfile), "a") #gapped file for tree
 for header in alignment.keys():
-    if (len(alignment[header].replace('-', ''))) > length:
 
     #    file = open("{}.fa".format(outfile), "a")
       #use the '.fa' file, also called gapped later on
-        sequence = ">" + header + '\n' + alignment[header] + '\n'
-        file.write(sequence)
+    sequence = ">" + header + '\n' + alignment[header] + '\n'
+    file.write(sequence)
 file.close()
