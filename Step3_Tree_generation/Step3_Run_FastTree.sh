@@ -9,6 +9,5 @@
 
 
 module load FastTree/2.1.11-GCC-12.3.0
-cd /nesi/nobackup/uc04105/new_databases_May/final_tree_set 
  export OMP_NUM_THREADS=3
-FastTree -lg -cat 20 -gamma CPA_sequences_PF00999_algined.fasta >  CPA_TREE_ALGINEDMMSEQ1_PF00999_3Nov_fasttree__lg_gamma_cat.treefile
+FastTree -lg -cat 20 -gamma /home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/final_april28/tree_input/CPA_April30_merged_alignedPF0999_67392.faa  > /home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/final_april28/tree_input/CPA_28April_tree_seeds_lg_cat_gamma20.treefile
