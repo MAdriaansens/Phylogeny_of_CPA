@@ -5,17 +5,17 @@ import json
 clade_id = {}
 #outputs midrooted tree, a tsv file of all clade info + midrooted RED normalized tree
 import os
-file_path = "/nesi/nobackup/uc04105/new_databases_May/final_tree_set/edit_trees/CPA_TREE_ALGINEDMMSEQ1_PF00999_3Nov_fasttree_midrooted.treefile"
+file_path = "/nesi/nobackup/uc04105/new_databases_May/final_april28/RED/CPA_TREE_ALGINEDMMSEQ1_PF00999_28April_fasttree_midrooted.treefile"
 
 if os.path.exists(file_path):
     print('yah')
-    tree = Phylo.read("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/edit_trees/CPA_TREE_ALGINEDMMSEQ1_PF00999_3Nov_fasttree_midrooted.treefile", "newick")
+    tree = Phylo.read( "/nesi/nobackup/uc04105/new_databases_May/final_april28/RED/CPA_TREE_ALGINEDMMSEQ1_PF00999_28April_fasttree_midrooted.treefile", "newick")
 
 else:
-    tree = Phylo.read("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_TREE_ALGINEDMMSEQ1_PF00999_3Nov_fasttree.treefile", "newick")
+    tree = Phylo.read("/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/final_april28/tree_input/CPA_28April_tree_seeds_lg_cat_gamma20.treefile", "newick")
     tree.root_at_midpoint()
     
-    Phylo.write(tree, "/nesi/nobackup/uc04105/new_databases_May/final_tree_set/edit_trees/CPA_TREE_ALGINEDMMSEQ1_PF00999_3Nov_fasttree_midrooted.nw", "newick")
+    Phylo.write(tree,  "/nesi/nobackup/uc04105/new_databases_May/final_april28/RED/CPA_TREE_ALGINEDMMSEQ1_PF00999_28April_fasttree_midrooted.treefile", "newick")
 #this has to occur after midpoint root
 count = 0
 #only give clade a number/name if it is not terminal
@@ -77,7 +77,7 @@ import json
 #this file is essential for downstream processing. 
 
 #important file when generating and calling clades later on
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/info_RED_clades_CPA_phylogeny_FTtree_3Nov.tsv', 'w') as C:
+with open('/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/final_april28/RED/info_RED_clades_CPA_phylogeny_FTtree_28April.tsv', 'w') as C:
     header = 'clade_id' + '\t' + 'distance_from_root' + '\t' + 'og_branch_length' + '\t' + 'bootstrap' + '\t' + 'children' + '\t' + 'RED' + '\t' + 'summed_red' + '\t' + 'RED_BL' + '\n'
     C.write(header)
     for clade in tree.find_clades(order='postorder'):
@@ -123,5 +123,5 @@ for clade in tree.find_clades():
         clade.name = clade.comment
     clade.confidence = clade.bootstrap
 
-Phylo.write(tree, "./CPA_phylogeny_midroot_TREE_ALIGNEDRED_3Nov_ft.nw", "newick")
+Phylo.write(tree, "./CPA_phylogeny_midroot_TREE_ALIGNEDRED_28April_ft.nw", "newick")
 
