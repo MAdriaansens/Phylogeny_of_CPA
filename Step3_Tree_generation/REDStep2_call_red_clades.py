@@ -4,11 +4,12 @@ from Bio.Phylo.Consensus import *
 from Bio import Phylo
 from Bio.Phylo.Consensus import *
 
+from collections import Counter
 
 #redo the clade name as it was done for the tree in previous code so we are uniform and consistent
 
 #loas red normalized tree        
-tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_phylogeny_midroot_TREE_ALIGNEDRED_7Nov_ft_lg_cat_gamma.nw', 'newick')
+tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/final_april28/RED/CPA_TREE_ALGINEDMMSEQ1_PF00999_28April_fasttree_midrooted.treefile', 'newick')
 count = 0
 #only give clade a number/name if it is not terminal
 # otherwise let it keep the same name, this prevents future back paddeling and renaming. 
@@ -30,7 +31,7 @@ for clade in tree.find_clades():
 Red_dict = {}
 #since I am bad at decorating trees I have a seperate tsv file with for each node/termini the number of reps and their red in the lg_cat_gamma tree
 #that is what lg_cat_gamma.tsv is, I open that file, matches the clade id with the red value in a dict so it is easy to parse
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/info_RED_clades_CPA_phylogeny_FTtree_lg_cat_gamma_7Nov.tsv', 'r') as clade_inf:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/RED/info_RED_clades_CPA_phylogeny_FTtree_28April.tsv', 'r') as clade_inf:
     next(clade_inf, None)
     for inf in clade_inf:
         RED =(inf.split('\t')[5])
@@ -270,31 +271,35 @@ def parse_parents_list(tree, parent_list, bad_parent_list, lowerlimit, upperlimi
 
 #generate dictionary for each protein group
 #Clade
-parent_list =[]
-parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.001, 0.14, 'None')
-node_dic1, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.001, 0.14, 'None')
 
-#Subfamily
 parent_list =[]
-parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.001, 0.31, 27958)
-node_dic2, bad_parent_good_child= parse_parents_list(tree, parent_list, bad_parent_list, 0.001, 0.31, 27958)
+parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.001, 0.11, 'None')
+node_dic2, bad_parent_good_child= parse_parents_list(tree, parent_list, bad_parent_list, 0.001, 0.11, 'None')
+
 
 #Subclade
 parent_list =[]
-parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.14, 0.478, 'None')
-node_dic3, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.14, 0.478, 'None')
+parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.11, 0.478, 'None')
+node_dic3, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.11, 0.478, 'None')
+
+#Subfamily
+
+parent_list =[]
+parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree,  0.4781, 0.65, 'None')
+node_dic1, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.4781, 0.65, 'None')
+
 
 #Group
 parent_list =[]
-parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.479, 0.729, 'None')
-node_dic4, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.479, 0.729,'None')
+parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.65, 0.89, 'None')
+node_dic4, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list,  0.8, 1,'None')
 
 #Subgroup
 parent_list =[]
-parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.73, 1,'None')
-node_dic5, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.73, 1,'None')
+parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.89, 1,'None')
+node_dic5, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.89, 1,'None')
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_clade_20_lg_cat_gamma_RED_interval_15Jan.tsv', 'w') as Big:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/Red_informed_clade_20_lg_cat_gamma_RED_interval_28April.tsv', 'w') as Big:
     header = 'Protein_id' + '\t' + 'Subfamily' + '\t' + 'Clade' + '\t' + 'Subclade' + '\t' + 'Group' + '\t' + 'Subgroup' + '\n'
     
     Big.write(header)
