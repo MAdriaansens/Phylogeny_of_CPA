@@ -84,10 +84,10 @@ Euk_cNMP = Parse_hmmalign_to_list('/nesi/nobackup/uc04105/new_databases_May/fina
 
 
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_april28//CPA_full_tree_aligned_annotation_30April.tsv', 'w') as C:
-
-    C.write('Protein_id' + '\t' + 'Sequence' + '\t' + 'ngaps' + '\t' + 'Motif' + '\t' + 'Domain' + '\t' + 'GTDB_taxonomy' + '\t' + 'Phyla' + '\t' + 'Seed' + '\t' + 'First_site' + '\t' + 'Second_site' + '\t' + 'last_site' + '\t' + 'Cluster_count' '\t' + 'NhaA' + '\t' + 'TRK_N' + '\t' + 'TRK_C' + '\t' + 'CHX17' + '\t' + 'CHX17_C' + '\t' + 'cNMP' + '\t' + 'Nha1_C'+ '\n')
-
+with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/CPA_full_tree_aligned_annotation_30April.tsv', 'w') as C:
+    Prot_dict={}
+    C.write('Protein_id' + '\t' + 'Sequence' + '\t' + 'ngaps' + '\t' + 'Motif' + '\t' + 'Domain' + '\t' + 'GTDB_taxonomy' + '\t' + 'Phyla' '\t' + 'Class' + '\t' + 'Order' + '\t' + 'Family' + '\t' + 'Genus' + '\t' + 'Seed' + '\t' + 'First_site' + '\t' + 'Second_site' + '\t' + 'last_site' + '\t' + 'Cluster_count' '\t' + 'NhaA' + '\t' + 'TRK_N' + '\t' + 'TRK_C' + '\t' + 'CHX17' + '\t' + 'CHX17_C' + '\t' + 'cNMP' + '\t' + 'Nha1_C'+ '\n')
+    count = 0
     for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_april28/tree_input/SG_seed_update_jan142024_135seq_alignedPF009999_filtered.faa.fasta', 'fasta'):
         seq = str(record.seq)
         if '_d' in record.id:
@@ -97,6 +97,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_april28//CPA_full_tree
         else:
             tax = 'Eukarya'
         prot_id =  record.id.split('_')[-1] + '_' + record.id.split('_')[-2] 
+        print(prot_id)
         count = count + 1
         Prot_dict[prot_id] = tax, seq
 
@@ -222,7 +223,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_april28//CPA_full_tree
         Second_site = record.seq[146]
         last_site = record.seq[300]
         Motif = record.seq[145] + record.seq[146] + record.seq[300]
-        C.write(record.id + '\t' + str(record.seq) + '\t' + ngaps + '\t' + Motif + '\t' + Domain + '\t' + GTDB_taxonomy + '\t' + Phyla + '\t' + Seed + '\t' + First_site + '\t' + Second_site + '\t' + last_site + '\t' + str(Cluster_count) +  '\t' + NhaA + '\t' + TRK_N + '\t' + TRK_C + '\t' + CHX17 + '\t' + CHX17_C + '\t' + cNMP + '\t' + Nha1_C + '\n')
+        C.write(record.id.split(':')[0] + '\t' + str(record.seq) + '\t' + ngaps + '\t' + Motif + '\t' + Domain + '\t' + GTDB_taxonomy + '\t' + Phyla + '\t' + Class + '\t' + Order + '\t' + Family + '\t' + Genus + '\t' + Seed + '\t' + First_site + '\t' + Second_site + '\t' + last_site + '\t' + str(Cluster_count) +  '\t' + NhaA + '\t' + TRK_N + '\t' + TRK_C + '\t' + CHX17 + '\t' + CHX17_C + '\t' + cNMP + '\t' + Nha1_C + '\n')
 
 #check if annotation and alignment match
 
