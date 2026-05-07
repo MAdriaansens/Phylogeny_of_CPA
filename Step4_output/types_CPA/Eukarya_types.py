@@ -1,351 +1,340 @@
-import json
 
+MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_april28/tree_input/Eukarya_April_hmmaligned_e03_mmseq_treeinput_clusterd_at_0.7.faa_cluster.tsv'
+rep_list = []
+
+
+with open(MMseq, 'r') as clusters:
+    for cluster in clusters:
+        
+        rep = cluster.split('\t')[0].split(':')[0]
+        rep_list.append(rep)
+    clusters.close()
+from collections import Counter
+
+#the rep list, is just a list of all values in the representative columns, this means that ids are present multiple times
+
+rep_list = (rep_list)
+reps = Counter(rep_list)
+
+#reps returns is a counter of how many sequences a rep represents
+items = reps.items()
+
+
+singleton_list = []
+multiple_list = []
+
+for i in items:
+    if i[-1] == 1:
+        singleton_list.append(i[0].split(':')[0])
+    else:
+        multiple_list.append(i[0].split(':')[0])
+
+print(len(multiple_list))
+print(len(singleton_list))
+replist = []
+Reps_dic = {}
+
+with open(MMseq, 'r') as clustermap:
+    count = 0
+    second_list = []
+    element_count = 0
+    for entry in clustermap:
+        count = reps[entry.split('\t')[0].split(':')[0]]
+        repm = entry.split('\t')[0].split(':')[0]
+        if repm in multiple_list:
+            if repm in replist:
+                second = (entry.split('\t')[1].split('\n')[0])
+                second_list.append(second)
+                if len(second_list) == count:
+                    Reps_dic[repm] = second_list
+            else:
+
+                replist.append(repm)
+                second_list = []
+                second_list.append(repm)
+        else:
+            pass
+
+#load matching types
 clade_dic = {}
-
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Red_informed_clade_20_lg_cat_gamma_RED_interval.tsv', 'r') as LG_Cat_Gamma_clade:
+with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/Red_informed_clade_20_lg_cat_gamma_RED_interval_28April.tsv', 'r') as LG_Cat_Gamma_clade:
     next(LG_Cat_Gamma_clade, None)
     for line in LG_Cat_Gamma_clade:
         protein_id = line.split('\t')[0]
-        domain = line.split('\t')[1]
+        domain = line.split('\t')[2]
         clade_dic[protein_id] = domain
-domain_list = []
-for key in clade_dic.keys():
-    domain_list.append(clade_dic[key])
-
-from collections import Counter
-
-
-Tax_dic = {}
 
 
 
-Reps_dic = {}
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Eukarya_clusters_7OKT.tsv', 'r') as reps_euk:
-    next(reps_euk, None)
-    for line in reps_euk:
-        Rep = (line.split('\t')[0])
-        Clusteroids = (line.split('\t')[-1].split('\n')[0])
-        Reps_dic[Rep] = Clusteroids
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/second_set/fl_taxa/Eukarya/Eukarya_cpa_fl_taxa.json', 'r') as euk_data:
-    Euk_dic = json.load(euk_data)
+
+
 
 seq_dic = {}
-Tax_dic = {}
-Tax_list = []
-
-for key in Euk_dic.keys():
-    Tax_list.append(Euk_dic[key][0].split('_Taxa')[0])
-    seq_dic[key] = Euk_dic[key][-1]
-    Tax_dic[key] = Euk_dic[key][0]
-
-
-CPA1_dict = {}
-CPA2_dict = {}
-Kef_dict = {}
-NhaA_dict = {}
-Lates_dict={}
-Uncharacterized  = {}
-DxK_pseudo_dict = {}
-NxKGamma_dict = {}
-NhaS5_dict = {}
-UncArc_dict = {}
-UncProk_dict = {}
+from Bio import SeqIO
+tax_list = []
+for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Eukarya_CPA_fl.fasta','fasta'):
+    seq_dic[record.id.split(':')[0]] = [record.id, str(record.seq)]
+    tax_list.append(record.id.split('tax:')[1])
+tax_list = list(set(tax_list))
 
 
+#list
+CPA1_list = []
+CHX_list = []
+Kef_list = []
+NhaA_list = []
+Uncharacterized_list = []
+NhaS5_list = []
+Undescribed_CPA1_list = []
+SOD2_list = []
+NhaP_CPA1_list = []
+UndProkarya_CPA1_IDK_list = []
+GerN_list = []
+CPA1_SL_list = []
 for key in clade_dic.keys():
-    if 'Euk' in key:
+
+    if 'EukM6' in key:
         if key[0].isnumeric():
             pass
         else:
-            if clade_dic[key] == '35427':
-                #now we unpack the representatives
+
+            if clade_dic[key] == '8':
                 if key in Reps_dic:
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        CPA1_dict[entry] = 'CPA1'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/CPA1_Euksequences.faa", "a") as CPA1out:
-                             sequence  = seq_dic[entry]
-                             line = '>{}_{}_CPA1'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
-                             CPA1out.write(line)
+                    for entry.split(':')[0] in Reps_dic[key]:
+                        
+                        
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CPA1_sequences.faa", "a") as CPA1out:
+                            sequence  = seq_dic[entry.split(':')[0]][1]
+                            id_tax =  seq_dic[entry.split(':')[0]][0]
+                            CPA1_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:CPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            CPA1out.write(line)
                         CPA1out.close()
                 else:
-                    CPA1_dict[key] = 'CPA1'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/CPA1_Euksequences.faa", "a") as CPA1out:
-                             sequence  = seq_dic[key]
-                             line = '>{}_{}_CPA1'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                             CPA1out.write(line)
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CPA1_sequences.faa", "a") as CPA1out:
+                        sequence  = seq_dic[key][1]
+                        id_tax =  seq_dic[key][0]
+                        CPA1_list.append(id_tax.split('tax:')[1])
+                        line = '>{}_Protein:CPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
+                        CPA1out.write(line)
                     CPA1out.close()
-    
-            elif clade_dic[key] == '13164':
-                            #now we unpack the representatives
-                if key in Reps_dic:
-                    
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        Kef_dict[entry] = 'Kef'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/Kef_Euksequences.faa", "a") as Kefout:
-                            sequence  = seq_dic[entry]
-                            line = '>{}_{}_Kef'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
+            elif clade_dic[key] == '62243':
+                    if key in Reps_dic:
+                        for entry.split(':')[0] in Reps_dic[key]:
+                            
+                            with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CHX_sequences.faa", "a") as CHXout:
+                                sequence  = seq_dic[entry.split(':')[0]][1]
+                                id_tax =  seq_dic[entry.split(':')[0]][0]
+                                CHX_list.append(id_tax.split('tax:')[1])
+
+                                line = '>{}_Protein:CHX'.format(id_tax) + '\n' + str(sequence) + '\n'
+                                CHXout.write(line)
+                            CHXout.close()
+                    else:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CHX_sequences.faa", "a") as CHXout:
+                            sequence  = seq_dic[key][1]
+                            id_tax =  seq_dic[key][0]
+                            CHX_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:CHX'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            CHXout.write(line)
+                        CHXout.close()
+            elif clade_dic[key] == '29930':
+                    if key in Reps_dic:
+                        for entry.split(':')[0] in Reps_dic[key]:
+                            
+                            with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Kef_sequences.faa", "a") as Kefout:
+                                sequence  = seq_dic[entry.split(':')[0]][1]
+                                id_tax =  seq_dic[entry.split(':')[0]][0]
+                                Kef_list.append(id_tax.split('tax:')[1])
+                                line = '>{}_Protein:Kef'.format(id_tax) + '\n' + str(sequence) + '\n'
+                                Kefout.write(line)
+                            Kefout.close()
+                    else:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Kef_sequences.faa", "a") as Kefout:
+                            sequence  = seq_dic[key][1]
+                            id_tax =  seq_dic[key][0]
+                            Kef_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:Kef'.format(id_tax) + '\n' + str(sequence) + '\n'
                             Kefout.write(line)
                         Kefout.close()
-                else:
-                    Kef_dict[key] = 'Kef'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/Kef_Euksequences.faa", "a") as Kefout:
-                        sequence  = seq_dic[key]
-                        line = '>{}_{}_Kef'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                        Kefout.write(line)
-                    Kefout.close()
-            elif clade_dic[key] == '4':
-                                            #now we unpack the representatives
-                if key in Reps_dic:
-                    
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        CPA2_dict[entry] = 'CPA2'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/CPA2_Euksequences.faa", "a") as CPA2out:
-                             sequence  = seq_dic[entry]
-                             line = '>{}_{}_CPA2'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
-                             CPA2out.write(line)
-                        CPA2out.close()
-                else:
-                    CPA2_dict[key] = 'CPA2'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/CPA2_Euksequences.faa", "a") as CPA2out:
-                             sequence  = seq_dic[key]
-                             line = '>{}_{}_CPA2'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                             CPA2out.write(line)
-                    CPA2out.close()
-            elif clade_dic[key] == '27962':
-                                                            #now we unpack the representatives
-                if key in Reps_dic:
-                    
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        NhaA_dict[entry] = 'NhaA'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/NhaA_Euksequences.faa", "a") as Nhaout:
-                             sequence  = seq_dic[entry]
-                             line = '>{}_{}_NhaA'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
-                             Nhaout.write(line)
+            elif clade_dic[key] == '45068':
+                    if key in Reps_dic:
+                        for entry.split(':')[0] in Reps_dic[key]:
+                            
+                            with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaA_sequences.faa", "a") as NhaAout:
+                                sequence  = seq_dic[entry.split(':')[0]][1]
+                                id_tax =  seq_dic[entry.split(':')[0]][0]
+                                NhaA_list.append(id_tax.split('tax:')[1])
+                                line = '>{}_Protein:NhaA'.format(id_tax) + '\n' + str(sequence) + '\n'
+                                NhaAout.write(line)
+                            NhaAout.close()
+                    else:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaA_sequences.faa", "a") as NhaAout:
+                            sequence  = seq_dic[key][1]
+                            id_tax =  seq_dic[key][0]
+                            NhaA_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:NhaA'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            NhaAout.write(line)
                         NhaAout.close()
-                else:
-                    NhaA_dict[key] = 'NhaA'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/NhaA_Euksequences.faa", "a") as Nhaout:
-                        sequence  = seq_dic[key]
-                        line = '>{}_{}_NhaA'.format(entry, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                        Nhaout.write(line)
-                    Nhaout.close()
-            elif clade_dic[key] == '58708':
+            elif clade_dic[key] == '57585':
                                                             #now we unpack the representatives
                 if key in Reps_dic:
 
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        Lates_dict[entry] = 'Latescibacteriota_cpa'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/Latesci_Euksequences.faa", "a") as Latesciout:
-                             sequence  = seq_dic[entry]
-                             line = '>{}_{}_Latesci'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
-                             Latesciout.write(line)
-                        Latesciout.close()
+                    for entry in Reps_dic[key]:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaS5_sequences.faa", "a") as NhaS5out:
+                            sequence  = seq_dic[entry.split(':')[0]][1]
+                            id_tax =  seq_dic[entry.split(':')[0]][0]
+                            NhaS5_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:NhaS5'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            NhaS5out.write(line)
+                        NhaS5out.close()
                 else:
-                    Lates_dict[key] = 'Latescibacteriota_cpa'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/Latesci_Euksequences.faa", "a") as Latesciout:
-                        sequence  = seq_dic[key]
-                        line = '>{}_{}_Latesci'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                        Latesciout.write(line)
-                    Latesciout.close()
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaS5_sequences.faa", "a") as NhaS5out:
+                        sequence  = seq_dic[key][1]
+                        id_tax =  seq_dic[key][0]
+                        NhaS5_list.append(id_tax.split('tax:')[1])
 
-            elif clade_dic[key] == '58745':
+                        line = '>{}_Protein:NhaS5'.format(id_tax) + '\n' + str(sequence) + '\n'
+                        NhaS5out.write(line)
+                    NhaS5out.close()
+            elif clade_dic[key] == '23026':
                                                             #now we unpack the representatives
                 if key in Reps_dic:
 
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        DxK_pseudo_dict[entry] = 'DxK_Pseudomonadota'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/DxKPseudo_Euksequences.faa", "a") as DxK:
-                            sequence  = seq_dic[entry]
-                            line = '>{}_{}_DxKPseudo'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
-                            DxK.write(line)
-                        Dxk.close()
+                    for entry in Reps_dic[key]:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Undescribed_CPA1_sequences.faa", "a") as Undescribed_CPA1out:
+                            sequence  = seq_dic[entry.split(':')[0]][1]
+                            id_tax =  seq_dic[entry.split(':')[0]][0]
+                            Undescribed_CPA1_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:Undescribed_CPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            Undescribed_CPA1out.write(line)
+                        Undescribed_CPA1out.close()
                 else:
-                    DxK_pseudo_dict[key] = 'DxK_Pseudomonadota'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/DxKPseudo_Euksequences.faa", "a") as DxK:
-                        sequence  = seq_dic[key]
-                        line = '>{}_{}_DxKPseudo'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                        DxK.write(line)
-                    Dxk.close()
-            elif clade_dic[key] == '59314':
-                                                            #now we unpack the representatives
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Undescribed_CPA1_sequences.faa", "a") as Undescribed_CPA1out:
+                        sequence  = seq_dic[key][1]
+                        id_tax =  seq_dic[key][0]
+                        Undescribed_CPA1_list.append(id_tax.split('tax:')[1])
+                        line = '>{}_Protein:Undescribed_CPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
+                        Undescribed_CPA1out.write(line)
+                    Undescribed_CPA1out.close()
+            elif clade_dic[key] == '11132':
                 if key in Reps_dic:
-
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        NxKGamma_dict[entry] = 'NxK_Gammaproteobacteriota'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/NxK_Euksequences.faa", "a") as NxK:
-                            sequence  = seq_dic[entry]
-                            line = '>{}_{}_NxK'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
-                            NxK.write(line)
-                        Nxk.close()
+                    for entry in Reps_dic[key]:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_SOD2_sequences.faa", "a") as SOD2out:
+                            sequence  = seq_dic[entry.split(':')[0]][1]
+                            id_tax =  seq_dic[entry.split(':')[0]][0]
+                            SOD2_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:SOD2'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            SOD2out.write(line)
+                        SOD2out.close()
                 else:
-                    NxKGamma_dict[key] = 'NxK_Gammaproteobacteriota'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/NxK_Euksequences.faa", "a") as NxK:
-                        sequence  = seq_dic[key]
-                        line = '>{}_{}_NxK'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                        NxK.write(line)
-                    Nxk.close()
-            elif clade_dic[key] == '65825':
-                                                            #now we unpack the representatives
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_SOD2_sequences.faa", "a") as  SOD2out:
+                        sequence  = seq_dic[key][1]
+                        id_tax =  seq_dic[key][0]
+                        SOD2_list.append(id_tax.split('tax:')[1])
+                        line = '>{}_Protein:SOD2'.format(id_tax) + '\n' + str(sequence) + '\n'
+                        SOD2out.write(line)
+                    SOD2out.close()
+            elif clade_dic[key] == '14956':
                 if key in Reps_dic:
-
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        NhaS5_dict[entry] = 'NhS5'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/NhaS5_Euksequences.faa", "a") as NhaS5:
-                            sequence  = seq_dic[key]
-                            line = '>{}_{}_NhaS5'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
-                            NhaS5.write(line)
-                        NhaS5.close()
+                    for entry in Reps_dic[key]:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaPCPA1_sequences.faa", "a") as NhaPCPA1out:
+                            sequence  = seq_dic[entry.split(':')[0]][1]
+                            id_tax =  seq_dic[entry.split(':')[0]][0]
+                            NhaP_CPA1_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:NhaPCPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            NhaPCPA1out.write(line)
+                        NhaPCPA1out.close()
                 else:
-                    NhaS5_dict[key] = 'NhaS5'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/NhaS5_Euksequences.faa", "a") as NhaS5:
-                        sequence  = seq_dic[key]
-                        line = '>{}_{}_NhaS5'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                        NhaS5.write(line)
-                    NhaS5.close()
-            elif clade_dic[key] == '65668':
-                                                            #now we unpack the representatives
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaPCPA1_sequences.faa", "a") as  NhaPCPA1out:
+                        sequence  = seq_dic[key][1]
+                        id_tax =  seq_dic[key][0]
+                        NhaP_CPA1_list.append(id_tax.split('tax:')[1])
+                        line = '>{}_Protein:NhaPCPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
+                        NhaPCPA1out.write(line)
+                    NhaPCPA1out.close()
+            elif clade_dic[key] == '8560':
                 if key in Reps_dic:
-
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        UncArc_dict[entry] = 'UncArc'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/UncArc_Euksequences.faa", "a") as UncArc:
-                            sequence  = seq_dic[entry]
-                            line = '>{}_{}_UncArc'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
-                            UnArc.write(line)
-                        UnArc.close()
+                    for entry in Reps_dic[key]:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_UndProkaryaCPA1IDK_sequences.faa", "a") as UndProkaryaCPA1IDKout:
+                            sequence  = seq_dic[entry.split(':')[0]][1]
+                            id_tax =  seq_dic[entry.split(':')[0]][0]
+                            UndProkarya_CPA1_IDK_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:UndProkaryaCPA1IDK'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            UndProkaryaCPA1IDKout.write(line)
+                        UndProkaryaCPA1IDKout.close()
                 else:
-                    UncArc_dict[key] = 'UncArc'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/UncArc_Euksequences.faa", "a") as UncArc:
-                        sequence  = seq_dic[key]
-                        line = '>{}_{}_UncArc'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                        UnArc.write(line)
-                    UnArc.close()
-            elif clade_dic[key] == '61608':
-                                                            #now we unpack the representatives
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_UndProkaryaCPA1IDK_sequences.faa", "a") as  UndProkaryaCPA1IDKout:
+                        sequence  = seq_dic[key][1]
+                        id_tax =  seq_dic[key][0]
+                        UndProkarya_CPA1_IDK_list.append(id_tax.split('tax:')[1])
+                        line = '>{}_Protein:UndProkaryaCPA1IDK'.format(id_tax) + '\n' + str(sequence) + '\n'
+                        UndProkaryaCPA1IDKout.write(line)
+                    UndProkaryaCPA1IDKout.close()
+            elif clade_dic[key] == '53633':
                 if key in Reps_dic:
-
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        UncProk_dict[entry] = 'Uncharacterized_Prokarya'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/UncPro_Euksequences.faa", "a") as UncPro:
-                            sequence  = seq_dic[key]
-                            line = '>{}_{}_UncPro'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
-                            UncPro.write(line)
-                        UncPro.close()
+                    for entry in Reps_dic[key]:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_GerN_sequences.faa", "a") as GerNout:
+                            sequence  = seq_dic[entry.split(':')[0]][1]
+                            id_tax =  seq_dic[entry.split(':')[0]][0]
+                            GerN_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:GerN'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            GerNout.write(line)
+                        GerNout.close()
                 else:
-                    UncProk_dict[key] = 'Uncharcaterized_Prokarya'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/UncPro_Euksequences.faa", "a") as UncPro:
-                        sequence  = seq_dic[key]
-                        line = '>{}_{}_UncPro'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                        UncPro.write(line)
-                    UncPro.close()
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_GerN_sequences.faa", "a") as GerNout:
+                        sequence  = seq_dic[key][1]
+                        id_tax =  seq_dic[key][0]
+                        GerN_list.append(id_tax.split('tax:')[1])
+                        line = '>{}_Protein:GerN'.format(id_tax) + '\n' + str(sequence) + '\n'
+                        GerNout.write(line)
+                    GerNout.close()
+            elif clade_dic[key] == '21649':
+                if key in Reps_dic:
+                    for entry in Reps_dic[key]:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CPA1_SL_sequences.faa", "a") as CPA1_SLout:
+                            sequence  = seq_dic[entry.split(':')[0]][1]
+                            id_tax =  seq_dic[entry.split(':')[0]][0]
+                            CPA1_SL_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:CPA1_SL'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            CPA1_SLout.write(line)
+                        CPA1_SLout.close()
+                else:
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CPA1_SL_sequences.faa", "a") as CPA1_SLout:
+                        sequence  = seq_dic[key][1]
+                        id_tax =  seq_dic[key][0]
+
+                        CPA1_SL_list.append(id_tax.split('tax:')[1])
+                        line = '>{}_Protein:CPA1_SL'.format(id_tax) + '\n' + str(sequence) + '\n'
+                        CPA1_SLout.write(line)
+                    CPA1_SLout.close()
             else:
-                                                            #now we unpack the representatives
                 if key in Reps_dic:
-                    
-                    for entry in Reps_dic[key].replace("[","").replace("]", "").replace("'", "").replace(" ", "").split(","):
-                        Uncharacterized[entry] = 'Unc'
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/Unc_Euksequences.faa", "a") as Unc:
-                            sequence  = seq_dic[key]
-                            line = '>{}_{}_Unc'.format(entry, Tax_dic[entry]) + '\n' + str(sequence) + '\n'
-                            Unc.write(line)
-                        Unc.close()
+                    for entry in Reps_dic[key]:
+                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Uncharacterized_sequences.faa", "a") as Uncharacterizedout:
+                            sequence  = seq_dic[entry.split(':')[0]][1]
+                            id_tax =  seq_dic[entry.split(':')[0]][0]
+                            Uncharacterized_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:Uncharacterized'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            Uncharacterizedout.write(line)
+                        Uncharacterizedout.close()
                 else:
-                    Uncharacterized[key] = 'Unc'
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_tree_set/fl_sequences_types/Eukarya/Unc_Euksequences.faa", "a") as Unc:
-                        sequence  = seq_dic[key]
-                        line = '>{}_{}_Unc'.format(key, Tax_dic[key]) + '\n' + str(sequence) + '\n'
-                        Unc.write(line)
+                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Uncharacterized_sequences.faa", "a") as Uncharacterizedout:
+                        sequence  = seq_dic[key][1]
+                        id_tax =  seq_dic[key][0]
+                        Uncharacterized_list.append(id_tax.split('tax:')[1])
+
+                        line = '>{}_Protein:Uncharacterized'.format(id_tax) + '\n' + str(sequence) + '\n'
+                        Uncharacterizedout.write(line)
+                    Uncharacterizedout.close()
 
 
+     
 
-
-
-            
-print(len(set(CPA1_dict.keys())))
-print(len(set(CPA2_dict.keys())))  
-print(len(set(Kef_dict.keys())))        
-print(len(set(NhaA_dict.keys())))
-print(len(set(Uncharacterized.keys())))
-    
-
-#make sure this some is similar to grep -c '>' Archaea input filei
-
-CPA1_list_tax = []
-CPA1_tax_id = []
-for key in CPA1_dict.keys():
-    CPA1_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-    #WORK ON THIS AFTER NZMS
-    #info_list = []
-    #info_list.append(Tax_dic[key])
-    #info_list.append('CPA1')
-
-
-
-CPA2_list_tax = []
-for key in CPA2_dict.keys():
-    CPA2_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-print(len(CPA2_list_tax))
-
-NhaA_list_tax = []
-for key in NhaA_dict.keys():
-    NhaA_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-print(len(NhaA_list_tax))
-
-Kef_list_tax = []
-for key in Kef_dict.keys():
-    Kef_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-print(len(Kef_list_tax))
-
-
-Unc_list_tax = []
-for key in Uncharacterized.keys():
-    Unc_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-print(len(Unc_list_tax))
-
-Lates_list_tax = []
-for key in Lates_dict.keys():
-    Lates_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-print(len(Lates_list_tax))
-
-
-DxK_pseudo_list_tax = []
-for key in DxK_pseudo_dict.keys():
-    DxK_pseudo_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-print(len(DxK_pseudo_list_tax))
-
-NxKGamma_list_tax = []
-for key in NxKGamma_dict.keys():
-    NxKGamma_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-print(len(NxKGamma_list_tax))
-
-
-NhaS5_list_tax = []
-for key in NhaS5_dict.keys():
-    NhaS5_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-print(len(NhaS5_list_tax))
-
-UncArc_list_tax = []
-for key in UncArc_dict.keys():
-    UncArc_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-print(len(UncArc_list_tax))
-
-UncProk_list_tax = []
-for key in UncProk_dict.keys():
-    UncProk_list_tax.append(Tax_dic[key].split('_Taxa')[0])
-print(len(UncProk_list_tax))
-
-
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/Types_CPA_in_Eukarya_GTDB226.tsv', 'w') as TAX_TYPE:
-    header = 'species_name' + '\t' + 'Uncharcterized' + '\t' + 'Kef' + '\t' + 'CPA1' + '\t' + 'CPA2' + '\t' + 'NhaA' + '\t' + 'NhaS5' + '\t' + 'Uncharacterized_Archaea' + '\t' + 'Uncharacterized_prokarya' + '\t' + 'DxK_Pseudomonadota' + '\t' + 'NxK_Gammaproteobacteriota' + '\t' + 'Latescibacteriota' + '\n'
+with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/CPA_types_Eukarya_5may.tsv', 'w') as TAX_TYPE:
+    header = 'GTDB_id' + '\t' + 'Kef' + '\t' + 'CPA1' + '\t' + 'NhaA' + '\t' + 'Undescribed_CPA1' + '\t' + 'NhaS5' + '\t' + 'CHX' + '\t' + 'SOD2' + '\t' + 'NhaP' + '\t' + 'CPA1_IDK' + '\t' + 'GerN' + '\t' + 'CPA1_SL' + '\t' + 'Uncharacaterized' + '\n'
     TAX_TYPE.write(header)
-    for tax in set(Tax_list):
-        Organism_id = tax
-        line = Organism_id+ '\t' + str(Unc_list_tax.count(tax)) + '\t' + str(Kef_list_tax.count(tax)) + '\t' + str(CPA1_list_tax.count(tax)) + '\t' +  str(CPA2_list_tax.count(tax)) + '\t' + str(NhaA_list_tax.count(tax)) + '\t'+ str(NhaS5_list_tax.count(tax)) + '\t' +  str(UncArc_list_tax.count(tax)) + '\t' +str(UncProk_list_tax.count(tax)) + '\t' +  str(DxK_pseudo_list_tax.count(tax)) + '\t' +  str(NxKGamma_list_tax.count(tax)) + '\t' + str(Lates_list_tax.count(tax)) + '\n'
-        TAX_TYPE.write(line)
-
-            
-print(len(set(CPA1_dict.keys())))
-print(len(set(CPA2_dict.keys())))  
-print(len(set(Kef_dict.keys())))        
-print(len(set(NhaA_dict.keys())))
-print(len(set(Uncharacterized.keys())))    
+    total_count = 0
+    for GTDB_tax in tax_list:
+        line = GTDB_tax + '\t' + str(Kef_list.count(GTDB_tax)) + '\t'  + str(CPA1_list.count(GTDB_tax)) + '\t' + str(NhaA_list.count(GTDB_tax)) + '\t' + str(Undescribed_CPA1_list.count(GTDB_tax)) + '\t'  + str(NhaS5_list.count(GTDB_tax)) + '\t' + str(CHX_list.count(GTDB_tax)) + '\t'  + str(SOD2_list.count(GTDB_tax)) + '\t'  + str(NhaP_CPA1_list.count(GTDB_tax)) + '\t' + str(UndProkarya_CPA1_IDK_list.count(GTDB_tax)) + '\t' + str(GerN_list.count(GTDB_tax)) + '\t' + str(CPA1_SL_list.count(GTDB_tax)) + '\t' + str(Uncharacterized_list.count(GTDB_tax)) + '\n'
+        TAX_TYPE.write(line)              
