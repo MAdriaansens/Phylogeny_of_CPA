@@ -98,7 +98,7 @@ for key in clade_dic.keys():
 
             if clade_dic[key] == '8':
                 if key in Reps_dic:
-                    for entry.split(':')[0] in Reps_dic[key]:
+                    for entry in Reps_dic[key]:
                         
                         
                         with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Arc_CPA1_sequences.faa", "a") as CPA1out:
@@ -118,7 +118,7 @@ for key in clade_dic.keys():
                     CPA1out.close()
             elif clade_dic[key] == '62243':
                     if key in Reps_dic:
-                        for entry.split(':')[0] in Reps_dic[key]:
+                        for entry in Reps_dic[key]:
                             
                             with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Arc_CHX_sequences.faa", "a") as CHXout:
                                 sequence  = seq_dic[entry.split(':')[0]][1]
@@ -138,7 +138,7 @@ for key in clade_dic.keys():
                         CHXout.close()
             elif clade_dic[key] == '29930':
                     if key in Reps_dic:
-                        for entry.split(':')[0] in Reps_dic[key]:
+                        for entry in Reps_dic[key]:
                             
                             with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Arc_Kef_sequences.faa", "a") as Kefout:
                                 sequence  = seq_dic[entry.split(':')[0]][1]
@@ -157,7 +157,7 @@ for key in clade_dic.keys():
                         Kefout.close()
             elif clade_dic[key] == '45068':
                     if key in Reps_dic:
-                        for entry.split(':')[0] in Reps_dic[key]:
+                        for entry in Reps_dic[key]:
                             
                             with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Arc_NhaA_sequences.faa", "a") as NhaAout:
                                 sequence  = seq_dic[entry.split(':')[0]][1]
