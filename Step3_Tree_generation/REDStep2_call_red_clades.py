@@ -322,9 +322,9 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/Red_informed_c
                 if str(clade.temp) in node_dic2.keys():
                     Subfamily = node_dic2[str(clade.temp)]
                 else:
-                    Clade = 'RR'
+                    Subfamily = 'RR'
                 if str(clade.temp) in node_dic3.keys():
-                    Subfamily = node_dic3[str(clade.temp)]
+                    Subclade = node_dic3[str(clade.temp)]
                 else:
                     Subclade = 'RR'
                 if str(clade.temp) in node_dic4.keys():
