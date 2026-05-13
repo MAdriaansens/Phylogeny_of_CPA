@@ -270,37 +270,36 @@ def parse_parents_list(tree, parent_list, bad_parent_list, lowerlimit, upperlimi
     return(node_dic, bad_parent_good_child)
 
 #generate dictionary for each protein group
-#Clade
+#Families
 
 parent_list =[]
-parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.001, 0.11, 'None')
-node_dic2, bad_parent_good_child= parse_parents_list(tree, parent_list, bad_parent_list, 0.001, 0.11, 'None')
-
-
-#Subclade
-parent_list =[]
-parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.11, 0.478, 'None')
-node_dic3, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.11, 0.478, 'None')
+parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree,  0.001, 0.11, 'None')
+node_dic1, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.001, 0.11, 'None')
 
 #Subfamily
 
 parent_list =[]
-parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree,  0.4781, 0.65, 'None')
-node_dic1, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.4781, 0.65, 'None')
+parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.11, 0.478, 'None')
+node_dic2, bad_parent_good_child= parse_parents_list(tree, parent_list, bad_parent_list, 0.11, 0.478, 'None')
+
+#subclade
+
+parent_list =[]
+parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.478, 0.78, 'None')
+node_dic3, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.478, 0.78, 'None')
+
+
 
 
 #Group
 parent_list =[]
-parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.65, 0.89, 'None')
-node_dic4, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list,  0.8, 1,'None')
+parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.78, 1, 'None')
+node_dic4, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list,  0.78, 1,'None')
 
-#Subgroup
-parent_list =[]
-parent_list, bad_parent_list = get_subset_inlcuding_terminal(tree, 0.89, 1,'None')
-node_dic5, bad_parent_good_child = parse_parents_list(tree, parent_list, bad_parent_list, 0.89, 1,'None')
+
 
 with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/Red_informed_clade_20_lg_cat_gamma_RED_interval_28April.tsv', 'w') as Big:
-    header = 'Protein_id' + '\t' + 'Subfamily' + '\t' + 'Clade' + '\t' + 'Subclade' + '\t' + 'Group' + '\t' + 'Subgroup' + '\n'
+    header = 'Protein_id' + '\t' + 'Family' + '\t' + 'Subfamily' + '\t' + 'Subclade' + '\t' + 'Group' + '\n'
     
     Big.write(header)
 
@@ -317,27 +316,24 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/Red_informed_c
                 else:
                     clade.temp = clade.name
                 if str(clade.temp) in node_dic1.keys():
-                    Clade = node_dic1[str(clade.temp)]
+                    Family = node_dic1[str(clade.temp)]
                 else:
-                    Clade = 'RR'
+                    Family = 'RR'
                 if str(clade.temp) in node_dic2.keys():
                     Subfamily = node_dic2[str(clade.temp)]
                 else:
-                    Subfamily = 'RR'
+                    Clade = 'RR'
                 if str(clade.temp) in node_dic3.keys():
-                    Subclade = node_dic3[str(clade.temp)]
+                    Subfamily = node_dic3[str(clade.temp)]
                 else:
                     Subclade = 'RR'
                 if str(clade.temp) in node_dic4.keys():
                     Group = node_dic4[str(clade.temp)]
                 else:
                     Group = 'RR'
-                if str(clade.temp) in node_dic5.keys():
-                    Subgroup = node_dic5[str(clade.temp)]
-                else:
-                    Subgroup = 'RR'
+
                
                 protein_id = clade.name
 
-                Line = protein_id + '\t' + Subfamily + '\t' + Clade + '\t' + Subclade + '\t' + Group + '\t' + Subgroup + '\n'
+                Line = protein_id + '\t' + Family + '\t' + Subfamily + '\t' + Subclade + '\t' + Group + '\n'
                 Big.write(Line)
