@@ -1,6 +1,6 @@
-output_file='/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/Archaea_all_part1A_remove_dupes.fasta'
+output_file='~/results/Archaea_all_part1A_remove_dupes.fasta'
 from Bio import SeqIO
-input_file='/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/Archaea_all_part1A.fasta'
+input_file='~/results/Archaea_all_part1A.fasta'
 Entry_list = []
 Entry_dict = {}
 
