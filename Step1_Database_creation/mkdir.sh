@@ -45,5 +45,12 @@ mkdir ~/results/HMMalign/Bacteria/PF03600
 mkdir ~/results/HMMalign/Bacteria/PF03553
 mkdir ~/results/HMMalign/Bacteria/PF06450
 
+mkdir ~/tree_input
+mkdir ~/RED
+mkdir ~/tree_input/fl
 mkdir ~/results/HMMalign/PF00999
 
+mkdir ~/chloroplast_mitochondria_genomes
+mkdir ~/chloroplast_mitochondria_genomes/database
+mkdir ~/chloroplast_mitochondria_genomes/blastn_output
+mkdir ~/chloroplast_mitochondria_genomes/euk_cpa_seeds
