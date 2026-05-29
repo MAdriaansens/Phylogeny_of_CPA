@@ -4,9 +4,9 @@ in_filterd = sys.argv[1] #'PF03600MMseq_e03vsBacteria_10_alignedPF03600.faa.fast
 out_fl = sys.argv[2] #'PF03600MMseq_e03vsBacteria_10_alignedPF03600_fl.fasta'
 
 
-outdir =  sys.argv[3]#'/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF03600/MMseq'
+outdir =  sys.argv[3]#'~/GTDB_226/results/HMMalign/Bacteria/PF03600/MMseq'
 
-tsv =  sys.argv[4] #'/nesi/nobackup/uc04105/new_databases_May/GTDB_226/aDB/tsv/Bacteria_GTDB226_protein_May92025_chunk_10.tsv'
+tsv =  sys.argv[4] #'~/GTDB_226/Bac_DB/tsv/Bacteria_GTDB226_protein_May92025_chunk_10.tsv'
 
 from Bio import SeqIO
 
