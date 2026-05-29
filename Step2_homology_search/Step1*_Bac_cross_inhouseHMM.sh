@@ -8,15 +8,15 @@
 #SBATCH --error         slurm_output_cross/BACslurm_prokka_%A-%a.err
 #SBATCH --output        slurm_output_cross/BACslurm_prokka_%A-%a.out
 
-DB=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/DB/fasta
-TSV=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/DB/tsv
+DB=~/GTDB_226/Bac_DB/fasta
+TSV=~/GTDB_226/Bac_DB/tsv
 
-HMMalign=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF00999
-HMMsearch=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMsearch/Bacteria
-HMMdir=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMM/Bacteria
+HMMalign=~/GTDB_226/results/HMMalign/Bacteria/PF00999
+HMMsearch=~/results/HMMsearch/Bacteria
+HMMdir=~results/HMM/Bacteria
 
-ARCHMM=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMM/Archaea/Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned.hmm
-EUKHMM=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMM/PF00999/Manual_seq_cov30_e05_seqid0.7_genafpair_aligned.hmm
+ARCHMM=~/HMM/Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned.hmm
+EUKHMM=~/HMM/Manual_seq_cov30_e05_seqid0.7_genafpair_aligned.hmm
 
 module load HMMER/3.3.2-GCC-12.3.0
 module load Python/3.11.6-foss-2023a
