@@ -7,12 +7,15 @@
 #SBATCH --error         slurm_output/slurm_EukA_%A.err
 #SBATCH --output        slurm_output/slurm_EukA_%A.out
 
-HMMdir=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/HMM
-Euk_TSV=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May_protein.tsv
-Euk_db=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May_protein.fasta
-HMMsearch=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/results/HMMsearch/Eukarya
-MMseqs=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/results/MMseqs/Eukarya
+HMMdir=~/HMM
+Euk_TSV=~/Euk_db_May_protein.tsv
+Euk_db=~/Euk_db_May_protein.fasta
+HMMsearch=~/HMMsearch/Eukarya
+MMseqs=~/MMseqs/Eukarya
 Seq=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/sequences
+
+mkdir ${HMMsearch}
+mkdir ${MMseqs}
 
 #---------------------------------------------------------CPA------------------------------------------------------------------------------------------------
 module load MMseqs2/15-6f452-gompi-2023a
