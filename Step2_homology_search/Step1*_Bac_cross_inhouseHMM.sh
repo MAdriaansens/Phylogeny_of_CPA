@@ -30,7 +30,7 @@ python getting_fasta_from_hit_extra.py ${HMMsearch}/ARC_HMM_e03vsBacteria${array
 
 #mkdir -p ${HMMalign}/HMMsearch
 
-hmmalign --amino --trim -o ${HMMalign}/ARC_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.sthk /nesi/nobackup/uc04105/results/HMM/PF00999.hmm ${HMMsearch}/ARC_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.fa
+hmmalign --amino --trim -o ${HMMalign}/ARC_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.sthk ~/HMM/PF00999.hmm ${HMMsearch}/ARC_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.fa
 
 python parse_stockholm_filter.py ${HMMalign}/ARC_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.sthk ${HMMalign}/ARC_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.fa 258
 
@@ -41,6 +41,6 @@ python getting_fasta_from_hit_extra.py ${HMMsearch}/EUK_HMM_e03vsBacteria${array
 
 #mkdir -p ${HMMalign}/HMMsearch
 
-hmmalign --amino --trim -o ${HMMalign}/EUK_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.sthk /nesi/nobackup/uc04105/results/HMM/PF00999.hmm ${HMMsearch}/EUK_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.fa
+hmmalign --amino --trim -o ${HMMalign}/EUK_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.sthk ~/HMM/PF00999.hmm ${HMMsearch}/EUK_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.fa
 
 python parse_stockholm_filter.py ${HMMalign}/EUK_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.sthk ${HMMalign}/EUK_HMM_e03vsBacteria${array[$SLURM_ARRAY_TASK_ID]}.fa 258
