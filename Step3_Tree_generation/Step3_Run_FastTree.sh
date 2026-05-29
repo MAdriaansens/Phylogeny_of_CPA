@@ -10,4 +10,4 @@
 
 module load FastTree/2.1.11-GCC-12.3.0
  export OMP_NUM_THREADS=3
-FastTree -lg -cat 20 -gamma /home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/final_april28/tree_input/CPA_April30_merged_alignedPF0999_67392.faa  > /home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/final_april28/tree_input/CPA_28April_tree_seeds_lg_cat_gamma20.treefile
+FastTree -lg -cat 20 -gamma ~/tree_input/CPA_April30_merged_alignedPF0999_67392.faa  > ~/final_april28/tree_input/CPA_28April_tree_seeds_lg_cat_gamma20.treefile
