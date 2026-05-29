@@ -1,7 +1,7 @@
 import sys
-passed_seq = sys.argv[1] #'/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/Euk_database_May/results/HMMalign/PF00999/Eukfoundseq_vsEukarya_subset1_e03_mmseq_alignedPF00999.fasta.fasta'
-tsv_file  = sys.argv[2] #'/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/Euk_database_May/Euk_DB/tsv/Euk_db_May_protein_chunk_1.tsv'
-output = sys.argv[3] #'/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/Euk_database_May/results/HMMalign/PF00999/Eukfoundseq_vsEukarya_subset1_e03_mmseq_alignedPF00999_FL_nogrep.fasta'
+passed_seq = sys.argv[1] #'~/results/HMMalign/PF00999/Eukfoundseq_vsEukarya_subset1_e03_mmseq_alignedPF00999.fasta.fasta'
+tsv_file  = sys.argv[2] #'~/Euk_DB/tsv/Euk_db_May_protein_chunk_1.tsv'
+output = sys.argv[3] #'~/HMMalign/PF00999/Eukfoundseq_vsEukarya_subset1_e03_mmseq_alignedPF00999_FL_nogrep.fasta'
 
 
 from Bio import SeqIO
