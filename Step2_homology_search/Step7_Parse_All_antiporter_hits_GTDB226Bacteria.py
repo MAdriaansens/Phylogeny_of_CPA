@@ -106,9 +106,12 @@ with open('~/Bacteria_CPA_fl.fasta', 'w') as out:
         Passed_all_list.append(CPA)
         out.write('>' + CPA + '\n' + str(records_in[CPA]) + '\n')
 ##NhaB
-HMMscan = '~/results/HMMscan/Bacteria/PF06450_aligned_Bacteria_PF06450_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
+scandir = '~/results/HMMscan/Bacteria/PF06450'
 scan_dict = {}
-
+for hmmscan in os.listdir(scandir):
+    if hmmscan.split('.')[-1] == 'tsv':
+        HMMscan = '{}/{}'.format(scandir,hmmscan)
+        scan_dict = best_hit_dict(HMMscan, scan_dict)
 scan_dict = best_hit_dict(HMMscan, scan_dict)
 from collections import Counter
 hit_list = []
@@ -134,11 +137,14 @@ print(len(NhaB_list))
 print(len(set(NhaB_list)))
 
 #NhaC
-#NhaC
-HMMscan = '~results/HMMscan/Bacteria/PF03553_aligned_Bacteria_PF03553_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
-scan_dict = {}
 
-scan_dict = best_hit_dict(HMMscan, scan_dict)
+scandir = '~/results/HMMscan/Bacteria/PF03553'
+scan_dict = {}
+for hmmscan in os.listdir(scandir):
+    if hmmscan.split('.')[-1] == 'tsv':
+        HMMscan = '{}/{}'.format(scandir,hmmscan)
+        scan_dict = best_hit_dict(HMMscan, scan_dict)scan_dict = {}
+
 from collections import Counter
 hit_list = []
 for key in scan_dict.keys():
@@ -167,9 +173,12 @@ print(len(set(NhaC_list)))
 
     
 #NhaD
-HMMscan = '~/results/HMMscan/PF03600_aligned_Bacteria_PF03600_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
-
-scan_dict = best_hit_dict(HMMscan, scan_dict)
+scandir = '~/results/HMMscan/Bacteria/PF03600'
+scan_dict = {}
+for hmmscan in os.listdir(scandir):
+    if hmmscan.split('.')[-1] == 'tsv':
+        HMMscan = '{}/{}'.format(scandir,hmmscan)
+        scan_dict = best_hit_dict(HMMscan, scan_dict)
 from collections import Counter
 hit_list = []
 for key in scan_dict.keys():
