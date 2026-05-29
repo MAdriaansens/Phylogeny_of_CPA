@@ -1,5 +1,5 @@
 #run this script for Archaea/Bacteria and Eukarya for downstream application
-
+#make sure to make a database direcotry of GTDB and Eukarya
 Dir = '~/GTDB_226'
 Archaea = 'Archaea_GTDB226_protein_May92025.tsv'
 
