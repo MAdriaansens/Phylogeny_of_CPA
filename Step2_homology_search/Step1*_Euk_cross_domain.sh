@@ -7,8 +7,8 @@
 #SBATCH --error         slurm_output/slurm_prokka_%A-%a.err
 #SBATCH --output        slurm_output/slurm_prokka_%A-%a.out
 
-DB=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May_protein.fasta
-TSV=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May_protein.tsv
+DB=~/Euk_db_May_protein.fasta
+TSV=~/Euk_db_May_protein.tsv
 HMMalign=~/results/HMMalign/PF00999
 HMMsearch=~/results/HMMsearch/PF00999
 HMMdir=~/HMM/PF00999
