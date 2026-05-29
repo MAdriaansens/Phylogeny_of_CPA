@@ -3,7 +3,6 @@
 #SBATCH --time=120:00:00      # Walltime (HH:MM:SS
 #SBATCH --mem=55GB
 #SBATCH --array=0-3
-#SBATCH --account=uc04105 
 #SBATCH --cpus-per-task=32
 #SBATCH --error=slurm_output/Bac_cluster_seq_%A-%a.err
 #SBATCH --output=slurm_output/Bac_cluster_seq_%A-%a.out
