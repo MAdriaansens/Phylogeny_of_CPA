@@ -35,20 +35,20 @@ hmmsearch --noali --cpu 20 -E 0.001 --tblout ${HMMsearch}/PF00999hmmvs_vsEukarya
 module load Python/3.11.6-foss-2023a
 python getting_fasta_from_hit_extra_Euk.py ${HMMsearch}/PF00999hmmvs_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv HMM ${Euk_TSV} ${HMMsearch}/PF00999hmmvs_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_fl_sequence.fasta
 
-HMMdir=/home/mad149/00_nesi_projects/uc04105_nobackup/cross_biome_metagenome/Protein/HMM/Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned.hmm
+HMMdir=~/HMM/Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned.hmm
 hmmsearch --noali --cpu 20 -E 0.001 --tblout ${HMMsearch}/PF00999Archmmvs_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv ${HMMdir} ${Euk_db}
 
 module load Python/3.11.6-foss-2023a
 python getting_fasta_from_hit_extra_Euk.py ${HMMsearch}/PF00999Archmmvs_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv HMM ${Euk_TSV} ${HMMsearch}/PF00999Archmmvs_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_fl_sequence.fasta
 
-HMMdir=/home/mad149/00_nesi_projects/uc04105_nobackup/cross_biome_metagenome/Protein/HMM/Manual_seq_cov30_e05_seqid0.7_genafpair_aligned.hmm
+HMMdir=~/HMM/Manual_seq_cov30_e05_seqid0.7_genafpair_aligned.hmm
 hmmsearch --noali --cpu 20 -E 0.001 --tblout ${HMMsearch}/PF00999Eukhmmvs_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv ${HMMdir} ${Euk_db}
 
 module load Python/3.11.6-foss-2023a
 python getting_fasta_from_hit_extra_Euk.py ${HMMsearch}/PF00999Eukhmmvs_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv HMM ${Euk_TSV} ${HMMsearch}/PF00999Eukhmmvs_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_fl_sequence.fasta
 
 
-HMMdir=/home/mad149/00_nesi_projects/uc04105_nobackup/cross_biome_metagenome/Protein/HMM/Manual_vsBacteria_merged_e5_cov30_seqid0.6.faa_rep_seq_autoaligned.hmm
+HMMdir=~/HMM/Manual_vsBacteria_merged_e5_cov30_seqid0.6.faa_rep_seq_autoaligned.hmm
 hmmsearch --noali --cpu 20 -E 0.001 --tblout ${HMMsearch}/PF00999Bachmmvs_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03.tsv ${HMMdir} ${Euk_db}
 
 module load Python/3.11.6-foss-2023a
