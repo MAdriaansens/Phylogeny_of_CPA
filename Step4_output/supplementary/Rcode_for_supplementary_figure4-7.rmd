@@ -48,7 +48,7 @@ TypesE <- rename(TypesE, Uncharacterized = Uncharacaterized)
 
 
 #check median
-median(TypesE$CPA1)
+median(TypesE$NHX)
 median(TypesE$Kef)
 median(TypesE$CPA1_SL)
 
@@ -875,7 +875,7 @@ GTDB_Bac <- read.delim('~/bac120_metadata_r226.tsv', sep='\t', stringsAsFactors 
 GTDB_Bac$GTDB_id <- GTDB_Bac$accession
 
 IT_Bacteria <-  merge(IT_Bacteria, GTDB_Bac, by = 'GTDB_id')
-#Antiporters_Bacteria$selected_cols_sum <- rowSums(Antiporters_Bacteria[, c("Kef", "CPA1", "CPA2","Uncharcterized", "NhaA")]) - Antiporters_Bacteria$CPA_count
+#Antiporters_Bacteria$selected_cols_sum <- rowSums(Antiporters_Bacteria[, c("Kef", "NHX", "CPA2","Uncharcterized", "NhaA")]) - Antiporters_Bacteria$CPA_count
 
 IT_Bacteria_clean<- IT_Bacteria[IT_Bacteria$Completeness> 90 & IT_Bacteria$Contamination < 5 & IT_Bacteria$trna_aa_count > 17,]
 
