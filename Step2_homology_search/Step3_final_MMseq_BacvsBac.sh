@@ -13,7 +13,7 @@ declare -a array=($(seq 0 127))
 Bac_TSV=~/tsv/Bacteria_GTDB226_protein_May92025_chunk_${array[$SLURM_ARRAY_TASK_ID]}.tsv
 Bac_db=~/Bac_DB/fasta/Bacteria_GTDB226_protein_May92025_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
 MMseqs=~/results/MMseq/Bacteria/PF00999/part3
-Seq=/nesi/nobackup/uc04105/new_databases_May/Bac_database_May/results/MMseq/PF00999/PF00999_cross_vsBacteria_dupes_removed_sequences.fasta
+Seq=~/results/MMseq/PF00999/PF00999_cross_vsBacteria_dupes_removed_sequences.fasta
 
 #module load MMseqs2/15-6f452-gompi-2023a
 
