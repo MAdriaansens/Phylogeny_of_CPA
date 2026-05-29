@@ -11,15 +11,17 @@
 declare -a array=($(seq 0 15))
 
 HMMdir=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/HMM/PF00999.hmm
-Euk_TSV=/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/Euk_database_May/Euk_DB/tsv/Euk_db_May_protein_chunk_${array[$SLURM_ARRAY_TASK_ID]}.tsv
-Euk_db=/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/Euk_database_May/Euk_DB/fasta/Euk_db_May_protein_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
-HMMsearch=/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/Euk_database_May/results/HMMsearch/PF00999
-MMseqs=/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/Euk_database_May/results/MMseq/PF00999/part3
-Seq=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/MMseq/PF00999/PF00999_cross_vsEukarya_dupes_removed_sequences.fasta
+#in this case we decided to split up Eukarya into 15 subsets. 
+Euk_TSV=~/Euk_DB/tsv/Euk_db_May_protein_chunk_${array[$SLURM_ARRAY_TASK_ID]}.tsv
+Euk_db=~/Euk_DB/fasta/Euk_db_May_protein_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
 
-#module load MMseqs2/15-6f452-gompi-2023a
+#else
+#Euk_TSV= ~/Euk_db_7April_protein.tsv
+#Euk_db=~ ~/Euk_db_7April.fasta
 
-#mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}  ${Euk_db} ${MMseqs}/Eukfoundseq_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv ${array[$SLURM_ARRAY_TASK_ID]}_Euk_tmp
+MMseqs=~/results/MMseq/Eukarya/PF00999/part3
+Seq=~/MMseqs/PF00999/PF00999_cross_vsEukarya_dupes_removed_sequences.fasta
+
 
 
 if [ -f "${MMseqs}/Eukfoundseq_vsEukarya_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.fasta" ]; then
