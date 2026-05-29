@@ -21,7 +21,29 @@ mkdir ~/results/HMMsearch/PF00999
 mkdir ~/results/HMMsearch/Archaea
 mkdir ~/results/HMMsearch/Bacteria
 mkdir ~/results/HMMsearch/Eukarya
+mkdir ~/results/HMMscan/
+mkdir ~/results/HMMscan/Archaea
+mkdir ~/results/HMMscan/Eukarya
+mkdir ~/results/HMMscan/Bacteria
 
 mkdir ~/results/HMMalign/
+mkdir ~/results/HMMalign/Eukarya
+mkdir ~/results/HMMalign/Eukarya/PF00999/part3
+mkdir ~/results/HMMalign/Eukarya/PF03600
+mkdir ~/results/HMMalign/Eukarya/PF03553
+mkdir ~/results/HMMalign/Eukarya/PF06450
+mkdir ~/results/HMMalign/Archaea
+mkdir ~/results/HMMalign/Archaea/PF00999/part3
+mkdir ~/results/HMMalign/Archaea/PF03600
+mkdir ~/results/HMMalign/Archaea/PF03553
+mkdir ~/results/HMMalign/Archaea/PF06450
+
+mkdir ~/results/HMMalign/Bacteria
+mkdir ~/results/HMMalign/Bacteria/PF00999
+mkdir ~/results/HMMalign/Bacteria/PF00999/part3
+mkdir ~/results/HMMalign/Bacteria/PF03600
+mkdir ~/results/HMMalign/Bacteria/PF03553
+mkdir ~/results/HMMalign/Bacteria/PF06450
+
 mkdir ~/results/HMMalign/PF00999
 
