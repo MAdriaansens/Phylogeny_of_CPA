@@ -3,7 +3,6 @@
 #SBATCH --time=168:00:00      # Walltime (HH:MM:SS
 #SBATCH --mem=4GB          # Memory in MB
 #SBATCH --cpus-per-task=3
-#SBATCH --account=uc04105 
 #SBATCH --output=slurm_output/FT_output%A.out
 #SBATCH --error=slurm_output/FT_error%A.err
 
