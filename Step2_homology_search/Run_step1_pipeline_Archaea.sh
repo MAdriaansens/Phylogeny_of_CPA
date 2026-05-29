@@ -19,6 +19,8 @@ Seq=~/sequences
 
 #---------------------CPA-------------------------
 module load MMseqs2/15-6f452-gompi-2023a
+mkdir ${HMMsearch}
+mkdir ${MMseqs}
 
 mmseqs easy-search -e 1.00E-03 -c 0.0 --threads 20 ${Seq}  ${Bac_db} ${MMseqs}/PF00999seq_vsBacteria_subset${array[$SLURM_ARRAY_TASK_ID]}_e03_mmseq.tsv ${array[$SLURM_ARRAY_TASK_ID]}_Bac_tmp
 
