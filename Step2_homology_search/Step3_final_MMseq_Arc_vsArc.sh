@@ -10,12 +10,10 @@
 
 declare -a array=($(seq 0 32))
 
-HMMdir=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/HMM/PF00999.hmm
-Arc_TSV=/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/GTDB_226/ARCDB/Archaea_GTDB226_protein_May92025_chunk_${array[$SLURM_ARRAY_TASK_ID]}.tsv
-Arc_db=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ARCDB/Archaea_GTDB226_protein_May92025_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
-HMMsearch=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMsearch/Archaea
-MMseqs=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/MMseq/Archaea/PF00999/part3
-Seq=/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/GTDB_226/results/MMseq/Archaea/PF00999/All_archaea_cross_domain_pf00999_dupes_removed_sequences.fasta
+Arc_TSV=~/ARCDB/Archaea_GTDB226_protein_May92025_chunk_${array[$SLURM_ARRAY_TASK_ID]}.tsv
+Arc_db=~/ARCDB/Archaea_GTDB226_protein_May92025_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
+MMseqs=~/results/MMseq/Archaea/PF00999/part3
+Seq=~/results/MMseq/Archaea/PF00999/All_archaea_cross_domain_pf00999_dupes_removed_sequences.fasta
 
 
 #---------------------CPA-------------------------
