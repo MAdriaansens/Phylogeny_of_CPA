@@ -4,7 +4,6 @@
 #SBATCH --mem=9000MB          # Memory in MB
 #SBATCH --partition=long
 #SBATCH --cpus-per-task=5
-#SBATCH --account=uc04105 
 #SBATCH --output=slurm_output/perl03600_output%A.out
 #SBATCH --error=slurm_output/perl03600_errror%A.err
 
