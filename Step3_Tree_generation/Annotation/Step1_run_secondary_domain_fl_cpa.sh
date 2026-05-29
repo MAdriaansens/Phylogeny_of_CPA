@@ -16,8 +16,8 @@ module load Python/3.11.6-foss-2023a
 
 module load HMMER/3.3.2-GCC-12.3.0
 
-IN=/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/final_april28/fl
-HMM_DB=/home/mad149/00_nesi_projects/uc04105_nobackup/new_databases_May/Chapter_2_data/old_HMM
+IN=~/tree_input/fl
+HMM_DB=~/HMM
 #NhaA
 hmmalign -o ${IN}/HMMalign/${array[$SLURM_ARRAY_TASK_ID]}_fl_vsPF06965_NhaA.sthk ${HMM_DB}/PF06965.hmm ${IN}/${array[$SLURM_ARRAY_TASK_ID]}_CPA_fl.fasta
 python parse_stockholm_filterHMMscan.py ${IN}/HMMalign/${array[$SLURM_ARRAY_TASK_ID]}_fl_vsPF06965_NhaA.sthk ${IN}/HMMalign/${array[$SLURM_ARRAY_TASK_ID]}_fl_vsPF06965_NhaA 262
