@@ -16,7 +16,6 @@ Arc_db=~/ARCDB/Archaea_GTDB226_protein_May92025_subset${array[$SLURM_ARRAY_TASK_
 HMMsearch=~/results/HMMsearch/Archaea
 MMseqs=~/results/MMseqs/Archaea/PF00999/part2
 Seq=~/Bacteria_all_part1A_remove_dupes.fasta
-mkdir ${MMseqs}
 
 #---------------------CPA-------------------------
 module load MMseqs2/15-6f452-gompi-2023a
