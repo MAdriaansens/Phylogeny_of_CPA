@@ -17,6 +17,9 @@ HMMsearch=~/results/HMMsearch/Bacteria
 MMseqs=~/results/MMseqs/Bacteria
 Seq=~/sequences
 
+mkdir ${HMMsearch}
+mkdir ${MMseqs}
+
 #---------------------------------------------------------NhaB-----------------------------------------------------------------------------------------------
 module load MMseqs2/15-6f452-gompi-2023a
 
