@@ -3,7 +3,7 @@ import sys
 
 #Craig herbold has been instrumental in generating the 're' part, I do not like running re
 
-hit_file = sys.argv[1] # '/nesi/nobackup/uc04105/results/hmmalign/pipeline/CPA/Archaea_nhaA_TRKACpfam_align_CPAfold.sthk'  #sys.argv[1]  
+hit_file = sys.argv[1] 
 outfile = sys.argv[2]
 length = int(sys.argv[3])
 
