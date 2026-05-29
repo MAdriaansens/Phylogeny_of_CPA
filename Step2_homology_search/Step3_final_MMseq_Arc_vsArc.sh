@@ -1,5 +1,4 @@
 #!/bin/bash -e
-#SBATCH --account       uc04105
 #SBATCH --job-name      ArcA
 #SBATCH --time          36:00:00
 #SBATCH --mem           20GB
