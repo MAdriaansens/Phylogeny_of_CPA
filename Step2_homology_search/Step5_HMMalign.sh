@@ -2,9 +2,7 @@
 #SBATCH --job-name=06450_Homology_Euk_direct
 #SBATCH --time=120:00:00      # Walltime (HH:MM:SS
 #SBATCH --mem=18500MB          # Memory in MB
-#SBATCH --partition=milan
 #SBATCH --cpus-per-task=11
-#SBATCH --account=uc04105 
 #SBATCH --output=slurm_output/06450_Homology_Euk_direct_output%A.out
 #SBATCH --error=slurm_output/06450_Homology_Euk_direct_error%A.err
 
