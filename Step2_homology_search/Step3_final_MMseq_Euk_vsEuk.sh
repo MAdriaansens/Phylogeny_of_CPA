@@ -10,7 +10,7 @@
 
 declare -a array=($(seq 0 15))
 
-HMMdir=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/HMM/PF00999.hmm
+HMMdir=~/HMM/PF00999.hmm
 #in this case we decided to split up Eukarya into 15 subsets. 
 Euk_TSV=~/Euk_DB/tsv/Euk_db_May_protein_chunk_${array[$SLURM_ARRAY_TASK_ID]}.tsv
 Euk_db=~/Euk_DB/fasta/Euk_db_May_protein_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
