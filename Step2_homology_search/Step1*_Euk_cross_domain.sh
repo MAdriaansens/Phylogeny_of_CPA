@@ -9,11 +9,11 @@
 
 DB=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May_protein.fasta
 TSV=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Euk_db_May_protein.tsv
-HMMalign=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign/PF00999
-HMMsearch=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMsearch/PF00999
-HMMdir=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMM/PF00999
-ARCHMM=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMM/Archaea/Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned.hmm
-BACHMM=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMM/Bacteria/Manual_vsBacteria_merged_e5_cov30_seqid0.6.faa_rep_seq_autoaligned.hmm
+HMMalign=~/results/HMMalign/PF00999
+HMMsearch=~/results/HMMsearch/PF00999
+HMMdir=~/HMM/PF00999
+ARCHMM=~/HMM/PF00999/Archaea_Manual_e5_cov50_AlignedPF00999_clustered_0.6_rep_seq_Ginsialigned.hmm
+BACHMM=~/HMM/PF00999/Manual_vsBacteria_merged_e5_cov30_seqid0.6.faa_rep_seq_autoaligned.hmm
 
 
 module load HMMER/3.3.2-GCC-12.3.0
@@ -26,7 +26,7 @@ python getting_fasta_from_hit_extra.py ${HMMsearch}/BAC_HMM_e03vsEukarya.tsv HMM
 
 #mkdir -p ${HMMalign}/HMMsearch
 
-hmmalign --amino --trim -o ${HMMalign}/BAC_HMM_e03vsEukarya.sthk /nesi/nobackup/uc04105/results/HMM/PF00999.hmm ${HMMsearch}/BAC_HMM_e03vsEukarya.fa
+hmmalign --amino --trim -o ${HMMalign}/BAC_HMM_e03vsEukarya.sthk ~/HMM/PF00999.hmm ${HMMsearch}/BAC_HMM_e03vsEukarya.fa
 
 python parse_stockholm_filter.py ${HMMalign}/BAC_HMM_e03vsEukarya.sthk ${HMMalign}/BAC_HMM_e03vsEukarya.fa 258
 
@@ -37,6 +37,6 @@ python getting_fasta_from_hit_extra.py ${HMMsearch}/ARC_HMM_e03vsEukarya.tsv HMM
 
 #mkdir -p ${HMMalign}/HMMsearch
 
-hmmalign --amino --trim -o ${HMMalign}/ARC_HMM_e03vsEukarya.sthk /nesi/nobackup/uc04105/results/HMM/PF00999.hmm ${HMMsearch}/ARC_HMM_e03vsEukarya.fa
+hmmalign --amino --trim -o ${HMMalign}/ARC_HMM_e03vsEukarya.sthk ~/HMM/PF00999.hmm ${HMMsearch}/ARC_HMM_e03vsEukarya.fa
 
 python parse_stockholm_filter.py ${HMMalign}/ARC_HMM_e03vsEukarya.sthk ${HMMalign}/ARC_HMM_e03vsEukarya.fa 258
