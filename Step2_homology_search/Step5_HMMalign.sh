@@ -11,12 +11,13 @@
 module load Python/3.11.6-foss-2023a
 module load HMMER/3.3.2-GCC-12.3.0
 
-HMMalign=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/HMMalign
-MMseqs=/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/results/MMseq/Iterative_MMseqs
+HMMalign=~/results/HMMalign
+MMseqs=~/results/MMseqs/Iterative_MMseqs
 HMMdir=/nesi/nobackup/uc04105/results/HMM
-
+mkdir ${MMseqs}
 #this code takes the mmseq output of Step 4 and directly runs a hmmalign and filter on it. 
-#this is just eukarya, but can be (and has been) made iterative for Archaea and Bacteria
+#this is just eukarya, but can be (and has been) made iterative for Archaea and Bacteria similar to HMMsearch etc in previous scripts
+#for CPA this was PF00999 and 263 (0.7*375)
 hmmalign --amino --trim -o ${HMMalign}/Pfam06450_seq_Step4_vsEuk_alignedPF06450.sthk ${HMMdir}/PF06450.hmm  ${MMseqs}/PF06450_seq_Step4_e03vsEuk.faa
 
 python parse_stockholm_filter.py ${HMMalign}/Pfam06450_seq_Step4_vsEuk_alignedPF06450.sthk ${HMMalign}/Pfam06450_seq_Step4_vsEuk_alignedPF06450_Step5_HMMscan 235
