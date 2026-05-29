@@ -4,7 +4,6 @@
 #SBATCH --mem=5000MB          # Memory in MB
 #SBATCH --partition=long
 #SBATCH --cpus-per-task=5
-#SBATCH --account=uc04105 
 #SBATCH --output=slurm_output/Run_pythonred_output%A.out
 #SBATCH --error=slurm_output/Run_pythonred_error%A.err
 
