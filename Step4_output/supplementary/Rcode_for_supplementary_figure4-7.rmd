@@ -58,7 +58,7 @@ IT_Eukarya [is.na(IT_Eukarya)] <- 0
 IT_Eukarya <- IT_Eukarya[-c(246:248),]
  #species with no CPA off course have no CPA types present so here I edit that in. 
 #write it out
-write.table(IT_Eukarya, 'Antiporter_Eukarya_30Apri.tsv', sep='\t', row.names = FALSE)
+#write.table(IT_Eukarya, 'Antiporter_Eukarya_30Apri.tsv.tsv', sep='\t', row.names = FALSE)
 ```
 
 ```{r, Load Eukarya data and create new data variables}
@@ -104,6 +104,7 @@ Major_tax_NhaBobservations <- IT_Eukarya[IT_Eukarya$NhaB_binary == 1,] %>%count(
 Major_tax_NhaBobservations<- merge(Major_tax_observations, Major_tax_NhaBobservations, Major_tax = 'Major_tax')
 Major_tax_NhaBobservations$percentage <-  (Major_tax_NhaBobservations$n/Major_tax_NhaBobservations$Species_total)*100
 
+
 Major_tax_NhaCobservations <- IT_Eukarya[IT_Eukarya$NhaC_binary == 1,] %>%count(Major_tax)
 Major_tax_NhaCobservations<- merge(Major_tax_observations, Major_tax_NhaCobservations, Major_tax = 'Major_tax')
 Major_tax_NhaCobservations$percentage <-  (Major_tax_NhaCobservations$n/Major_tax_NhaCobservations$Species_total)*100
@@ -112,6 +113,18 @@ Major_tax_NhaCobservations$percentage <-  (Major_tax_NhaCobservations$n/Major_ta
 Major_tax_NhaDobservations <- IT_Eukarya[IT_Eukarya$NhaD_binary == 1,] %>%count(Major_tax)
 Major_tax_NhaDobservations<- merge(Major_tax_observations, Major_tax_NhaDobservations, Major_tax = 'Major_tax')
 Major_tax_NhaDobservations$percentage <-  (Major_tax_NhaDobservations$n/Major_tax_NhaDobservations$Species_total)*100
+
+mean(Major_tax_CPAobservations$percentage)
+sd(Major_tax_CPAobservations$percentage)/sqrt(length(Major_tax_CPAobservations$percentage))
+
+mean(Major_tax_NhaCobservations$percentage)
+sd(Major_tax_NhaCobservations$percentage)/sqrt(length(Major_tax_NhaCobservations$percentage))
+
+mean(Major_tax_NhaDobservations$percentage)
+sd(Major_tax_NhaDobservations$percentage)/sqrt(length(Major_tax_NhaDobservations$percentage))
+
+mean(Major_tax_NhaBobservations$percentage)
+sd(Major_tax_NhaBobservations$percentage)/sqrt(length(Major_tax_NhaBobservations$percentage))
 
 ```
 
@@ -501,6 +514,12 @@ Archaea_average_ap_mb$averages <- Archaea_average_ap_mb$total_CPA/Archaea_averag
 Phyla_Ac_observations <- IT_Archaea_clean %>% count(Phyla)
 Phyla_Ac_observations <- Phyla_Ac_observations  %>% rename(Species_total=n)
 
+Phyla_Ac_CPAobservations <- IT_Archaea_clean[IT_Archaea_clean$CPA_binary == 1,] %>%count(Phyla)
+Phyla_Ac_CPAobservations<- merge(Phyla_Ac_observations, Phyla_Ac_CPAobservations, Phyla = 'Phyla')
+Phyla_Ac_CPAobservations$percentage <-  (Phyla_Ac_CPAobservations$n/Phyla_Ac_CPAobservations$Species_total)*100
+
+mean(Phyla_Ac_CPAobservations$percentage)
+sd(Phyla_Ac_CPAobservations$percentage)/sqrt(length(Phyla_Ac_CPAobservations$percentage))
 Phyla_Ac_NhaCobservations <- IT_Archaea_clean[IT_Archaea_clean$NhaC_binary == 1,] %>%count(Phyla)
 Phyla_Ac_NhaCobservations<- merge(Phyla_Ac_observations, Phyla_Ac_NhaCobservations, Phyla = 'Phyla')
 Phyla_Ac_NhaCobservations$percentage <-  (Phyla_Ac_NhaCobservations$n/Phyla_Ac_NhaCobservations$Species_total)*100
@@ -509,6 +528,15 @@ Phyla_Ac_NhaCobservations$percentage <-  (Phyla_Ac_NhaCobservations$n/Phyla_Ac_N
 Phyla_Ac_NhaDobservations <- IT_Archaea_clean[IT_Archaea_clean$NhaD_binary == 1,] %>%count(Phyla)
 Phyla_Ac_NhaDobservations<- merge(Phyla_Ac_observations, Phyla_Ac_NhaDobservations, Phyla = 'Phyla')
 Phyla_Ac_NhaDobservations$percentage <-  (Phyla_Ac_NhaDobservations$n/Phyla_Ac_NhaDobservations$Species_total)*100
+
+
+mean(Phyla_Ac_NhaCobservations$percentage)
+sd(Phyla_Ac_NhaCobservations$percentage)/sqrt(length(Phyla_Ac_NhaCobservations$percentage))
+
+mean(Phyla_Ac_NhaDobservations$percentage)
+sd(Phyla_Ac_NhaDobservations$percentage)/sqrt(length(Phyla_Ac_NhaDobservations$percentage))
+
+
 ```
 
 
@@ -901,6 +929,11 @@ IT_Bacteria_clean$Antiporter_binary[IT_Bacteria_clean$Antiporter_count >0] <- 1
 Phyla_Bc_observations <- IT_Bacteria_clean %>% count(Phyla)
 Phyla_Bc_observations <- Phyla_Bc_observations  %>% rename(Species_total=n)
 
+
+Phyla_Bc_NhaBobservations <- IT_Bacteria_clean[IT_Bacteria_clean$NhaB_binary == 1,] %>%count(Phyla)
+Phyla_Bc_NhaBobservations<- merge(Phyla_Bc_observations, Phyla_Bc_NhaBobservations, Phyla = 'Phyla')
+Phyla_Bc_NhaBobservations$percentage <-  (Phyla_Bc_NhaBobservations$n/Phyla_Bc_NhaBobservations$Species_total)*100
+
 Phyla_Bc_NhaCobservations <- IT_Bacteria_clean[IT_Bacteria_clean$NhaC_binary == 1,] %>%count(Phyla)
 Phyla_Bc_NhaCobservations<- merge(Phyla_Bc_observations, Phyla_Bc_NhaCobservations, Phyla = 'Phyla')
 Phyla_Bc_NhaCobservations$percentage <-  (Phyla_Bc_NhaCobservations$n/Phyla_Bc_NhaCobservations$Species_total)*100
@@ -909,6 +942,27 @@ Phyla_Bc_NhaCobservations$percentage <-  (Phyla_Bc_NhaCobservations$n/Phyla_Bc_N
 Phyla_Bc_NhaDobservations <- IT_Bacteria_clean[IT_Bacteria_clean$NhaD_binary == 1,] %>%count(Phyla)
 Phyla_Bc_NhaDobservations<- merge(Phyla_Bc_observations, Phyla_Bc_NhaDobservations, Phyla = 'Phyla')
 Phyla_Bc_NhaDobservations$percentage <-  (Phyla_Bc_NhaDobservations$n/Phyla_Bc_NhaDobservations$Species_total)*100
+
+
+
+Phyla_Bc_CPAobservations <- IT_Bacteria_clean[IT_Bacteria_clean$CPA_binary == 1,] %>%count(Phyla)
+Phyla_Bc_CPAobservations<- merge(Phyla_Bc_observations, Phyla_Bc_CPAobservations, Phyla = 'Phyla')
+Phyla_Bc_CPAobservations$percentage <-  (Phyla_Bc_CPAobservations$n/Phyla_Bc_CPAobservations$Species_total)*100
+
+mean(Phyla_Bc_CPAobservations$percentage)
+sd(Phyla_Bc_CPAobservations$percentage)/sqrt(length(Phyla_Bc_CPAobservations$percentage))
+
+mean(Phyla_Bc_NhaBobservations$percentage)
+sd(Phyla_Bc_NhaBobservations$percentage)/sqrt(length(Phyla_Bc_NhaBobservations$percentage))
+
+ 
+ 
+
+mean(Phyla_Bc_NhaCobservations$percentage)
+sd(Phyla_Bc_NhaCobservations$percentage)/sqrt(length(Phyla_Bc_NhaCobservations$percentage))
+
+mean(Phyla_Bc_NhaDobservations$percentage)
+sd(Phyla_Bc_NhaDobservations$percentage)/sqrt(length(Phyla_Bc_NhaDobservations$percentage))
 
 ```
 
