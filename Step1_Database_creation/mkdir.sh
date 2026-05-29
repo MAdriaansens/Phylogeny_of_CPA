@@ -12,6 +12,10 @@ mkdir ~/results/MMseqs/Archaea
 mkdir ~/results/MMseqs/Eukarya/part2
 mkdir ~/results/MMseqs/Bacteria/part2
 mkdir ~/results/MMseqs/Archaea/part2
+mkdir ~/results/MMseqs/Eukarya/part3
+mkdir ~/results/MMseqs/Bacteria/part3
+mkdir ~/results/MMseqs/Archaea/part3
+mkdir ~/results/MMseqs/PF00999
 mkdir ~/results/HMMsearch/
 mkdir ~/results/HMMsearch/PF00999
 mkdir ~/results/HMMsearch/Archaea
