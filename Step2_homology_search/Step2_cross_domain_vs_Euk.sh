@@ -13,12 +13,12 @@ declare -a array=($(seq 0 15))
 HMMdir=~/HMM/PF00999.hmm
 
 #in this case we decided to split up Eukarya into 15 subsets. 
-#Euk_TSV=~/Euk_DB/tsv/Euk_db_May_protein_chunk_${array[$SLURM_ARRAY_TASK_ID]}.tsv
-#Euk_db=~/Euk_DB/fasta/Euk_db_May_protein_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
+Euk_TSV=~/Euk_DB/tsv/Euk_db_May_protein_chunk_${array[$SLURM_ARRAY_TASK_ID]}.tsv
+Euk_db=~/Euk_DB/fasta/Euk_db_May_protein_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
 
 #else
-Euk_TSV= ~/Euk_db_7April_protein.tsv
-Euk_db=~ ~/Euk_db_7April.fasta
+#Euk_TSV= ~/Euk_db_7April_protein.tsv
+#Euk_db=~ ~/Euk_db_7April.fasta
 
 HMMsearch=~/results/HMMsearch/PF00999
 MMseqs=~/results/MMseq/PF00999/part2
