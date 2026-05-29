@@ -13,7 +13,9 @@ module load HMMER/3.3.2-GCC-12.3.0
 
 HMMalign=~/results/HMMalign
 MMseqs=~/results/MMseqs/Iterative_MMseqs
-HMMdir=/nesi/nobackup/uc04105/results/HMM
+
+mkdir ${MMseqs}
+HMMdir=~/HMM
 mkdir ${MMseqs}
 #this code takes the mmseq output of Step 4 and directly runs a hmmalign and filter on it. 
 #this is just eukarya, but can be (and has been) made iterative for Archaea and Bacteria similar to HMMsearch etc in previous scripts
