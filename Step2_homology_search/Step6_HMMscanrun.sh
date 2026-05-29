@@ -4,7 +4,6 @@
 #SBATCH --mem=10GB          # Memory in MB
 #SBATCH --cpus-per-task=10
 #SBATCH --array=0-61
-#SBATCH --account=uc04105 
 #SBATCH --output=slurm_bacoutput/euk6450Run_python_output%A-%a.out
 #SBATCH --error=slurm_bacoutput/euk6450Run_python_error%A-%a.err
 
