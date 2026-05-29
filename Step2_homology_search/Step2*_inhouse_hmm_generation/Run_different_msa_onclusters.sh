@@ -4,7 +4,6 @@
 #SBATCH --mem=48GB          # Memory in MB
 #SBATCH --cpus-per-task=27
 #SBATCH --array=0-3
-#SBATCH --account=uc04105 
 #SBATCH --output=slurm_output/06Bac_HMM_output%A-%a.out
 #SBATCH --error=slurm_output/06Bac_HMM_error%A-%a.err
 
