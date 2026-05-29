@@ -59,7 +59,7 @@ def best_hit_dict(HMMscan, scan_dict):
     return(scan_dict)
 
 
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Archaea'
+scandir = '~/results/HMMscan/Archaea/PF00999'
 from Bio import SeqIO
 
 scan_dict = {}
@@ -99,9 +99,9 @@ print(len(set(tax_list)))
     
 #returns all protein ids whom match with CPA PFAM
 Passed_all_list = {}
-HMMalign_dir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Archaea'
+HMMalign_dir = '~/HMMalign/Archaea'
 
-with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/CPA_FL_Archaea.fasta', 'w') as FL:
+with open('~/CPA_FL_Archaea.fasta', 'w') as FL:
     for HMMalign in os.listdir('{}'.format(HMMalign_dir)):
         if 'FL' in HMMalign:
             print(HMMalign)
@@ -118,11 +118,19 @@ for key in Passed_all_list.keys():
 NhaB_list = []
 
 #NhaC
-#NhaC
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan/PF03553_aligned_Archaea_PF03553_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
+scandir = '~/results/HMMscan/Archaea/PF03553'
+from Bio import SeqIO
+
 scan_dict = {}
 
-scan_dict = best_hit_dict(HMMscan, scan_dict)
+
+import os
+for hmmscan in os.listdir(scandir):
+    if hmmscan.split('.')[-1] == 'tsv':
+        HMMscan = '{}/{}'.format(scandir,hmmscan)
+        scan_dict = best_hit_dict(HMMscan, scan_dict)
+        print(HMMscan)
+
 from collections import Counter
 hit_list = []
 for key in scan_dict.keys():
@@ -131,13 +139,13 @@ for key in scan_dict.keys():
         hit_list.append(key)
 
 passed_list = []
-fulllength_NhaC_file='/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/Archaea_merged_PF03553_unique_aligned_PF03553_full_length.fa'
+fulllength_NhaC_file='~/Archaea_merged_PF03553_unique_aligned_PF03553_full_length.fa'
 seq_dict = {}
 for record in SeqIO.parse(fulllength_NhaC_file, 'fasta'):
     seq_dict[record.id] = record.seq
     
-with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Archaea_NhaC_fl.fasta', 'w') as C_out:
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/Archaea_merged_PF03553_unique_aligned_PF03553_full_length.fa', 'fasta'):
+with open('~/Archaea_NhaC_fl.fasta', 'w') as C_out:
+    for record in SeqIO.parse('~/Archaea_merged_PF03553_unique_aligned_PF03553_full_length.fa', 'fasta'):
         if record.id in hit_list:
             passed_list.append(str(record.id.split('tax:')[1]))
             outline = '>' + record.id + '\n' + str(record.seq) + '\n'
@@ -152,21 +160,24 @@ print(len(set(NhaC_list)))
 
     
 #NhaD
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/results_HMMscan/PF03600_aligned_Archaea_PF03600_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
+scandir = '~/results/HMMscan/Archaea/PF03600'
+from Bio import SeqIO
 
-scan_dict = best_hit_dict(HMMscan, scan_dict)
-from collections import Counter
-hit_list = []
-for key in scan_dict.keys():
-    domain = scan_dict[key][0]
-    if domain == 'CitMHS':
-        hit_list.append(key)
+scan_dict = {}
+
+
+import os
+for hmmscan in os.listdir(scandir):
+    if hmmscan.split('.')[-1] == 'tsv':
+        HMMscan = '{}/{}'.format(scandir,hmmscan)
+        scan_dict = best_hit_dict(HMMscan, scan_dict)
+        print(HMMscan)
 print(len(hit_list))
 
 
 passed_list = []
-with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Archaea_NhaD_fl.fasta', 'w') as D_out:
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/original_files/Archaea_merged_PF03600_unique_aligned_PF03600_full_length.fa', 'fasta'):
+with open('`~/Archaea_NhaD_fl.fasta', 'w') as D_out:
+    for record in SeqIO.parse('~/Archaea_merged_PF03600_unique_aligned_PF03600_full_length.fa', 'fasta'):
         if record.id in hit_list:
             
             passed_list.append(str(record.id.split('tax:')[1]))
@@ -174,8 +185,8 @@ with open('/nesi/nobackup/uc04105/new_databases_May/Chapter2_dtaa/Archaea_NhaD_f
             D_out.write(outline)
 NhaD_list = passed_list
 print(len(NhaD_list))
-with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', 'r') as Meta:
-    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Antiporter_Archaea_21April.tsv', 'w') as Out:
+with open('~/ar53_metadata.tsv', 'r') as Meta:
+    with open('~/Antiporter_Archaea_21April.tsv', 'w') as Out:
         header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'Sample' + '\t'+ 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         representatives_list = []
