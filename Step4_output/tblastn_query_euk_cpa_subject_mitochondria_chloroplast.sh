@@ -1,5 +1,4 @@
 #!/bin/bash
-#SBATCH --account       uc04105
 #SBATCH --job-name      Euk_blastn
 #SBATCH --time          2:00:00
 #SBATCH --mem           2GB
