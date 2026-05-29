@@ -60,14 +60,14 @@ def Get_representatives(MMseq):
                 pass
     return(Rep_dict)
 
-MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Euk_allhmmscanned_final_clustered_at0.7.fasta_cluster.tsv'
+MMseq= '~/tree_input/Euk_allhmmscanned_final_clustered_at0.7.fasta_cluster.tsv'
 Erepdic = Get_representatives(MMseq)
-MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Archaea_allhmmscanned_final_clustered_at0.7.fasta_cluster.tsv'
+MMseq= '~/tree_input/Archaea_allhmmscanned_final_clustered_at0.7.fasta_cluster.tsv'
 Arepdic = Get_representatives(MMseq)
-MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_tree_set/sequences/MMseq/Bacteria_allhmmscanned_final_clustered_at0.7.fasta_cluster.tsv'
+MMseq= '~/tree_input/Bacteria_allhmmscanned_final_clustered_at0.7.fasta_cluster.tsv'
 Brepdic = Get_representatives(MMseq)
 Seq_taxa = {}
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/CPA_full_tree_aligned_annotation_13sept.tsv', 'r') as A:
+with open('~/CPA_full_tree_aligned_annotation_13sept.tsv', 'r') as A:
     next(A, None)
     for line in A:
         Seq_taxa[(line.split('\t')[0])] =(line.split('\t')[5]) 
@@ -113,7 +113,7 @@ def enough_proteins_in_clade(i):
     return(non_euk_count)
     return(total_clusteroids)
 
-tree = Phylo.read('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/edit_trees/CPA_TREE_ALGINEDMMSEQ1_PF0099_28juli_fasttree_midrooted.nw', 'newick')
+tree = Phylo.read('~/CPA_TREE_ALGINEDMMSEQ1_PF0099_28juli_fasttree_midrooted.nw', 'newick')
 count = 0
 #only give clade a number/name if it is not terminal
 # otherwise let it keep the same name, this prevents future back paddeling and renaming. 
@@ -133,7 +133,7 @@ for clade in tree.find_clades(order='postorder'):
         clade.reps = representatives_in_clade
 #generate mini trees
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_tree_set/representatives_per_clades.tsv', 'w') as Rep_clades:
+with open('~/representatives_per_clades.tsv', 'w') as Rep_clades:
     Header = 'clade_id' + '\t' + 'no_reps' + '\n'
     Rep_clades.write(Header)
     for clade in tree.find_clades(order='postorder'):
