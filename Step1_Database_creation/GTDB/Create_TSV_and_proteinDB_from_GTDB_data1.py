@@ -5,12 +5,12 @@ import sys
 #input required: all proteomes from Bacteria or Archaea downloaded, the metadata file
 #ouput a .tsv file containing species information, gtdb ID etc. 
 
-tsv_file = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata.tsv'
-dir_files = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/protein_faa_reps/bacteria'
-files = os.listdir('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/protein_faa_reps/bacteria')
+tsv_file = '~/GTDB_226/bac120_metadata.tsv'
+dir_files = '~/GTDB_226/protein_faa_reps/bacteria'
+files = os.listdir('~/GTDB_226/protein_faa_reps/bacteria')
 
-outfile = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_GTDB226_protein_May92025.tsv'
-fasta_out = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_GTDB226_protein_May92025.faa'
+outfile = '~/GTDB_226/Bacteria_GTDB226_protein_May92025.tsv'
+fasta_out = '~/GTDB_226/Bacteria_GTDB226_protein_May92025.faa'
 dictionary = {}
 
 with open('{}'.format(tsv_file)) as dataset:
