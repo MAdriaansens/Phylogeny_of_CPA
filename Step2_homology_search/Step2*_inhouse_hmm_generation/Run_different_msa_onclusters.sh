@@ -11,9 +11,9 @@
 module load MAFFT/7.505-gimkl-2022a-with-extensions
 
 
-MMseq=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/MMseq/Archaea/PF00999
-MAFFT=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/MMseq/Archaea/PF00999
-HMM_out=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMM/Archaea
+MMseq=~/MMseq/Archaea/PF00999
+MAFFT=~/MMseq/Archaea/PF00999
+HMM_out=~/HMM/Archaea
 
 
 declare -a array=("0.6" "0.7" "0.8" "0.9")
