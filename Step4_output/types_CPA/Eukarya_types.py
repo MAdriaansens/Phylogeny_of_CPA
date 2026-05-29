@@ -1,5 +1,5 @@
 
-MMseq= '/nesi/nobackup/uc04105/new_databases_May/final_april28/tree_input/Eukarya_April_hmmaligned_e03_mmseq_treeinput_clusterd_at_0.7.faa_cluster.tsv'
+MMseq= '~/tree_input/Eukarya_April_hmmaligned_e03_mmseq_treeinput_clusterd_at_0.7.faa_cluster.tsv'
 rep_list = []
 
 
@@ -59,7 +59,7 @@ with open(MMseq, 'r') as clustermap:
 
 #load matching types
 clade_dic = {}
-with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/Red_informed_clade_20_lg_cat_gamma_RED_interval_28April.tsv', 'r') as LG_Cat_Gamma_clade:
+with open('~/Red_informed_clade_20_lg_cat_gamma_RED_interval_28April.tsv', 'r') as LG_Cat_Gamma_clade:
     next(LG_Cat_Gamma_clade, None)
     for line in LG_Cat_Gamma_clade:
         protein_id = line.split('\t')[0]
@@ -74,7 +74,7 @@ with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/Red_informed_c
 seq_dic = {}
 from Bio import SeqIO
 tax_list = []
-for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Eukarya_CPA_fl.fasta','fasta'):
+for record in SeqIO.parse('~/Eukarya_CPA_fl.fasta','fasta'):
     seq_dic[record.id.split(':')[0]] = [record.id, str(record.seq)]
     tax_list.append(record.id.split('tax:')[1])
 tax_list = list(set(tax_list))
@@ -105,7 +105,7 @@ for key in clade_dic.keys():
                     for entry in Reps_dic[key]:
                         
                         
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CPA1_sequences.faa", "a") as CPA1out:
+                        with open("~/fl/Euk_CPA1_sequences.faa", "a") as CPA1out:
                             sequence  = seq_dic[entry.split(':')[0]][1]
                             id_tax =  seq_dic[entry.split(':')[0]][0]
                             CPA1_list.append(id_tax.split('tax:')[1])
@@ -113,7 +113,7 @@ for key in clade_dic.keys():
                             CPA1out.write(line)
                         CPA1out.close()
                 else:
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CPA1_sequences.faa", "a") as CPA1out:
+                    with open("~/fl/Euk_CPA1_sequences.faa", "a") as CPA1out:
                         sequence  = seq_dic[key][1]
                         id_tax =  seq_dic[key][0]
                         CPA1_list.append(id_tax.split('tax:')[1])
@@ -125,7 +125,7 @@ for key in clade_dic.keys():
                         
                         for entry in Reps_dic[key]:
                             
-                            with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CPA1_sequences.faa", "a") as CHXout:
+                            with open("~/fl/Euk_CPA1_sequences.faa", "a") as CHXout:
                                 sequence  = seq_dic[entry.split(':')[0]][1]
                                 id_tax =  seq_dic[entry.split(':')[0]][0]
                                 CHX_list.append(id_tax.split('tax:')[1])
@@ -134,7 +134,7 @@ for key in clade_dic.keys():
                                 CHXout.write(line)
                             CHXout.close()
                     else:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CHX_sequences.faa", "a") as CHXout:
+                        with open("~/fl/Euk_CHX_sequences.faa", "a") as CHXout:
                             sequence  = seq_dic[key][1]
                             id_tax =  seq_dic[key][0]
                             CHX_list.append(id_tax.split('tax:')[1])
@@ -146,7 +146,7 @@ for key in clade_dic.keys():
                     if key in Reps_dic:
                         for entry in Reps_dic[key]:
                             
-                            with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Kef_sequences.faa", "a") as Kefout:
+                            with open("/~/fl/Euk_Kef_sequences.faa", "a") as Kefout:
                                 sequence  = seq_dic[entry.split(':')[0]][1]
                                 id_tax =  seq_dic[entry.split(':')[0]][0]
                                 Kef_list.append(id_tax.split('tax:')[1])
@@ -154,7 +154,7 @@ for key in clade_dic.keys():
                                 Kefout.write(line)
                             Kefout.close()
                     else:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Kef_sequences.faa", "a") as Kefout:
+                        with open("~/fl/Euk_Kef_sequences.faa", "a") as Kefout:
                             sequence  = seq_dic[key][1]
                             id_tax =  seq_dic[key][0]
                             Kef_list.append(id_tax.split('tax:')[1])
@@ -165,7 +165,7 @@ for key in clade_dic.keys():
                     if key in Reps_dic:
                         for entry in Reps_dic[key]:
                             
-                            with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaA_sequences.faa", "a") as NhaAout:
+                            with open("~/fl/Euk_NhaA_sequences.faa", "a") as NhaAout:
                                 sequence  = seq_dic[entry.split(':')[0]][1]
                                 id_tax =  seq_dic[entry.split(':')[0]][0]
                                 NhaA_list.append(id_tax.split('tax:')[1])
@@ -173,7 +173,7 @@ for key in clade_dic.keys():
                                 NhaAout.write(line)
                             NhaAout.close()
                     else:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaA_sequences.faa", "a") as NhaAout:
+                        with open("~/fl/Euk_NhaA_sequences.faa", "a") as NhaAout:
                             sequence  = seq_dic[key][1]
                             id_tax =  seq_dic[key][0]
                             NhaA_list.append(id_tax.split('tax:')[1])
@@ -185,7 +185,7 @@ for key in clade_dic.keys():
                 if key in Reps_dic:
 
                     for entry in Reps_dic[key]:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaS5_sequences.faa", "a") as NhaS5out:
+                        with open("~/fl/Euk_NhaS5_sequences.faa", "a") as NhaS5out:
                             sequence  = seq_dic[entry.split(':')[0]][1]
                             id_tax =  seq_dic[entry.split(':')[0]][0]
                             NhaS5_list.append(id_tax.split('tax:')[1])
@@ -193,7 +193,7 @@ for key in clade_dic.keys():
                             NhaS5out.write(line)
                         NhaS5out.close()
                 else:
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaS5_sequences.faa", "a") as NhaS5out:
+                    with open("~/fl/Euk_NhaS5_sequences.faa", "a") as NhaS5out:
                         sequence  = seq_dic[key][1]
                         id_tax =  seq_dic[key][0]
                         NhaS5_list.append(id_tax.split('tax:')[1])
@@ -206,7 +206,7 @@ for key in clade_dic.keys():
                 if key in Reps_dic:
 
                     for entry in Reps_dic[key]:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Undescribed_CPA1_sequences.faa", "a") as Undescribed_CPA1out:
+                        with open("~/fl/Euk_Undescribed_CPA1_sequences.faa", "a") as Undescribed_CPA1out:
                             sequence  = seq_dic[entry.split(':')[0]][1]
                             id_tax =  seq_dic[entry.split(':')[0]][0]
                             Undescribed_CPA1_list.append(id_tax.split('tax:')[1])
@@ -214,7 +214,7 @@ for key in clade_dic.keys():
                             Undescribed_CPA1out.write(line)
                         Undescribed_CPA1out.close()
                 else:
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Undescribed_CPA1_sequences.faa", "a") as Undescribed_CPA1out:
+                    with open("~/fl/Euk_Undescribed_CPA1_sequences.faa", "a") as Undescribed_CPA1out:
                         sequence  = seq_dic[key][1]
                         id_tax =  seq_dic[key][0]
                         Undescribed_CPA1_list.append(id_tax.split('tax:')[1])
@@ -224,7 +224,7 @@ for key in clade_dic.keys():
             elif clade_dic[key] == '11132':
                 if key in Reps_dic:
                     for entry in Reps_dic[key]:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_SOD2_sequences.faa", "a") as SOD2out:
+                        with open("~/fl/Euk_SOD2_sequences.faa", "a") as SOD2out:
                             sequence  = seq_dic[entry.split(':')[0]][1]
                             id_tax =  seq_dic[entry.split(':')[0]][0]
                             SOD2_list.append(id_tax.split('tax:')[1])
@@ -232,7 +232,7 @@ for key in clade_dic.keys():
                             SOD2out.write(line)
                         SOD2out.close()
                 else:
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_SOD2_sequences.faa", "a") as  SOD2out:
+                    with open("~/fl/Euk_SOD2_sequences.faa", "a") as  SOD2out:
                         sequence  = seq_dic[key][1]
                         id_tax =  seq_dic[key][0]
                         SOD2_list.append(id_tax.split('tax:')[1])
@@ -242,7 +242,7 @@ for key in clade_dic.keys():
             elif clade_dic[key] == '14956':
                 if key in Reps_dic:
                     for entry in Reps_dic[key]:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaPCPA1_sequences.faa", "a") as NhaPCPA1out:
+                        with open("~/fl/Euk_NhaPCPA1_sequences.faa", "a") as NhaPCPA1out:
                             sequence  = seq_dic[entry.split(':')[0]][1]
                             id_tax =  seq_dic[entry.split(':')[0]][0]
                             NhaP_CPA1_list.append(id_tax.split('tax:')[1])
@@ -250,7 +250,7 @@ for key in clade_dic.keys():
                             NhaPCPA1out.write(line)
                         NhaPCPA1out.close()
                 else:
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_NhaPCPA1_sequences.faa", "a") as  NhaPCPA1out:
+                    with open("~/fl/Euk_NhaPCPA1_sequences.faa", "a") as  NhaPCPA1out:
                         sequence  = seq_dic[key][1]
                         id_tax =  seq_dic[key][0]
                         NhaP_CPA1_list.append(id_tax.split('tax:')[1])
@@ -260,7 +260,7 @@ for key in clade_dic.keys():
             elif clade_dic[key] == '8560':
                 if key in Reps_dic:
                     for entry in Reps_dic[key]:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_UndProkaryaCPA1IDK_sequences.faa", "a") as UndProkaryaCPA1IDKout:
+                        with open("~/fl/Euk_UndProkaryaCPA1IDK_sequences.faa", "a") as UndProkaryaCPA1IDKout:
                             sequence  = seq_dic[entry.split(':')[0]][1]
                             id_tax =  seq_dic[entry.split(':')[0]][0]
                             UndProkarya_CPA1_IDK_list.append(id_tax.split('tax:')[1])
@@ -268,7 +268,7 @@ for key in clade_dic.keys():
                             UndProkaryaCPA1IDKout.write(line)
                         UndProkaryaCPA1IDKout.close()
                 else:
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_UndProkaryaCPA1IDK_sequences.faa", "a") as  UndProkaryaCPA1IDKout:
+                    with open("~/fl/Euk_UndProkaryaCPA1IDK_sequences.faa", "a") as  UndProkaryaCPA1IDKout:
                         sequence  = seq_dic[key][1]
                         id_tax =  seq_dic[key][0]
                         UndProkarya_CPA1_IDK_list.append(id_tax.split('tax:')[1])
@@ -278,7 +278,7 @@ for key in clade_dic.keys():
             elif clade_dic[key] == '53633':
                 if key in Reps_dic:
                     for entry in Reps_dic[key]:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_GerN_sequences.faa", "a") as GerNout:
+                        with open("~/fl/Euk_GerN_sequences.faa", "a") as GerNout:
                             sequence  = seq_dic[entry.split(':')[0]][1]
                             id_tax =  seq_dic[entry.split(':')[0]][0]
                             GerN_list.append(id_tax.split('tax:')[1])
@@ -286,7 +286,7 @@ for key in clade_dic.keys():
                             GerNout.write(line)
                         GerNout.close()
                 else:
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_GerN_sequences.faa", "a") as GerNout:
+                    with open("~/fl/Euk_GerN_sequences.faa", "a") as GerNout:
                         sequence  = seq_dic[key][1]
                         id_tax =  seq_dic[key][0]
                         GerN_list.append(id_tax.split('tax:')[1])
@@ -296,7 +296,7 @@ for key in clade_dic.keys():
             elif clade_dic[key] == '21649':
                 if key in Reps_dic:
                     for entry in Reps_dic[key]:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CPA1_SL_sequences.faa", "a") as CPA1_SLout:
+                        with open("~/fl/Euk_CPA1_SL_sequences.faa", "a") as CPA1_SLout:
                             sequence  = seq_dic[entry.split(':')[0]][1]
                             id_tax =  seq_dic[entry.split(':')[0]][0]
                             CPA1_SL_list.append(id_tax.split('tax:')[1])
@@ -304,7 +304,7 @@ for key in clade_dic.keys():
                             CPA1_SLout.write(line)
                         CPA1_SLout.close()
                 else:
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_CPA1_SL_sequences.faa", "a") as CPA1_SLout:
+                    with open("~/fl/Euk_CPA1_SL_sequences.faa", "a") as CPA1_SLout:
                         sequence  = seq_dic[key][1]
                         id_tax =  seq_dic[key][0]
 
@@ -315,7 +315,7 @@ for key in clade_dic.keys():
             else:
                 if key in Reps_dic:
                     for entry in Reps_dic[key]:
-                        with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Uncharacterized_sequences.faa", "a") as Uncharacterizedout:
+                        with open("~/fl/Euk_Uncharacterized_sequences.faa", "a") as Uncharacterizedout:
                             sequence  = seq_dic[entry.split(':')[0]][1]
                             id_tax =  seq_dic[entry.split(':')[0]][0]
                             Uncharacterized_list.append(id_tax.split('tax:')[1])
@@ -323,7 +323,7 @@ for key in clade_dic.keys():
                             Uncharacterizedout.write(line)
                         Uncharacterizedout.close()
                 else:
-                    with open("/nesi/nobackup/uc04105/new_databases_May/final_april28/fl/Euk_Uncharacterized_sequences.faa", "a") as Uncharacterizedout:
+                    with open("~/fl/Euk_Uncharacterized_sequences.faa", "a") as Uncharacterizedout:
                         sequence  = seq_dic[key][1]
                         id_tax =  seq_dic[key][0]
                         Uncharacterized_list.append(id_tax.split('tax:')[1])
@@ -335,7 +335,7 @@ for key in clade_dic.keys():
 
      
 
-with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/CPA_types_Eukarya_5may.tsv', 'w') as TAX_TYPE:
+with open('~/CPA_types_Eukarya_5may.tsv', 'w') as TAX_TYPE:
     header = 'GTDB_id' + '\t' + 'Kef' + '\t' + 'CPA1' + '\t' + 'NhaA' + '\t' + 'Undescribed_CPA1' + '\t' + 'NhaS5' + '\t' + 'CHX' + '\t' + 'SOD2' + '\t' + 'NhaP' + '\t' + 'CPA1_IDK' + '\t' + 'GerN' + '\t' + 'CPA1_SL' + '\t' + 'Uncharacaterized' + '\n'
     TAX_TYPE.write(header)
     total_count = 0
