@@ -20,5 +20,5 @@ def split_csv(file_path, chunk_size=1000):
         chunk_number += 1
         
 # Example usage:
-file_path = "/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bacteria_GTDB226_protein_May92025.tsv"
+file_path = "~/GTDB_226/Bacteria_GTDB226_protein_May92025.tsv"
 split_csv(file_path, chunk_size=7070931)
