@@ -12,7 +12,7 @@ Euk_TSV=~/Euk_db_May_protein.tsv
 Euk_db=~/Euk_db_May_protein.fasta
 HMMsearch=~/HMMsearch/Eukarya
 MMseqs=~/MMseqs/Eukarya
-Seq=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/sequences
+Seq=~/sequences
 
 mkdir ${HMMsearch}
 mkdir ${MMseqs}
