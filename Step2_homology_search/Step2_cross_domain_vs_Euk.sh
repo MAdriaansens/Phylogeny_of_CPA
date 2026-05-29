@@ -1,5 +1,4 @@
 #!/bin/bash -e
-#SBATCH --account       uc04105
 #SBATCH --job-name      EukA
 #SBATCH --time          8:00:00
 #SBATCH --mem           30GB
