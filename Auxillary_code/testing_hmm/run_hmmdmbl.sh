@@ -1,5 +1,4 @@
 #!/bin/bash
-#SBATCH --account       uc04105
 #SBATCH --job-name      HMMprokka
 #SBATCH --time          72:00:00
 #SBATCH --mem           3GB
