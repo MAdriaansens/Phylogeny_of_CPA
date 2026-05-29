@@ -4,9 +4,9 @@
 import sys
 
 
-all_sequences = sys.argv[1] # '/nesi/nobackup/uc04105/results/hmmalign/rerun_pipeline_euk/complete_euk.fasta'
+all_sequences = sys.argv[1] # '~/complete_euk.fasta'
 #protein tsv including taxonomic and species data
-tsv = sys.argv[2] #'/nesi/nobackup/uc04105/database/Euk_db_7April/Euk_db_7April_protein.tsv'
+tsv = sys.argv[2] #'~/Euk_db_7April/Euk_db_7April_protein.tsv'
 
 from Bio import SeqIO
 import time
