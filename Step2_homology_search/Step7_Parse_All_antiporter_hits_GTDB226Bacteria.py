@@ -106,7 +106,7 @@ with open('~/Bacteria_CPA_fl.fasta', 'w') as out:
         Passed_all_list.append(CPA)
         out.write('>' + CPA + '\n' + str(records_in[CPA]) + '\n')
 ##NhaB
-HMMscan = '~/results/HMMscan/Bacteria/PF06450/PF06450_aligned_Bacteria_PF06450_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
+HMMscan = '~/results/HMMscan/Bacteria/PF06450_aligned_Bacteria_PF06450_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -167,7 +167,7 @@ print(len(set(NhaC_list)))
 
     
 #NhaD
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Chapter_2_data/results_HMMscan/PF03600_aligned_Bacteria_PF03600_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
+HMMscan = '~/results/HMMscan/PF03600_aligned_Bacteria_PF03600_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
 from collections import Counter
