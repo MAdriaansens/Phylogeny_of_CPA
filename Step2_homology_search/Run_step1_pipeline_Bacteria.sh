@@ -10,12 +10,12 @@
 
 declare -a array=($(seq 0 61))
 
-HMMdir=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/HMM
-Bac_TSV=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bac_DB/tsv/Bacteria_GTDB226_protein_May92025_chunk_${array[$SLURM_ARRAY_TASK_ID]}.tsv
-Bac_db=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Bac_DB/fasta/Bacteria_GTDB226_protein_May92025_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
-HMMsearch=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/results/HMMsearch/Bacteria
-MMseqs=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/results/MMseqs/Bacteria
-Seq=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/sequences
+HMMdir=~/HMM
+Bac_TSV=~/Bac_DB/tsv/Bacteria_GTDB226_protein_May92025_chunk_${array[$SLURM_ARRAY_TASK_ID]}.tsv
+Bac_db=~/Bac_DB/fasta/Bacteria_GTDB226_protein_May92025_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
+HMMsearch=~/results/HMMsearch/Bacteria
+MMseqs=~/results/MMseqs/Bacteria
+Seq=~/sequences
 
 #---------------------------------------------------------NhaB-----------------------------------------------------------------------------------------------
 module load MMseqs2/15-6f452-gompi-2023a
