@@ -10,12 +10,12 @@
 
 declare -a array=($(seq 0 12))
 
-HMMdir=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/HMM
-Arc_TSV=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Archaea_GTDB226_protein_May92025.tsv
-Arc_db=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ARCDB/Archaea_GTDB226_protein_May92025_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
-HMMsearch=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/results/HMMsearch/Archaea
-MMseqs=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/results/MMseqs/Archaea
-Seq=/nesi/nobackup/uc04105/cross_biome_metagenome/Protein/sequences
+HMMdir=~/HMM
+Arc_TSV=~/Archaea_GTDB226_protein_May92025.tsv
+Arc_db=~/ARCDB/Archaea_GTDB226_protein_May92025_subset${array[$SLURM_ARRAY_TASK_ID]}.fasta
+HMMsearch=~/results/HMMsearch/Archaea
+MMseqs=~/results/MMseqs/Archaea
+Seq=~/sequences
 
 #---------------------CPA-------------------------
 module load MMseqs2/15-6f452-gompi-2023a
