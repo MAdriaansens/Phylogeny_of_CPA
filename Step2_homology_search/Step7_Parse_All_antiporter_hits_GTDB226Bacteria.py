@@ -56,7 +56,7 @@ def best_hit_dict(HMMscan, scan_dict):
                     entry_list = (best_match_hmm, evalue)
                     scan_dict[full_id] =entry_list
     return(scan_dict)
-scandir = '/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Bacteria/PF00999/part3'
+scandir = '~/results/HMMscan/Bacteria/PF00999/part3'
 from Bio import SeqIO
 
 scan_dict = {}
@@ -95,18 +95,18 @@ print(len(CPA_tax_list))
 
 #returns all protein ids whom match with CPA PFAM > 70%
 records_in ={}
-for aln in os.listdir('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF00999/part3'):
+for aln in os.listdir('~/HMMalign/Bacteria/PF00999/part3'):
     if 'FL' in aln:
-        for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria/PF00999/part3/{}'.format(aln), 'fasta'):
+        for record in SeqIO.parse('~/HMMalign/Bacteria/PF00999/part3/{}'.format(aln), 'fasta'):
             records_in[record.id] = record.seq
 
 Passed_all_list = []
-with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/Bacteria_CPA_fl.fasta', 'w') as out:
+with open('~/Bacteria_CPA_fl.fasta', 'w') as out:
     for CPA in CPA_list:
         Passed_all_list.append(CPA)
         out.write('>' + CPA + '\n' + str(records_in[CPA]) + '\n')
 ##NhaB
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Chapter_2_data/results_HMMscan/PF06450_aligned_Bacteria_PF06450_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
+HMMscan = '~/results/HMMscan/Bacteria/PF06450/PF06450_aligned_Bacteria_PF06450_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -118,13 +118,13 @@ for key in scan_dict.keys():
         hit_list.append(key)
 
 passed_list = []
-fulllength_NhaC_file='/nesi/nobackup/uc04105/new_databases_May/Chapter_2_data/original_files/PF06450_merged_Bac_fl.fasta'
+fulllength_NhaC_file='~/PF06450_merged_Bac_fl.fasta'
 seq_dict = {}
 for record in SeqIO.parse(fulllength_NhaC_file, 'fasta'):
     seq_dict[record.id] = record.seq
     
-with open('/nesi/nobackup/uc04105/new_databases_May/final_april28/Bacteria_NhaB_fl.fasta', 'w') as B_out:
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter_2_data/original_files/PF03600_merged_Bac_fl.fasta', 'fasta'):
+with open('~/Bacteria_NhaB_fl.fasta', 'w') as B_out:
+    for record in SeqIO.parse('~/PF03600_merged_Bac_fl.fasta', 'fasta'):
         if record.id in hit_list:
             passed_list.append(str(record.id.split('tax:')[1]))
             outline = '>' + record.id + '\n' + str(record.seq) + '\n'
@@ -135,7 +135,7 @@ print(len(set(NhaB_list)))
 
 #NhaC
 #NhaC
-HMMscan = '/nesi/nobackup/uc04105/new_databases_May/Chapter_2_data/results_HMMscan/PF03553_aligned_Bacteria_PF03553_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
+HMMscan = '~results/HMMscan/Bacteria/PF03553_aligned_Bacteria_PF03553_retrieved_preQC_full_length_hmmaligned.fasta_aligned_hmmscanned.tsv'
 scan_dict = {}
 
 scan_dict = best_hit_dict(HMMscan, scan_dict)
@@ -147,13 +147,13 @@ for key in scan_dict.keys():
         hit_list.append(key)
 
 passed_list = []
-fulllength_NhaC_file='/nesi/nobackup/uc04105/new_databases_May/Chapter_2_data/original_files/PF03553_merged_Bac_fl.fasta'
+fulllength_NhaC_file='~/PF03553_merged_Bac_fl.fasta'
 seq_dict = {}
 for record in SeqIO.parse(fulllength_NhaC_file, 'fasta'):
     seq_dict[record.id] = record.seq
     
-with open('/nesi/nobackup/uc04105/new_databases_May/Chapter_2_data/Bacteria_NhaC_fl.fasta', 'w') as C_out:
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter_2_data/original_files/PF03553_merged_Bac_fl.fasta', 'fasta'):
+with open('~/Bacteria_NhaC_fl.fasta', 'w') as C_out:
+    for record in SeqIO.parse('~/PF03553_merged_Bac_fl.fasta', 'fasta'):
         if record.id in hit_list:
             passed_list.append(str(record.id.split('tax:')[1]))
             outline = '>' + record.id + '\n' + str(record.seq) + '\n'
@@ -180,8 +180,8 @@ print(len(hit_list))
 
 
 passed_list = []
-with open('/nesi/nobackup/uc04105/new_databases_May/Chapter_2_data/Bacteria_NhaD_fl.fasta', 'w') as D_out:
-    for record in SeqIO.parse('/nesi/nobackup/uc04105/new_databases_May/Chapter_2_data/original_files/PF03600_merged_Bac_fl.fasta', 'fasta'):
+with open('~/Bacteria_NhaD_fl.fasta', 'w') as D_out:
+    for record in SeqIO.parse('~/PF03600_merged_Bac_fl.fasta', 'fasta'):
         if record.id in hit_list:
             
             passed_list.append(str(record.id.split('tax:')[1]))
@@ -191,8 +191,8 @@ NhaD_list = passed_list
 print(len(NhaD_list))
 
 GTDB_ids_passed = {}
-with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata_r226.tsv', 'r') as Meta:
-    with open('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Antiporter_Bacteria_25April.tsv', 'w') as Out:
+with open('~/bac120_metadata_r226.tsv', 'r') as Meta:
+    with open('~/Antiporter_Bacteria_25April.tsv', 'w') as Out:
         header = 'GTDB_id' + '\t' + 'GTDB_tax' + '\t' + 'Completeness' + '\t' + 'Contamination' + '\t' + 'Sample' + '\t'+ 'CPA_count' + '\t' + 'CPA_binary' + '\t' + 'NhaB_count' + '\t' +  'NhaB_binary' + '\t' + 'NhaC_count' + '\t' + 'NhaC_binary'+'\t' + 'NhaD_count' + '\t' + 'NhaD_binary' + '\n'
         Out.write(header)
         representatives_list = []
