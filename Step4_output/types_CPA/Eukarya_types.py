@@ -81,7 +81,7 @@ tax_list = list(set(tax_list))
 
 
 #list
-CPA1_list = []
+NHX_list = []
 CHX_list = []
 Kef_list = []
 NhaA_list = []
@@ -105,21 +105,21 @@ for key in clade_dic.keys():
                     for entry in Reps_dic[key]:
                         
                         
-                        with open("~/fl/Euk_CPA1_sequences.faa", "a") as CPA1out:
+                        with open("~/fl/Euk_NHX_sequences.faa", "a") as CPA1out:
                             sequence  = seq_dic[entry.split(':')[0]][1]
                             id_tax =  seq_dic[entry.split(':')[0]][0]
-                            CPA1_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:CPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            CPA1out.write(line)
-                        CPA1out.close()
+                            NHX_list.append(id_tax.split('tax:')[1])
+                            line = '>{}_Protein:NHX'.format(id_tax) + '\n' + str(sequence) + '\n'
+                            NHXout.write(line)
+                        NHXout.close()
                 else:
-                    with open("~/fl/Euk_CPA1_sequences.faa", "a") as CPA1out:
+                    with open("~/fl/Euk_NHX_sequences.faa", "a") as CPA1out:
                         sequence  = seq_dic[key][1]
                         id_tax =  seq_dic[key][0]
                         CPA1_list.append(id_tax.split('tax:')[1])
-                        line = '>{}_Protein:CPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
-                        CPA1out.write(line)
-                    CPA1out.close()
+                        line = '>{}_Protein:NHX'.format(id_tax) + '\n' + str(sequence) + '\n'
+                        NHXout.write(line)
+                    NHXout.close()
             elif clade_dic[key] == '62243':
                     if key in Reps_dic:
                         
@@ -336,9 +336,9 @@ for key in clade_dic.keys():
      
 
 with open('~/CPA_types_Eukarya_5may.tsv', 'w') as TAX_TYPE:
-    header = 'GTDB_id' + '\t' + 'Kef' + '\t' + 'CPA1' + '\t' + 'NhaA' + '\t' + 'Undescribed_CPA1' + '\t' + 'NhaS5' + '\t' + 'CHX' + '\t' + 'SOD2' + '\t' + 'NhaP' + '\t' + 'CPA1_IDK' + '\t' + 'GerN' + '\t' + 'CPA1_SL' + '\t' + 'Uncharacaterized' + '\n'
+    header = 'GTDB_id' + '\t' + 'Kef' + '\t' + 'NHX' + '\t' + 'NhaA' + '\t' + 'Undescribed_CPA1' + '\t' + 'NhaS5' + '\t' + 'CHX' + '\t' + 'SOD2' + '\t' + 'NhaP' + '\t' + 'CPA1_IDK' + '\t' + 'GerN' + '\t' + 'CPA1_SL' + '\t' + 'Uncharacaterized' + '\n'
     TAX_TYPE.write(header)
     total_count = 0
     for GTDB_tax in tax_list:
-        line = GTDB_tax + '\t' + str(Kef_list.count(GTDB_tax)) + '\t'  + str(CPA1_list.count(GTDB_tax)) + '\t' + str(NhaA_list.count(GTDB_tax)) + '\t' + str(Undescribed_CPA1_list.count(GTDB_tax)) + '\t'  + str(NhaS5_list.count(GTDB_tax)) + '\t' + str(CHX_list.count(GTDB_tax)) + '\t'  + str(SOD2_list.count(GTDB_tax)) + '\t'  + str(NhaP_CPA1_list.count(GTDB_tax)) + '\t' + str(UndProkarya_CPA1_IDK_list.count(GTDB_tax)) + '\t' + str(GerN_list.count(GTDB_tax)) + '\t' + str(CPA1_SL_list.count(GTDB_tax)) + '\t' + str(Uncharacterized_list.count(GTDB_tax)) + '\n'
+        line = GTDB_tax + '\t' + str(Kef_list.count(GTDB_tax)) + '\t'  + str(NHX_list.count(GTDB_tax)) + '\t' + str(NhaA_list.count(GTDB_tax)) + '\t' + str(Undescribed_CPA1_list.count(GTDB_tax)) + '\t'  + str(NhaS5_list.count(GTDB_tax)) + '\t' + str(CHX_list.count(GTDB_tax)) + '\t'  + str(SOD2_list.count(GTDB_tax)) + '\t'  + str(NhaP_CPA1_list.count(GTDB_tax)) + '\t' + str(UndProkarya_CPA1_IDK_list.count(GTDB_tax)) + '\t' + str(GerN_list.count(GTDB_tax)) + '\t' + str(CPA1_SL_list.count(GTDB_tax)) + '\t' + str(Uncharacterized_list.count(GTDB_tax)) + '\n'
         TAX_TYPE.write(line)              
