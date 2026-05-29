@@ -3,6 +3,7 @@
 
 import sys
 
+# be sure to make directroy ~/Euk_db_7April, so mkdir ~/Euk_db_7April
 
 all_sequences = sys.argv[1] # '~/complete_euk.fasta'
 #protein tsv including taxonomic and species data
