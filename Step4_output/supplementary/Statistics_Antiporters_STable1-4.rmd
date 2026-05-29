@@ -179,7 +179,7 @@ ITA
 ```{r Taxonomic_/Protein_data_wrangling_Arc9}
 #generate a Archaea set of only high quality genomes
 
-GTDB_Arc <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
+GTDB_Arc <- read.delim('~/ar53_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
 GTDB_Arc$GTDB_id <- GTDB_Arc$accession
 
 
@@ -359,7 +359,7 @@ Archaea_average_ap_mb$averages <- Archaea_average_ap_mb$total_CPA/Archaea_averag
 ```{r supplementary figure 4}
 #generate a Bacteria set of only high quality genomes
 
-GTDB_Bac <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata_r226.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
+GTDB_Bac <- read.delim('~/bac120_metadata_r226.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
 GTDB_Bac$GTDB_id <- GTDB_Bac$accession
 
 
