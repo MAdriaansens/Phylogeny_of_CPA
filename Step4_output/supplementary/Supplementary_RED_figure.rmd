@@ -20,7 +20,7 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r}
 library(tidyr)
 library(dplyr)
-RED_values <-read.delim('/nesi/nobackup/uc04105/new_databases_May/final_april28/RED/info_RED_clades_CPA_phylogeny_FTtree_28April.tsv',stringsAsFactors = TRUE, sep='\t')
+RED_values <-read.delim('~/RED/info_RED_clades_CPA_phylogeny_FTtree_28April.tsv',stringsAsFactors = TRUE, sep='\t')
 RED_values$bootstrap <- as.numeric(RED_values$bootstrap)
 
 RED_values <- RED_values %>%
@@ -52,9 +52,9 @@ ggsave("sign_plotplot.png")
 
 
 ```{r, generate dataframe with all info}
-Annotation1 <-read.delim('/nesi/nobackup/uc04105/new_databases_May/final_april28/Red_informed_clade_20_lg_cat_gamma_RED_interval_28April.tsv',stringsAsFactors = TRUE, sep='\t')
+Annotation1 <-read.delim('~/Red_informed_clade_20_lg_cat_gamma_RED_interval_28April.tsv',stringsAsFactors = TRUE, sep='\t')
 
-Annotation2 <-read.delim('/nesi/nobackup/uc04105/new_databases_May/final_april28/CPA_full_tree_aligned_annotation_30April.tsv',stringsAsFactors = TRUE, sep='\t')
+Annotation2 <-read.delim('/~/CPA_full_tree_aligned_annotation_30April.tsv',stringsAsFactors = TRUE, sep='\t')
 
 
 
