@@ -11,14 +11,14 @@
 module load Python/3.11.6-foss-2023a
 
 
-HMMalign=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMalign/Bacteria
+HMMalign=~/results/HMMalign/Bacteria
 declare -a array=($(seq 1 61))
 
-HMMscan=/nesi/nobackup/uc04105/new_databases_May/GTDB_226/results/HMMscan/Bacteria
+HMMscan=~/results/HMMscan/Bacteria
 
 module load HMMER/3.3.2-GCC-12.3.0
 
-HMMDB=/nesi/nobackup/uc04105/results/HMM/Pfam_db/Merged_PFAMA.hmm
+HMMDB=~/HMM/Pfam_db/Merged_PFAMA.hmm
 module load HMMER/3.3.2-GCC-12.3.0
 
 python parse_stockholm_forHMMscan.py ${HMMalign}/PF03553/cross_domain/PF03553_Bacteria_crossdomain_searched_all_${array[$SLURM_ARRAY_TASK_ID]}.sthk  ${HMMalign}/PF03553/cross_domain/PF03553_Bacteria_crossdomain_searched_all_${array[$SLURM_ARRAY_TASK_ID]} 212
