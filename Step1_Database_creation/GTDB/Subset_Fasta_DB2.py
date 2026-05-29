@@ -30,7 +30,7 @@ from Bio import SeqIO
 
 record_iter = SeqIO.parse(open(tinput), "fasta")
 for i, batch in enumerate(batch_iterator(record_iter, 7070931)):
-    filename = "~/GTDB_226/DB/Bacteria_GTDB226_protein_May92025_subset%i.fasta" % (i + 1)
+    filename = "~/GTDB_226/Bac_DB/Bacteria_GTDB226_protein_May92025_subset%i.fasta" % (i + 1)
     with open(filename, "w") as handle:
         count = SeqIO.write(batch, handle, "fasta")
     print("Wrote %i records to %s" % (count, filename))
