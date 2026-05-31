@@ -30,11 +30,11 @@ library(tidyr)
 
 ```{r Load_Eukarya}
 #these are the files containing all the antiporters, in our architecture it is called:
-IT_Eukarya <- read.delim('~/Antiporter_Eukarya_21April2026.tsv', sep='\t', stringsAsFactors = TRUE)
+IT_Eukarya <- read.delim('/nesi/nobackup/uc04105/new_databases_May/Euk_database_May/Antiporter_Eukarya_21April2026.tsv', sep='\t', stringsAsFactors = TRUE)
 sum(IT_Eukarya$CPA_count)
 
 
-TypesE<- read.delim('~/CPA_types_Eukarya_5may.tsv', sep='\t', stringsAsFactors = TRUE)
+TypesE<- read.delim('/nesi/nobackup/uc04105/new_databases_May/final_april28/CPA_types_Eukarya_5may.tsv', sep='\t', stringsAsFactors = TRUE)
 TypesE <- rename(TypesE, species_name = GTDB_id)
 TypesE <- rename(TypesE, Uncharacterized = Uncharacaterized)
 
@@ -48,7 +48,7 @@ TypesE <- rename(TypesE, Uncharacterized = Uncharacaterized)
 
 
 #check median
-median(TypesE$NHX)
+median(TypesE$CPA1)
 median(TypesE$Kef)
 median(TypesE$CPA1_SL)
 
@@ -58,7 +58,7 @@ IT_Eukarya [is.na(IT_Eukarya)] <- 0
 IT_Eukarya <- IT_Eukarya[-c(246:248),]
  #species with no CPA off course have no CPA types present so here I edit that in. 
 #write it out
-#write.table(IT_Eukarya, 'Antiporter_Eukarya_30Apri.tsv.tsv', sep='\t', row.names = FALSE)
+write.table(IT_Eukarya, 'Antiporter_Eukarya.tsv', sep='\t', row.names = FALSE)
 ```
 
 ```{r, Load Eukarya data and create new data variables}
@@ -84,7 +84,6 @@ IT_Eukarya$Major_tax[IT_Eukarya$Major_tax == 'Hapophyta'] <- 'Haptophyta'
 IT_Eukarya$Antiporter_binary[IT_Eukarya$Antiporter_count == 0] <- 0
 IT_Eukarya$Antiporter_binary[IT_Eukarya$Antiporter_count >0] <- 1
 
-write.table(IT_Eukarya, file='Antiporter_across_all_245Eukarya.csv', quote=FALSE, sep='\t')
 ```
 
 ```{r, get number per taxonomic group for gene numbers}
@@ -420,11 +419,11 @@ rm(missing_tax)
 #I now repeat the same procedure for Archaea
 ```{r load_Archaea}
 #these are the files containing all the antiporters, in our architecture it is called:
-IT_Archaea <- read.delim('~/Antiporter_Archaea_21April.tsv', sep='\t', stringsAsFactors = TRUE)
+IT_Archaea <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Antiporter_Archaea_21April.tsv', sep='\t', stringsAsFactors = TRUE)
 
 sum(IT_Archaea$CPA_count)
 sum(IT_Archaea$NhaC_binary)
-TypesA <- read.delim('~/CPA_types_Archaea_5may.tsv', sep='\t', stringsAsFactors = TRUE)
+TypesA <- read.delim('/nesi/nobackup/uc04105/new_databases_May/final_april28/CPA_types_Archaea_5may.tsv', sep='\t', stringsAsFactors = TRUE)
 TypesA <- TypesA  %>% rename(GTDB_tax=GTDB_id)
 TypesA <-TypesA %>% distinct()
 IT_Archaea <- merge(IT_Archaea, TypesA, by ='GTDB_tax', all =TRUE)
@@ -465,7 +464,7 @@ IT_Archaea$IT_binary[IT_Archaea$IT_count > 0] <- 1
 #generate which CPA types are present in which CPAs
 
 #rm(TypesA)
-write.table(IT_Archaea, file='Antiporter_Archaea_30Apri.tsv', quote=FALSE, sep=',')
+write.table(IT_Archaea, file='Antiporter_Archaea.tsv', quote=FALSE, sep=',')
 
 ```
 
@@ -473,7 +472,7 @@ write.table(IT_Archaea, file='Antiporter_Archaea_30Apri.tsv', quote=FALSE, sep='
 ```{r Taxonomic_/Protein_data_wrangling_Arc}
 #generate a Archaea set of only high quality genomes
 
-GTDB_Arc <- read.delim('~/ar53_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
+GTDB_Arc <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/ar53_metadata.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
 GTDB_Arc$GTDB_id <- GTDB_Arc$accession
 
 
@@ -845,9 +844,9 @@ ggsave("Archaea_count.pdf")
 
 ```{r load_Bacteria}
 #these are the files containing all the antiporters, in our architecture it is called:
-IT_Bacteria <- read.delim('~/Antiporter_Bacteria_25April.tsv', sep='\t', stringsAsFactors = TRUE)
+IT_Bacteria <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/Antiporter_Bacteria_25April.tsv', sep='\t', stringsAsFactors = TRUE)
 
-TypesB <- read.delim('~/CPA_types_Bacteria_5may.tsv', sep='\t', stringsAsFactors = TRUE)
+TypesB <- read.delim('/nesi/nobackup/uc04105/new_databases_May/final_april28/CPA_types_Bacteria_5may.tsv', sep='\t', stringsAsFactors = TRUE)
 TypesB <-TypesB %>% distinct()
 
 TypesB <- TypesB %>% rename( "GTDB_tax" = GTDB_id)
@@ -871,11 +870,11 @@ IT_Bacteria %>% separate(Lower_genera, c('Genera', 'Species'), ';s__') -> IT_Bac
 ```
 
 ```{r}
-GTDB_Bac <- read.delim('~/bac120_metadata_r226.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
+GTDB_Bac <- read.delim('/nesi/nobackup/uc04105/new_databases_May/GTDB_226/bac120_metadata_r226.tsv', sep='\t', stringsAsFactors = TRUE, row.names = NULL)
 GTDB_Bac$GTDB_id <- GTDB_Bac$accession
 
 IT_Bacteria <-  merge(IT_Bacteria, GTDB_Bac, by = 'GTDB_id')
-#Antiporters_Bacteria$selected_cols_sum <- rowSums(Antiporters_Bacteria[, c("Kef", "NHX", "CPA2","Uncharcterized", "NhaA")]) - Antiporters_Bacteria$CPA_count
+#Antiporters_Bacteria$selected_cols_sum <- rowSums(Antiporters_Bacteria[, c("Kef", "CPA1", "CPA2","Uncharcterized", "NhaA")]) - Antiporters_Bacteria$CPA_count
 
 IT_Bacteria_clean<- IT_Bacteria[IT_Bacteria$Completeness> 90 & IT_Bacteria$Contamination < 5 & IT_Bacteria$trna_aa_count > 17,]
 
@@ -900,7 +899,7 @@ IT_Bacteria[is.na(IT_Bacteria)] <- 0
 #generate which CPA types are present in which CPAs
 
 rm(TypesB)
-write.table(IT_Bacteria, file='Antiporter_Bacteria_30Apri.tsv', quote=FALSE, sep=',')
+write.table(IT_Bacteria, file='Antiporter_Bacteria.tsv', quote=FALSE, sep=',')
 
 IT_Bac_subset <- IT_Bacteria[c()]
 ```
