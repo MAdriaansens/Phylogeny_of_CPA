@@ -119,7 +119,7 @@ for key in clade_dic.keys():
                             id_tax =  seq_dic[entry.split(':')[0]][0]
                             NHX_list.append(id_tax.split('tax:')[1])
                             line = '>{}_Protein:NHX'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            CPA1out.write(line)
+                            NHXout.write(line)
                         NHXout.close()
                 else:
                     with open("~/fl/Bac_NHX_sequences.faa", "a") as NHXout:
