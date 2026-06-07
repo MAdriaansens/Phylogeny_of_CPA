@@ -184,7 +184,7 @@ for key in clade_dic.keys():
                     line = '>{}_Protein:GerN'.format(id_tax) + '\n' + str(sequence) + '\n'
                     GerNout.write(line)
                     GerNout.close()
-            elif clade_dic[key] == '21649':
+            elif clade_dic[key][2] == '21649':
                 with open("~/fl/Arc_CPA1_SL_sequences.faa", "a") as CPA1_SLout:
                     sequence  = seq_dic[key.split('_tax')[0]][1]
                     id_tax =  seq_dic[key.split('_tax')[0]][0]
