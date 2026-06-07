@@ -57,25 +57,31 @@ with open(MMseq, 'r') as clustermap:
 #load matching types
 clade_dic = {}
 with open('~/Red_informed_clade_20_lg_cat_gamma_RED_interval_28April.tsv', 'r') as LG_Cat_Gamma_clade:
+    
     next(LG_Cat_Gamma_clade, None)
     for line in LG_Cat_Gamma_clade:
+
         protein_id = line.split('\t')[0]
-        domain = line.split('\t')[2]
-        clade_dic[protein_id] = domain
+        if protein_id in Reps_dic.keys():
+            for entry in (Reps_dic[protein_id]):
+                nline = (line.split('\n')[0].split('\t'))
+                clade_dic[entry] = nline
+                
+            
+        else:
+            nline = (line.split('\n')[0].split('\t'))
+            clade_dic[protein_id] = nline
 
 
-
-
-
-seq_dic = {}
-from Bio import SeqIO
-tax_list = []
-for record in SeqIO.parse('~/fl/Archaea_CPA_fl.fasta','fasta'):
-    seq_dic[record.id.split(':')[0]] = [record.id, str(record.seq)]
-    tax_list.append(record.id.split('tax:')[1])
 tax_list = list(set(tax_list))
+with open('~/Archaea_types_subclades_per_protein_id.tsv', 'w') as out_tsv:
+    header =  'Protein_id_full' + '\t' + 'Family' + '\t' + 'Subfamily'  + '\t' + 'Subclade' + '\t' + 'Group' + '\n'
+    out_tsv.write(header)
+    for key in clade_dic.keys():
+        if 'Arc226' in key:
 
-
+            line = seq_dic[key.split('_tax')[0]][0]+ '\t' + clade_dic[key][1] + '\t' + clade_dic[key][2]+ '\t' + clade_dic[key][3] + '\t' + clade_dic[key][4] + '\n'
+            out_tsv.write(line)
 #list
 NHX_list = []
 CHX_list = []
@@ -90,240 +96,109 @@ UndProkarya_CPA1_IDK_list = []
 GerN_list = []
 CPA1_SL_list = []
 for key in clade_dic.keys():
-
     if 'Arc226' in key:
+
         if key[0].isnumeric():
             pass
         else:
-
-            if clade_dic[key] == '8':
-                if key in Reps_dic:
-                    for entry in Reps_dic[key]:
-                        
-                        
-                        with open("~/fl/Arc_NHX_sequences.faa", "a") as NHXout:
-                            sequence  = seq_dic[entry.split(':')[0]][1]
-                            id_tax =  seq_dic[entry.split(':')[0]][0]
-                            NHX_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:CPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            NHXout.write(line)
-                        NHXout.close()
-                else:
-                    with open("~/fl/Arc_NHX_sequences.faa", "a") as NHXout:
-                        sequence  = seq_dic[key][1]
-                        id_tax =  seq_dic[key][0]
-                        CPA1_list.append(id_tax.split('tax:')[1])
-                        line = '>{}_Protein:NHX'.format(id_tax) + '\n' + str(sequence) + '\n'
-                        NHXout.write(line)
+            if clade_dic[key][2] == '8':
+                with open("~/fl/Arc_NHX_sequences.faa", "a") as NHXout:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    NHX_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:NHX'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    NHXout.write(line)
                     NHXout.close()
-            elif clade_dic[key] == '62243':
-                    if key in Reps_dic:
-                        for entry in Reps_dic[key]:
-                            
-                            with open("~/fl/Arc_CHX_sequences.faa", "a") as CHXout:
-                                sequence  = seq_dic[entry.split(':')[0]][1]
-                                id_tax =  seq_dic[entry.split(':')[0]][0]
-                                CHX_list.append(id_tax.split('tax:')[1])
+            elif clade_dic[key][2] == '62243':
 
-                                line = '>{}_Protein:CHX'.format(id_tax) + '\n' + str(sequence) + '\n'
-                                CHXout.write(line)
-                            CHXout.close()
-                    else:
-                        with open("~/fl/Arc_CHX_sequences.faa", "a") as CHXout:
-                            sequence  = seq_dic[key][1]
-                            id_tax =  seq_dic[key][0]
-                            CHX_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:CHX'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            CHXout.write(line)
-                        CHXout.close()
-            elif clade_dic[key] == '29930':
-                    if key in Reps_dic:
-                        for entry in Reps_dic[key]:
-                            
-                            with open("~/fl/Arc_Kef_sequences.faa", "a") as Kefout:
-                                sequence  = seq_dic[entry.split(':')[0]][1]
-                                id_tax =  seq_dic[entry.split(':')[0]][0]
-                                Kef_list.append(id_tax.split('tax:')[1])
-                                line = '>{}_Protein:Kef'.format(id_tax) + '\n' + str(sequence) + '\n'
-                                Kefout.write(line)
-                            Kefout.close()
-                    else:
-                        with open("~/fl/Arc_Kef_sequences.faa", "a") as Kefout:
-                            sequence  = seq_dic[key][1]
-                            id_tax =  seq_dic[key][0]
-                            Kef_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:Kef'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            Kefout.write(line)
-                        Kefout.close()
-            elif clade_dic[key] == '45068':
-                    if key in Reps_dic:
-                        for entry in Reps_dic[key]:
-                            
-                            with open("~/fl/Arc_NhaA_sequences.faa", "a") as NhaAout:
-                                sequence  = seq_dic[entry.split(':')[0]][1]
-                                id_tax =  seq_dic[entry.split(':')[0]][0]
-                                NhaA_list.append(id_tax.split('tax:')[1])
-                                line = '>{}_Protein:NhaA'.format(id_tax) + '\n' + str(sequence) + '\n'
-                                NhaAout.write(line)
-                            NhaAout.close()
-                    else:
-                        with open("~/fl/Arc_NhaA_sequences.faa", "a") as NhaAout:
-                            sequence  = seq_dic[key][1]
-                            id_tax =  seq_dic[key][0]
-                            NhaA_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:NhaA'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            NhaAout.write(line)
-                        NhaAout.close()
-            elif clade_dic[key] == '57585':
-                                                            #now we unpack the representatives
-                if key in Reps_dic:
-
-                    for entry in Reps_dic[key]:
-                        with open("~/fl/Arc_NhaS5_sequences.faa", "a") as NhaS5out:
-                            sequence  = seq_dic[entry.split(':')[0]][1]
-                            id_tax =  seq_dic[entry.split(':')[0]][0]
-                            NhaS5_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:NhaS5'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            NhaS5out.write(line)
-                        NhaS5out.close()
-                else:
-                    with open("~/fl/Arc_NhaS5_sequences.faa", "a") as NhaS5out:
-                        sequence  = seq_dic[key][1]
-                        id_tax =  seq_dic[key][0]
-                        NhaS5_list.append(id_tax.split('tax:')[1])
-
-                        line = '>{}_Protein:NhaS5'.format(id_tax) + '\n' + str(sequence) + '\n'
-                        NhaS5out.write(line)
+                with open("~/fl/Arc_CHX_sequences.faa", "a") as CHXout:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    CHX_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:CHX'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    CHXout.write(line)
+                    CHXout.close()
+            elif clade_dic[key][2] == '29930':
+                with open("~/fl/Arc_Kef_sequences.faa", "a") as Kefout:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    Kef_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:Kef'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    Kefout.write(line)
+                    Kefout.close()
+            elif clade_dic[key][2] == '45068':
+                with open("~/fl/Arc_NhaA_sequences.faa", "a") as NhaAout:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    NhaA_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:NhaA'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    NhaAout.write(line)
+                    NhaAout.close()
+            
+            elif clade_dic[key][2] == '57585':
+                with open("~/fl/Arc_NhaS5_sequences.faa", "a") as NhaS5out:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    NhaS5_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:NhaS5'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    NhaS5out.write(line)
                     NhaS5out.close()
-            elif clade_dic[key] == '23026':
-                                                            #now we unpack the representatives
-                if key in Reps_dic:
-
-                    for entry in Reps_dic[key]:
-                        with open("~/fl/Arc_Undescribed_CPA1_sequences.faa", "a") as Undescribed_CPA1out:
-                            sequence  = seq_dic[entry.split(':')[0]][1]
-                            id_tax =  seq_dic[entry.split(':')[0]][0]
-                            Undescribed_CPA1_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:Undescribed_CPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            Undescribed_CPA1out.write(line)
-                        Undescribed_CPA1out.close()
-                else:
-                    with open("~/fl/Arc_Undescribed_CPA1_sequences.faa", "a") as Undescribed_CPA1out:
-                        sequence  = seq_dic[key][1]
-                        id_tax =  seq_dic[key][0]
-                        Undescribed_CPA1_list.append(id_tax.split('tax:')[1])
-                        line = '>{}_Protein:Undescribed_CPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
-                        Undescribed_CPA1out.write(line)
+            
+            elif clade_dic[key][2] == '23026':
+                 with open("~/fl/Arc_Undescribed_CPA1_sequences.faa", "a") as Undescribed_CPA1out:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    Undescribed_CPA1_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:Undescribed_CPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    Undescribed_CPA1out.write(line)
                     Undescribed_CPA1out.close()
-            elif clade_dic[key] == '11132':
-                if key in Reps_dic:
-                    for entry in Reps_dic[key]:
-                        with open("~/fl/Arc_SOD2_sequences.faa", "a") as SOD2out:
-                            sequence  = seq_dic[entry.split(':')[0]][1]
-                            id_tax =  seq_dic[entry.split(':')[0]][0]
-                            SOD2_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:SOD2'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            SOD2out.write(line)
-                        SOD2out.close()
-                else:
-                    with open("~/fl/Arc_SOD2_sequences.faa", "a") as  SOD2out:
-                        sequence  = seq_dic[key][1]
-                        id_tax =  seq_dic[key][0]
-                        SOD2_list.append(id_tax.split('tax:')[1])
-                        line = '>{}_Protein:SOD2'.format(id_tax) + '\n' + str(sequence) + '\n'
-                        SOD2out.write(line)
+            elif clade_dic[key][2] == '11132':
+                with open("~/fl/Arc_SOD2_sequences.faa", "a") as SOD2out:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    SOD2_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:SOD2'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    SOD2out.write(line)
                     SOD2out.close()
-            elif clade_dic[key] == '14956':
-                if key in Reps_dic:
-                    for entry in Reps_dic[key]:
-                        with open("~/fl/Arc_NhaPCPA1_sequences.faa", "a") as NhaPCPA1out:
-                            sequence  = seq_dic[entry.split(':')[0]][1]
-                            id_tax =  seq_dic[entry.split(':')[0]][0]
-                            NhaP_CPA1_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:NhaPCPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            NhaPCPA1out.write(line)
-                        NhaPCPA1out.close()
-                else:
-                    with open("~/fl/Arc_NhaPCPA1_sequences.faa", "a") as  NhaPCPA1out:
-                        sequence  = seq_dic[key][1]
-                        id_tax =  seq_dic[key][0]
-                        NhaP_CPA1_list.append(id_tax.split('tax:')[1])
-                        line = '>{}_Protein:NhaPCPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
-                        NhaPCPA1out.write(line)
+            elif clade_dic[key][2] == '14956':
+                with open("~/fl/Arc_NhaPCPA1_sequences.faa", "a") as NhaPCPA1out:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    NhaP_CPA1_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:NhaPCPA1'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    NhaPCPA1out.write(line)
                     NhaPCPA1out.close()
-            elif clade_dic[key] == '8560':
-                if key in Reps_dic:
-                    for entry in Reps_dic[key]:
-                        with open("~/fl/Arc_UndProkaryaCPA1IDK_sequences.faa", "a") as UndProkaryaCPA1IDKout:
-                            sequence  = seq_dic[entry.split(':')[0]][1]
-                            id_tax =  seq_dic[entry.split(':')[0]][0]
-                            UndProkarya_CPA1_IDK_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:UndProkaryaCPA1IDK'.format(id_tax) + 'n' + str(sequence) + '\n'
-                            UndProkaryaCPA1IDKout.write(line)
-                        UndProkaryaCPA1IDKout.close()
-                else:
-                    with open("~/fl/Arc_UndProkaryaCPA1IDK_sequences.faa", "a") as  UndProkaryaCPA1IDKout:
-                        sequence  = seq_dic[key][1]
-                        id_tax =  seq_dic[key][0]
-                        UndProkarya_CPA1_IDK_list.append(id_tax.split('tax:')[1])
-                        line = '>{}_Protein:UndProkaryaCPA1IDK'.format(id_tax) + '\n' + str(sequence) + '\n'
-                        UndProkaryaCPA1IDKout.write(line)
+            elif clade_dic[key][2] == '8560':
+                with open("~/fl/Arc_UndProkaryaCPA1IDK_sequences.faa", "a") as UndProkaryaCPA1IDKout:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    UndProkarya_CPA1_IDK_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:UndProkaryaCPA1IDK'.format(id_tax) + 'n' + str(sequence) + '\n'
+                    UndProkaryaCPA1IDKout.write(line)
                     UndProkaryaCPA1IDKout.close()
-            elif clade_dic[key] == '53633':
-                if key in Reps_dic:
-                    for entry in Reps_dic[key]:
-                        with open("~/fl/Arc_GerN_sequences.faa", "a") as GerNout:
-                            sequence  = seq_dic[entry.split(':')[0]][1]
-                            id_tax =  seq_dic[entry.split(':')[0]][0]
-                            GerN_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:GerN'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            GerNout.write(line)
-                        GerNout.close()
-                else:
-                    with open("~/fl/Arc_GerN_sequences.faa", "a") as GerNout:
-                        sequence  = seq_dic[key][1]
-                        id_tax =  seq_dic[key][0]
-                        GerN_list.append(id_tax.split('tax:')[1])
-                        line = '>{}_Protein:GerN'.format(id_tax) + '\n' + str(sequence) + '\n'
-                        GerNout.write(line)
+            elif clade_dic[key][2] == '53633':
+                with open("~/fl/Arc_GerN_sequences.faa", "a") as GerNout:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    GerN_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:GerN'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    GerNout.write(line)
                     GerNout.close()
             elif clade_dic[key] == '21649':
-                if key in Reps_dic:
-                    for entry in Reps_dic[key]:
-                        with open("~/fl/Arc_CPA1_SL_sequences.faa", "a") as CPA1_SLout:
-                            sequence  = seq_dic[entry.split(':')[0]][1]
-                            id_tax =  seq_dic[entry.split(':')[0]][0]
-                            CPA1_SL_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:CPA1_SL'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            CPA1_SLout.write(line)
-                        CPA1_SLout.close()
-                else:
-                    with open("~/fl/Arc_CPA1_SL_sequences.faa", "a") as CPA1_SLout:
-                        sequence  = seq_dic[key][1]
-                        id_tax =  seq_dic[key][0]
-
-                        CPA1_SL_list.append(id_tax.split('tax:')[1])
-                        line = '>{}_Protein:CPA1_SL'.format(id_tax) + '\n' + str(sequence) + '\n'
-                        CPA1_SLout.write(line)
+                with open("~/fl/Arc_CPA1_SL_sequences.faa", "a") as CPA1_SLout:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    CPA1_SL_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:CPA1_SL'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    CPA1_SLout.write(line)
                     CPA1_SLout.close()
             else:
-                if key in Reps_dic:
-                    for entry in Reps_dic[key]:
-                        with open("~/fl/Arc_Uncharacterized_sequences.faa", "a") as Uncharacterizedout:
-                            sequence  = seq_dic[entry.split(':')[0]][1]
-                            id_tax =  seq_dic[entry.split(':')[0]][0]
-                            Uncharacterized_list.append(id_tax.split('tax:')[1])
-                            line = '>{}_Protein:Uncharacterized'.format(id_tax) + '\n' + str(sequence) + '\n'
-                            Uncharacterizedout.write(line)
-                        Uncharacterizedout.close()
-                else:
-                    with open("~/fl/Arc_Uncharacterized_sequences.faa", "a") as Uncharacterizedout:
-                        sequence  = seq_dic[key][1]
-                        id_tax =  seq_dic[key][0]
-                        Uncharacterized_list.append(id_tax.split('tax:')[1])
-
-                        line = '>{}_Protein:Uncharacterized'.format(id_tax) + '\n' + str(sequence) + '\n'
-                        Uncharacterizedout.write(line)
+                with open("~/fl/Arc_Uncharacterized_sequences.faa", "a") as Uncharacterizedout:
+                    sequence  = seq_dic[key.split('_tax')[0]][1]
+                    id_tax =  seq_dic[key.split('_tax')[0]][0]
+                    Uncharacterized_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:Uncharacterized'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    Uncharacterizedout.write(line)
                     Uncharacterizedout.close()
 for GTDB_tax in tax_list:
     print(GTDB_tax.split('\n'))
@@ -331,13 +206,10 @@ for GTDB_tax in tax_list:
     break
 print(Uncharacterized_list[11].split('\n'))
 print(type(Uncharacterized_list[11]))
-
-with open('~/CPA_types_Archaea_5may.tsv', 'w') as TAX_TYPE:
+with open('~/CPA_types_Archaea_June8.tsv', 'w') as TAX_TYPE:
     header = 'GTDB_id' + '\t' + 'Kef' + '\t' + 'NHX' + '\t' + 'NhaA' + '\t' + 'Undescribed_CPA1' + '\t' + 'NhaS5' + '\t' + 'CHX' + '\t' + 'SOD2' + '\t' + 'NhaP' + '\t' + 'CPA1_IDK' + '\t' + 'GerN' + '\t' + 'CPA1_SL' + '\t' + 'Uncharacaterized' + '\n'
     TAX_TYPE.write(header)
     total_count = 0
     for GTDB_tax in tax_list:
         line = GTDB_tax + '\t' + str(Kef_list.count(GTDB_tax)) + '\t'  + str(NHX_list.count(GTDB_tax)) + '\t' + str(NhaA_list.count(GTDB_tax)) + '\t' + str(Undescribed_CPA1_list.count(GTDB_tax)) + '\t'  + str(NhaS5_list.count(GTDB_tax)) + '\t' + str(CHX_list.count(GTDB_tax)) + '\t'  + str(SOD2_list.count(GTDB_tax)) + '\t'  + str(NhaP_CPA1_list.count(GTDB_tax)) + '\t' + str(UndProkarya_CPA1_IDK_list.count(GTDB_tax)) + '\t' + str(GerN_list.count(GTDB_tax)) + '\t' + str(CPA1_SL_list.count(GTDB_tax)) + '\t' + str(Uncharacterized_list.count(GTDB_tax)) + '\n'
         TAX_TYPE.write(line)              
-
-     
