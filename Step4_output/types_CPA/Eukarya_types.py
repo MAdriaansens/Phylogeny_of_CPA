@@ -178,7 +178,7 @@ for key in clade_dic.keys():
                     sequence  = seq_dic[key.split('_tax')[0]][1]
                     id_tax =  seq_dic[key.split('_tax')[0]][0]
                     UndProkarya_CPA1_IDK_list.append(id_tax.split('tax:')[1])
-                    line = '>{}_Protein:UndProkaryaCPA1IDK'.format(id_tax) + 'n' + str(sequence) + '\n'
+                    line = '>{}_Protein:UndProkaryaCPA1IDK'.format(id_tax) + '\n' + str(sequence) + '\n'
                     UndProkaryaCPA1IDKout.write(line)
                     UndProkaryaCPA1IDKout.close()
             elif clade_dic[key][2] == '53633':
