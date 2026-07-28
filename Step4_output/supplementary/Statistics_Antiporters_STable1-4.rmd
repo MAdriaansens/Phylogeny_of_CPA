@@ -188,6 +188,7 @@ rm(GTDB_Arc)
 
 IT_Archaea_clean <- IT_Archaea[IT_Archaea$Completeness> 90 & IT_Archaea$Contamination < 5 & IT_Archaea$trna_aa_count > 17,]
 summary(lm(IT_Archaea_clean$CPA_count~IT_Archaea_clean$coding_bases))
+summary(lm(IT_Archaea_clean$CPA_count~ IT_Archaea_clean$IT_count))
 
 ```
 
@@ -371,7 +372,7 @@ IT_Bacteria$Phyla[IT_Bacteria$Phyla == 'Desulfobacterota_I'] <- 'Desulfobacterot
 rm(GTDB_Bac)
 
 IT_Bacteria_clean <- IT_Bacteria[IT_Bacteria$Completeness> 90 & IT_Bacteria$Contamination < 5 & IT_Bacteria$trna_aa_count > 17,]
-
+summary(lm(IT_Bacteria_clean$CPA_count~ IT_Bacteria_clean$IT_count))
 group_by(IT_Bacteria_clean, CPA_binary)  %>%   summarise(
     count = n(),
     median = median(Completeness, na.rm = TRUE),
