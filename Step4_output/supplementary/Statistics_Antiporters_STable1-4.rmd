@@ -187,6 +187,7 @@ IT_Archaea <- merge(IT_Archaea, GTDB_Arc, by = 'GTDB_id')
 rm(GTDB_Arc)
 
 IT_Archaea_clean <- IT_Archaea[IT_Archaea$Completeness> 90 & IT_Archaea$Contamination < 5 & IT_Archaea$trna_aa_count > 17,]
+summary(lm(IT_Archaea_clean$CPA_count~IT_Archaea_clean$coding_bases))
 
 ```
 
@@ -413,6 +414,7 @@ ITmergedclean
 
 
 ```{r Taxonomic_/Protein_data_wrangling_Bac13}
+summary(lm(IT_Bacteria_clean$CPA_count~IT_Bacteria_clean$coding_bases))
 
 IT_Bacteria_nonna  <- IT_Bacteria_clean[IT_Bacteria_clean$Antiporter_binary == 1,]
 
