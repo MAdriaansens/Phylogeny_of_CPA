@@ -92,7 +92,7 @@ NhaS5_list = []
 Undescribed_CPA1_list = []
 SOD2_list = []
 NhaP_CPA1_list = []
-UndProkarya_CPA1_IDK_list = []
+UndProkarya_CPA1_IDR_list = []
 GerN_list = []
 CPA1_SL_list = []
 for key in clade_dic.keys():
@@ -169,13 +169,13 @@ for key in clade_dic.keys():
                     NhaPCPA1out.write(line)
                     NhaPCPA1out.close()
             elif clade_dic[key][2] == '8560':
-                with open("~/fl/Arc_UndProkaryaCPA1IDK_sequences.faa", "a") as UndProkaryaCPA1IDKout:
+                with open("~/fl/Arc_UndProkaryaCPA1IDR_sequences.faa", "a") as UndProkaryaCPA1IDRout:
                     sequence  = seq_dic[key.split('_tax')[0]][1]
                     id_tax =  seq_dic[key.split('_tax')[0]][0]
-                    UndProkarya_CPA1_IDK_list.append(id_tax.split('tax:')[1])
-                    line = '>{}_Protein:UndProkaryaCPA1IDK'.format(id_tax) + '\n' + str(sequence) + '\n'
-                    UndProkaryaCPA1IDKout.write(line)
-                    UndProkaryaCPA1IDKout.close()
+                    UndProkarya_CPA1_IDR_list.append(id_tax.split('tax:')[1])
+                    line = '>{}_Protein:UndProkaryaCPA1IDR'.format(id_tax) + '\n' + str(sequence) + '\n'
+                    UndProkaryaCPA1IDRout.write(line)
+                    UndProkaryaCPA1IDRout.close()
             elif clade_dic[key][2] == '53633':
                 with open("~/fl/Arc_GerN_sequences.faa", "a") as GerNout:
                     sequence  = seq_dic[key.split('_tax')[0]][1]
