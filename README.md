@@ -55,3 +55,7 @@ We generated, for each taxonomic domain, a fasta file with all the sequences and
 **Pfam.**
 Pfam HMMs were downloaded manually and sequences of each pfam were downloaded using a perl script as provided by Pfam.
 Code is available on Database_creation/Pfam. After creation of inhouse HMMs these HMMs were concatenated to the PFAM HMMdb and HMMpressed so it can be used for HMMscan in the future.
+
+
+**issue in the code***
+undescribed_prokarya_CPA1_IDK should be undescribed_prokarya_CPA1_IDR, a misspelling has been made
