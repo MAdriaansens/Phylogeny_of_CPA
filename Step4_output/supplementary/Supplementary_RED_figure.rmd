@@ -52,7 +52,7 @@ ggsave("sign_plotplot.png")
 
 
 ```{r, generate dataframe with all info}
-Annotation1 <-read.delim('~/Red_informed_clade_20_lg_cat_gamma_RED_interval_28April.tsv',stringsAsFactors = TRUE, sep='\t')
+Annotation1 <-read.delim('~/Red_informed_clade_20_lg_cat_gamma_RED_interval_28AJuli.tsv',stringsAsFactors = TRUE, sep='\t')
 
 Annotation2 <-read.delim('/~/CPA_full_tree_aligned_annotation_30April.tsv',stringsAsFactors = TRUE, sep='\t')
 
@@ -221,4 +221,54 @@ combined %>% mutate(Taxa = fct_relevel(Taxa, Ordering)) %>%ggplot( aes(x=RED, y=
 ggsave("RED_intervals.png") 
 
 #excludes terminal branches
+```
+
+
+```{r Supplementary_table_motifs_subfamilies}
+Subset_8 <- Annotation_final[Annotation_final$Subfamily == 8,]
+Subset_8_motif <- Subset_8  %>% count(Motif)
+Subset_8_motif$percentage <- ((Subset_8_motif$n)/8416)*100
+
+Subset_23026 <- Annotation_final[Annotation_final$Subfamily == 23026,]
+Subset_23026_motif <- Subset_23026  %>% count(Motif)
+Subset_23026_motif$percentage <- ((Subset_23026_motif$n)/6865)*100
+
+
+Subset_11132 <- Annotation_final[Annotation_final$Subfamily == 11132,]
+Subset_11132_motif <- Subset_11132  %>% count(Motif)
+Subset_11132_motif$percentage <- ((Subset_11132_motif$n)/3788)*100
+
+
+Subset_8560 <- Annotation_final[Annotation_final$Subfamily == 8560,]
+Subset_8560_motif <- Subset_8560  %>% count(Motif)
+Subset_8560_motif$percentage <- ((Subset_8560_motif$n)/2571)*100
+
+Subset_14956 <- Annotation_final[Annotation_final$Subfamily == 14956,]
+Subset_14956_motif <- Subset_14956  %>% count(Motif)
+Subset_14956_motif$percentage <- ((Subset_14956_motif$n)/3515)*100
+
+Subset_21649<- Annotation_final[Annotation_final$Subfamily == 21649,]
+Subset_21649_motif <- Subset_21649  %>% count(Motif)
+Subset_21649_motif$percentage <- ((Subset_21649_motif$n)/1377)*100
+
+Subset_29930<- Annotation_final[Annotation_final$Subfamily == 29930,]
+Subset_29930_motif <- Subset_29930  %>% count(Motif)
+Subset_29930_motif$percentage <- ((Subset_29930_motif$n)/14901)*100
+
+Subset_57585<- Annotation_final[Annotation_final$Subfamily ==57585,]
+Subset_57585_motif <- Subset_57585 %>% count(Motif)
+Subset_57585_motif$percentage <- ((Subset_57585_motif$n)/4659)*100
+
+Subset_62243<- Annotation_final[Annotation_final$Subfamily ==62243,]
+Subset_62243_motif <- Subset_62243 %>% count(Motif)
+Subset_62243_motif$percentage <- ((Subset_62243_motif$n)/4431)*100
+
+Subset_53633<- Annotation_final[Annotation_final$Subfamily ==53633,]
+Subset_53633_motif <- Subset_53633 %>% count(Motif)
+Subset_53633_motif$percentage <- ((Subset_53633_motif$n)/1535)*100
+
+
+Subset_45068<- Annotation_final[Annotation_final$Subfamily ==45068,]
+Subset_45068_motif <- Subset_45068 %>% count(Motif)
+Subset_45068_motif$percentage <- ((Subset_45068_motif$n)/7464)*100
 ```
